@@ -6,8 +6,20 @@ mov sp,bp
 call disk_read_16
 mov si,Message1
 call print_si_16
-mov si,Message2
-call print_si_16
+
+cli
+lgdt [gdt_descriptor]
+
+mov eax, cr0
+or eax,1
+mov cr0,eax
+
+jmp 0x08:pipeline_flush ;This is just to test out my understanding
+[bits 32] ;why 32 here???? This is the answer to life love and everything in between
+pipeline_flush:
+
+mov esi,Message2
+call print_esi_32
 
 jmp $
 
@@ -16,6 +28,7 @@ jmp $
 ;functions
 ;
 
+[bits 16]
 disk_read_16:  ;we can make it user input next ... al probably
 	pusha
 		mov dl,0x80;Drive number
@@ -52,7 +65,7 @@ print_si_16:
 print_esi_32:
 	pusha
 
-	mov ah,0xf0  ;White on black
+	mov ah,0x0f  ;Background on foreground
 	mov ebx,0xb8000 ;Starting address
 
 	_print_pm_loop:
