@@ -11,7 +11,7 @@ void entry()
 void printf(char* Message)
 {
 	char* ptr = (char*) VIDEO_MEMORY;
-	while(Message)
+	while(*Message)
 	{
 		*ptr = *Message;
 		Message++;

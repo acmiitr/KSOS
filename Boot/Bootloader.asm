@@ -18,6 +18,15 @@ mov cr0,eax ;This makes it protected
 jmp 0x08:pm_32_start ;This jumps to 32 bit segment
 [bits 32] ;why 32 here???? This is the answer to life love and everything in between
 pm_32_start:
+mov ebp,0x90000
+mov esp,ebp
+mov ax,0x10
+mov ds,ax
+mov ss,ax
+mov es,ax
+mov fs,ax
+mov gs,ax
+
 jmp kernel
 
 
@@ -82,13 +91,10 @@ print_esi_32:
 ;
 ;Data
 ;
-%include "GDT.asm"
+%include "/home/suraaj/Documents/GitStuff/DaddyOs/Boot/GDT.asm"
 Message1: db 'Welcome to your OS',0
 Message2: db 'Rishi is one gay boi',0
 times 510 - ($-$$) db 0
 dw 0xaa55
 ;Bootsector over
 kernel:
-mov esi,Message2
-call print_esi_32
-jmp $
