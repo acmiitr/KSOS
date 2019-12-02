@@ -4,6 +4,7 @@ mov bp,0x9000
 mov sp,bp
 
 call disk_read_16
+
 mov si,Message1
 call print_si_16
 
@@ -12,16 +13,12 @@ lgdt [gdt_descriptor]
 
 mov eax, cr0
 or eax,1
-mov cr0,eax
+mov cr0,eax ;This makes it protected
 
-jmp 0x08:pipeline_flush ;This is just to test out my understanding
+jmp 0x08:pm_32_start ;This jumps to 32 bit segment
 [bits 32] ;why 32 here???? This is the answer to life love and everything in between
-pipeline_flush:
-
-mov esi,Message2
-call print_esi_32
-
-jmp $
+pm_32_start:
+jmp kernel
 
 
 ;
@@ -36,7 +33,7 @@ disk_read_16:  ;we can make it user input next ... al probably
 		mov ch,0x0 ;This is track number
 		mov cl,2 ;This is sector number ... starts from 1
 		mov ah,0x02 ;interrupt function
-		mov al,1 ;Number of sectors to be read
+		mov al,9 ;Number of sectors to be read
 		mov bx,0x7c0
 		mov es,bx
 		mov bx,512
@@ -87,12 +84,11 @@ print_esi_32:
 ;
 %include "GDT.asm"
 Message1: db 'Welcome to your OS',0
+Message2: db 'Rishi is one gay boi',0
 times 510 - ($-$$) db 0
 dw 0xaa55
-
-;
-;Next sector - sector 2
-;
-Message2: db 'You are outside',0
-
-times 512 db 0
+;Bootsector over
+kernel:
+mov esi,Message2
+call print_esi_32
+jmp $
