@@ -5,7 +5,7 @@ kernel.o : Kernel/kernel.c
 	gcc -ffreestanding -c -fno-pie -m32 $^ -o $@
 
 kernel.bin : kernel.o #This needs to be updated
-	ld $^ -o $@ -m elf_i386 -Ttext 0x7e00 --oformat binary
+	ld $^ -o $@ -m elf_i386 -Ttext 0x1000 --oformat binary
 	chmod -x $@	
 
 boot.bin : Boot/Bootloader.asm

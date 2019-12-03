@@ -1,4 +1,5 @@
 [org 0x7c00]
+KERNEL_MEM equ 0x1000
 [bits 16]
 mov bp,0x9000
 mov sp,bp
@@ -30,7 +31,7 @@ mov es,ax
 mov fs,ax
 mov gs,ax
 
-jmp kernel
+jmp KERNEL_MEM
 
 
 ;
@@ -46,9 +47,9 @@ disk_read_16:  ;we can make it user input next ... al probably
 		mov cl,2 ;This is sector number ... starts from 1
 		mov ah,0x02 ;interrupt function
 		mov al,9 ;Number of sectors to be read
-		mov bx,0x7c0
+		mov bx,0x100
 		mov es,bx
-		mov bx,512
+		mov bx,0
 		int 0x13
 	popa
 	ret
@@ -100,4 +101,4 @@ Message2: db 'Rishi is one gay boi',0
 times 510 - ($-$$) db 0
 dw 0xaa55
 ;Bootsector over
-kernel:
+;kernel is present here in hard disk.... but will be loaded at 0x1000
