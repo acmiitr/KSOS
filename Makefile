@@ -4,7 +4,10 @@ all: run
 kernel.o : Kernel/kernel.c
 	gcc -ffreestanding -c -fno-pie -m32 $^ -o $@
 
-kernel.bin : kernel.o #This needs to be updated
+entry.o : Kernel/entry.asm
+	nasm $^ -o $@ -f elf
+
+kernel.bin : entry.o kernel.o 
 	ld $^ -o $@ -m elf_i386 -Ttext 0x1000 --oformat binary
 	chmod -x $@	
 

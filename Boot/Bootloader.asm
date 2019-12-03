@@ -39,7 +39,7 @@ jmp KERNEL_MEM
 ;
 
 [bits 16]
-disk_read_16:  ;we can make it user input next ... al probably
+disk_read_16:  ;THis si a function that reads the next 9 sectors 1-10 and loads it at 0x1000
 	pusha
 		mov dl,0x80;Drive number
 		mov dh,0x0;This is actually head number/platter number
@@ -49,7 +49,7 @@ disk_read_16:  ;we can make it user input next ... al probably
 		mov al,9 ;Number of sectors to be read
 		mov bx,0x100
 		mov es,bx
-		mov bx,0
+		xor bx,bx   ;mov bx,0
 		int 0x13
 	popa
 	ret

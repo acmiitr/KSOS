@@ -1,7 +1,7 @@
 #define VIDEO_MEMORY 0xb8000
 #define BLACK_ON_WHITE 0x0f
 void printf(char *);
-void entry()
+void main()
 {
 	printf("Chordia is a gay boiiiii");
 
