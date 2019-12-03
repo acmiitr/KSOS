@@ -8,6 +8,9 @@ call disk_read_16
 mov si,Message1
 call print_si_16
 
+mov ah,0x00
+int 0x16
+
 cli
 lgdt [gdt_descriptor]
 
@@ -92,7 +95,7 @@ print_esi_32:
 ;Data
 ;
 %include "/home/suraaj/Documents/GitStuff/DaddyOs/Boot/GDT.asm"
-Message1: db 'Welcome to your OS',0
+Message1: db 'Welcome to your OS - 16 bit, press any key to continue...',0
 Message2: db 'Rishi is one gay boi',0
 times 510 - ($-$$) db 0
 dw 0xaa55
