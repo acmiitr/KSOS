@@ -4,8 +4,6 @@ void printf(char *);
 void main()
 {
 	printf("Chordia is a gay boiiiii");
-
-	while(1){}
 }
 
 void printf(char* Message)
