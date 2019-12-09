@@ -19,7 +19,7 @@ daddy-os : boot.bin kernel.bin
 	truncate $@ -s 4K
 
 run : daddy-os
-	qemu-system-x86_64 $^
+	qemu-system-x86_64 -hda  $^
 
 clean :
 	rm *.bin *.o
