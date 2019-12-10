@@ -1,0 +1,3 @@
+floppya: 1_44=daddy-os:, status=inserted  # Boot from drive A
+boot : a
+ 

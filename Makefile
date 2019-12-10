@@ -11,7 +11,7 @@ kernel.bin : entry.o kernel.o
 	ld $^ -o $@ -m elf_i386 -Ttext 0x1000 --oformat binary
 	chmod -x $@	
 
-boot.bin : Boot/Bootloader.asm
+boot.bin : Boot/bootloader.asm
 	nasm $^ -f bin -o $@
 
 daddy-os : boot.bin kernel.bin
@@ -23,3 +23,6 @@ run : daddy-os
 
 clean :
 	rm *.bin *.o
+
+emul:
+	alias emul="qemu-system-x86_64"
