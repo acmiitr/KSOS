@@ -41,15 +41,6 @@ boot_stage_2:
 mov si,Message1
 call print_si_16
 ;---------------------------------------------------------------------------------------
-call get_cursor_16
-call print_hex_bx
-
-call print_si_16
-
-call get_cursor_16
-call print_hex_bx
-
-
 mov ah,0x00  ;This is a cool thing... It waits for user input before going into 32 bit mode
 int 0x16
 ;---------------------------------------------------------------------------------------
@@ -74,21 +65,14 @@ mov fs,ax
 mov gs,ax
 
 ;---------------------------------------------------------------------------------------
-mov al, 0x0f ;Refer to the index register table port mapping for CRT (low byte)
-mov dx, 0x3d4 ; port number CRT index
-out dx,al   ;Write 0x0f in port 0x3D4  --- note that the port registers are 1 byte in size
-mov dx,0x3d5 ;port number CRT data
-mov al,0x70    ;Trial run
-out dx,al
 
-mov al, 0x0e ;Refer to the index register table port mapping for CRT (high byte)
-mov dx, 0x3d4 ; port number CRT index
-out dx,al   
-mov dx,0x3d5 ;port number CRT data
-mov al,0x03    ;Trial run
-out dx,al
+call clrscr
+mov ah,0x07 ; Our printsi function is using this to do some crap
+mov si,Message2
+call print_esi_32
 
-jmp $
+cli
+hlt
 
 %include "/home/suraaj/Documents/GitStuff/DaddyOs/Boot/print.asm"
 %include "/home/suraaj/Documents/GitStuff/DaddyOs/Boot/GDT.asm"
