@@ -31,6 +31,13 @@ mov es,ax
 mov fs,ax
 mov gs,ax
 
+mov al, 0x0f ;Refer to the index register table port mapping for CRT (low byte)
+mov dx, 0x3d4 ; port number CRT index
+out dx,al   ;Write 0x0f in port 0x3D4
+mov dx,0x3d5 ;port number CRT data
+mov al,0    ;Trial run
+out dx,al
+jmp $
 jmp KERNEL_MEM
 
 
