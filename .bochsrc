@@ -1,3 +1,5 @@
-floppya: 1_44=daddy-os:, status=inserted  # Boot from drive A
-boot : a
- 
+ata0-master: type=disk, path="daddy-os", mode=flat,
+cylinders=1, heads=1, spt=1
+boot: disk
+display_library: sdl
+megs: 128 

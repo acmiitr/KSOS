@@ -34,48 +34,8 @@ jmp boot_stage_2
 times 510 - ($-$$) db 0
 dw 0xaa55
 ;---------------------------------------------------------------------------------------
+;---------------------------------------------------------------------------------------
 ;Bootsector over
 ;This is sector 2 of the hard disk
 ;---------------------------------------------------------------------------------------
-boot_stage_2:
-mov si,Message1
-call print_si_16
-;---------------------------------------------------------------------------------------
-mov ah,0x00  ;This is a cool thing... It waits for user input before going into 32 bit mode
-int 0x16
-;---------------------------------------------------------------------------------------
-cli
-lgdt [gdt_descriptor]
-
-mov eax, cr0
-or eax,1
-mov cr0,eax ;This makes it protected
-jmp 0x08:pm_32_start ;This jumps to 32 bit segment looking at the descriptor table values and all
-;---------------------------------------------------------------------------------------
-
-[bits 32] ;why 32 here???? This is the answer to life love and everything in between
-pm_32_start:
-mov ebp,0x90000
-mov esp,ebp
-mov ax,0x10
-mov ds,ax
-mov ss,ax
-mov es,ax
-mov fs,ax
-mov gs,ax
-
-;---------------------------------------------------------------------------------------
-
-call clrscr
-mov ah,0x07 ; Our printsi function is using this to do some crap
-mov si,Message2
-call print_esi_32
-
-cli
-hlt
-
-%include "/home/suraaj/Documents/GitStuff/DaddyOs/Boot/print.asm"
-%include "/home/suraaj/Documents/GitStuff/DaddyOs/Boot/GDT.asm"
-
-Message1: db 'Welcome to your OS - 16 bit, press any key to continue...',0
-Message2: db 'Rishi is one gay boi',0
+%include "/home/suraaj/Documents/GitStuff/DaddyOs/Boot/stage2.asm"
