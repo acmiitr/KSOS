@@ -1,5 +1,6 @@
-;This is sector 2 of the hard disk
+;This is stage 2 of the Bootloader
 ;---------------------------------------------------------------------------------------
+[org 0x7e00]
 boot_stage_2:
 mov si,Message16
 call print_si_16
@@ -30,7 +31,7 @@ mov gs,ax
 
 ;We need to enable address line A20 here  - We will use keyboard controller to do this
 mov al,0xdd
-;out 0x64,al
+out 0x64,al
 
 ;---------------------------------------------------------------------------------------
 ;--------------Welcome screen for our bootloader----------------------------------------
@@ -61,9 +62,9 @@ call print_esi_32
 cli
 hlt
 
-%include "/home/suraaj/Documents/GitStuff/DaddyOs/Boot/func16.asm"
-%include "/home/suraaj/Documents/GitStuff/DaddyOs/Boot/func32.asm"
-%include "/home/suraaj/Documents/GitStuff/DaddyOs/Boot/GDT.asm"
+%include "Boot/stage2/func16.asm"
+%include "Boot/stage2/func32.asm"
+%include "Boot/stage2/GDT.asm"
 
 Message16: db 'Welcome to your OS - 16 bit, press any key to continue...',0
 Welcome: db 'Rishi is one gay boi',0
