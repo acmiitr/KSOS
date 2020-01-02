@@ -2,6 +2,8 @@
 ;---------------------------------------------------------------------------------------
 [org 0x7e00]
 boot_stage_2:
+mov ah,0x00  ;This is a cool thing... It waits for user input before going into 32 bit mode
+int 0x16
 mov si,Message16
 call print_si_16
 ;---------------------------------------------------------------------------------------

@@ -11,17 +11,18 @@ kernel.bin : entry.o kernel.o
 	ld $^ -o $@ -m elf_i386 -Ttext 0x1000 --oformat binary
 	chmod -x $@	
 
-boot.bin : Boot/bootloader.asm
+#daddy-os : boot.bin kernel.bin
+#	cat $^ > $@
+#	truncate $@ -s 4K
+
+stage1.bin : Boot/stage1/stage1.asm
 	nasm $^ -f bin -o $@
 stage2.bin: Boot/stage2/stage2.asm
 	nasm $^ -f bin -o $@
 
-daddy-os : boot.bin kernel.bin
-	cat $^ > $@
-	truncate $@ -s 4K
 
-run : daddy-os
-	qemu-system-x86_64 -hda  $^
+run : stage2 
+	qemu-system-x86_64 -hda disk.img
 
 clean :
 	rm *.bin *.o
@@ -29,8 +30,14 @@ clean :
 emul:
 	alias emul="qemu-system-x86_64"
 
-bootsector: boot.bin stage2.bin
-	dd if=boot.bin of=test bs=1 count=3 seek=0 skip=0 conv=notrunc
-	dd if=boot.bin of=test bs=1 count=451 seek=62 skip=62 conv=notrunc
-	dd if=stage2.bin of=test bs=512 count=2 seek=1 skip=0 conv=notrunc
 
+disk.img: stage1.bin
+	truncate disk.img -s 1M
+	mkfs.vfat -F12 -S512 -s1 disk.img
+	dd if=stage1.bin of=disk.img bs=1 count=3 seek=0 skip=0 conv=notrunc
+	dd if=stage1.bin of=disk.img bs=1 count=451 seek=62 skip=62 conv=notrunc
+
+stage2: stage2.bin disk.img
+	sudo mount disk.img /mnt
+	sudo cp stage2.bin /mnt
+	sudo umount /mnt

@@ -1,5 +1,5 @@
-ata0-master: type=disk, path="daddy-os", mode=flat,
-cylinders=1, heads=1, spt=1
+ata0-master: type=disk, path="disk.img", mode=flat,
+cylinders=1, heads=16, spt=63
 boot: disk
 display_library: sdl
 megs: 128 
