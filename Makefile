@@ -31,13 +31,14 @@ emul:
 	alias emul="qemu-system-x86_64"
 
 
-disk.img: stage1.bin
-	truncate disk.img -s 1M
-	mkfs.vfat -F12 -S512 -s1 disk.img
+disk.img: 
+	truncate $@ -s 1M
+	mkfs.vfat -F12 -S512 -s1 $@
+stage1: disk.img stage1.bin
 	dd if=stage1.bin of=disk.img bs=1 count=3 seek=0 skip=0 conv=notrunc
 	dd if=stage1.bin of=disk.img bs=1 count=451 seek=62 skip=62 conv=notrunc
 
-stage2: stage2.bin disk.img
+stage2: stage2.bin stage1
 	sudo mount disk.img /mnt
 	sudo cp stage2.bin /mnt
 	sudo umount /mnt

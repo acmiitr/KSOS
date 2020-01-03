@@ -2,8 +2,6 @@
 ;---------------------------------------------------------------------------------------
 [org 0x7e00]
 boot_stage_2:
-mov ah,0x00  ;This is a cool thing... It waits for user input before going into 32 bit mode
-int 0x16
 mov si,Message16
 call print_si_16
 ;---------------------------------------------------------------------------------------
@@ -68,7 +66,7 @@ hlt
 %include "Boot/stage2/func32.asm"
 %include "Boot/stage2/GDT.asm"
 
-Message16: db 'Welcome to your OS - 16 bit, press any key to continue...',0
+Message16: db 0xa,0xd,'Welcome to your OS - 16 bit, press any key to continue...',0
 Welcome: db 'Rishi is one gay boi',0
 Stars: db '***********************************************',0
 DaddyOsWelcome: db 'This is DADDY-OS',0

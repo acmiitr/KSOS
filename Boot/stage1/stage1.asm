@@ -7,7 +7,7 @@ FATLoad equ 0x6000
 [org 0x7c00]
 [bits 16]
 
-jmp near boot_stage_1
+jmp near  boot_stage_1
 ;---------------------------------------------------------------------------------------
 ;times (0x3d-0x02) db 0
 bpbOEM			db "DummyBPB"
@@ -17,7 +17,7 @@ bpbReservedSectors: 	DW 1
 bpbNumberOfFATs: 	DB 2
 bpbRootEntries: 	DW 512
 bpbTotalSectors: 	DW 2880
-bpbMedia: 		DB 0xf0  ;; 0xF1
+bpbMedia: 		DB 0xf0  
 bpbSectorsPerFAT: 	DW 6     ;We need all this
 bpbSectorsPerTrack: 	DW 63
 bpbHeadsPerCylinder: 	DW 16
@@ -36,7 +36,8 @@ mov bp,0x9000
 mov sp,bp
 sti
 ;---------------------------------------------------------------------------------------
-;We want to get this number 46 from the bpb
+	;Initialize ROOT_SECT_NO and DATA_SECT_NO
+;---------------------------------------------------------------------------------------
 xor ax,ax
 mov al,[bpbNumberOfFATs]
 mul byte[bpbSectorsPerFAT] ;we ignore dx  what?? potential bug?
@@ -46,8 +47,13 @@ mov bx,[bpbRootEntries]
 shr bx,4
 add ax,bx
 mov [DATA_SECT_NO],ax
+
 ;---------------------------------------------------------------------------------------
-call init_CHS
+call init_CHS   ;Initializes the disk geometry
+;---------------------------------------------------------------------------------------
+
+;---------------------------------------------------------------------------------------
+	;Loads the Root directory and FAT tables into memory
 ;---------------------------------------------------------------------------------------
 LoadRoot:
 	mov ax,[ROOT_SECT_NO]
@@ -66,10 +72,13 @@ LoadFAT:
 	mov bx,FATLoad  ;Reading to 0x6000
 	call disk_read_16
 ;---------------------------------------------------------------------------------------
-;---------------------------------------------------------------------------------------
-;---------------------------------------------------------------------------------------
+	;Finds the file with given target name
 ;---------------------------------------------------------------------------------------
 Findfile:  ;Returns cluster number in bx
+	mov si,.TargetMessage
+	call print_si_16
+	mov si,TargetName
+	call print_si_16
 	mov bx,TargetName
 	cld  ;Clears the direction flag
 	mov di,RootLoad
@@ -90,17 +99,18 @@ Findfile:  ;Returns cluster number in bx
 		call print_si_16
 		jmp $
 
-	.Error: db 'File not found',0
-	.Message: db ': File found!',0
+	.Error: db 0xa,0xd,'File not found!',0
+	.Message: db 0xa,0xd,'File found!',0
+	.TargetMessage: db 'Searching for file: ',0
 	.Found:
-		mov si,di
-		call print_si_16
 		mov si,.Message
 		call print_si_16
 		add di,26
 		mov dx,word[di]
 
+
 ReadFile:
+	
 	;Read sector bx, get next sector, loop
 	mov bx,STAGE_2
 	.loop:
@@ -142,7 +152,8 @@ GetNextSector:  ;dx is parameter
 		
 ;---------------------------------------------------------------------------------------
 END_OF_STAGE:
-
+mov ah,0x00  ;This is a cool thing... It waits for user input before going into 32 bit mode
+int 0x16
 jmp STAGE_2
 ;---------------------------------------------------------------------------------------
 ;Functions 
