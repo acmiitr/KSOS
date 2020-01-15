@@ -1,5 +1,4 @@
 ;This is our bootloader assembly code
-;I am trying to include a 2 stage bootloader to not worry about space issues in the future -- Maybe we might use a filesystem
 
 STAGE_2 equ 0x7e00
 RootLoad equ 0x1000
@@ -27,14 +26,18 @@ bsDriveNumber: 	        DB 0
 bsUnused: 		DB 0
 bsExtBootSignature: 	DB 0x29
 bsSerialNumber:	        DD 0xa0a1a2a3
-bsVolumeLabel: 	        DB "MOS FLOPPY "
+bsVolumeLabel: 	        DB "DUMMY DISK "
 bsFileSystem: 	        DB "FAT12   "
 ;---------------------------------------------------------------------------------------
 boot_stage_1:
 cli
+xor bx,bx
+mov ss,bx
+mov ds,bx
 mov bp,0x9000
 mov sp,bp
 sti
+mov [BootDiskNumber],dl
 ;---------------------------------------------------------------------------------------
 	;Initialize ROOT_SECT_NO and DATA_SECT_NO
 ;---------------------------------------------------------------------------------------

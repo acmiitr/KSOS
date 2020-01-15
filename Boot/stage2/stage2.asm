@@ -4,6 +4,12 @@
 boot_stage_2:
 mov si,Message16
 call print_si_16
+
+		
+in al, 0x92
+or al, 2
+out 0x92, al  ;This enables A20 on my acer PC
+
 ;---------------------------------------------------------------------------------------
 mov ah,0x00  ;This is a cool thing... It waits for user input before going into 32 bit mode
 int 0x16
@@ -29,19 +35,23 @@ mov fs,ax
 mov gs,ax
 
 
-;We need to enable address line A20 here  - We will use keyboard controller to do this
-mov al,0xdd
-out 0x64,al
 
 ;---------------------------------------------------------------------------------------
 ;--------------Welcome screen for our bootloader----------------------------------------
 ;---------------------------------------------------------------------------------------
+mov ah,0x37
+flashing_screen:
+mov ecx, 0x00ffffff
+timer:
+loop timer
 
-mov ah,0x30
+;mov ah,0x30
+sub ah,0x07
 call clrscr_32
+add ah,0x07
 
 
-mov ah,0x37 ; Our printsi function is using this to do some crap
+;mov ah,0x37 ; Our printsi function is using this to do some crap
 mov bx, (80*9)+15
 call set_cursor_32
 mov si,Stars
@@ -58,7 +68,8 @@ mov bx, (80*15)+15
 call set_cursor_32
 mov si,Stars
 call print_esi_32
-
+add ah,0x10 
+jmp flashing_screen
 cli
 hlt
 
@@ -67,7 +78,7 @@ hlt
 %include "Boot/stage2/GDT.asm"
 
 Message16: db 0xa,0xd,'Welcome to your OS - 16 bit, press any key to continue...',0
-Welcome: db 'Rishi is one gay boi',0
+Welcome: db 'Rishi Ranjan is a Gay Boi',0
 Stars: db '***********************************************',0
 DaddyOsWelcome: db 'This is DADDY-OS',0
 

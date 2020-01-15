@@ -29,31 +29,26 @@ print_hex_bx:
 	int 0x10
 	mov al,'x'
 	int 0x10
-	mov cx,0
-	print_hex_start:
-		cmp cx,4
-		je _finish
+	mov cx,4
+	.loop:
 		mov ax,bx
 		and ax,0xf000
 		shr ax,12
 		cmp ax,9
-		jg print_hex_letter
+		jg .print_hex_letter
 		add ax,0x30  ;ascii encoding for numbers 
-		jmp print_hex_conv_end
-		print_hex_letter:
+		jmp .print_hex_conv_end
+		.print_hex_letter:
 		add ax,55  ;ascii encoding for numbers 
 
-		print_hex_conv_end:
+		.print_hex_conv_end:
 			mov ah,0x0e  ;Printing routine
 			int 0x10
 
 		shl bx,4
-		inc cx
-		jmp print_hex_start
-	_finish:
+	loop .loop
 	popa
 	ret
-
 
 get_cursor_16:
 	;pusha can't use this becuase we expect a return vlaue in bx

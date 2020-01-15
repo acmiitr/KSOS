@@ -22,14 +22,13 @@ stage2.bin: Boot/stage2/stage2.asm
 
 
 run : stage2 
-	qemu-system-x86_64 -hda disk.img
+	qemu-system-i386 -hda disk.img
 
 clean :
 	rm *.bin *.o
 
 emul:
 	alias emul="qemu-system-x86_64"
-
 
 disk.img: 
 	truncate $@ -s 1M
