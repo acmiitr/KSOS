@@ -1,18 +1,33 @@
 ;This is stage 2 of the Bootloader
 ;---------------------------------------------------------------------------------------
+FinalKernel equ 0X100000
+TempKernel equ 0Xf000
+[bits 16]
 [org 0x7e00]
+start:
+mov [KernelSize],cx
+mov bx,[KernelSize]
+
+jmp boot_stage_2
+
+KernelSize: dw 0
+		
 boot_stage_2:
 mov si,Message16
 call print_si_16
 
-		
-in al, 0x92
-or al, 2
-out 0x92, al  ;This enables A20 on my acer PC
+;in al, 0x92
+;or al, 2
+;out 0x92, al  ;This enables A20 on my acer PC
+
+
 
 ;---------------------------------------------------------------------------------------
-mov ah,0x00  ;This is a cool thing... It waits for user input before going into 32 bit mode
-int 0x16
+;mov ah,0x00  ;This is a cool thing... It waits for user input before going into 32 bit mode
+;int 0x16
+
+;---------------------------------------------------------------------------------------
+;This is the switch to PMode
 ;---------------------------------------------------------------------------------------
 cli
 lgdt [gdt_descriptor]
@@ -34,16 +49,28 @@ mov es,ax
 mov fs,ax
 mov gs,ax
 
+;-------------Moving our kernel to it's rightful place---------------
 
+KernelTransfer:
+	cld
+	xor ecx,ecx
+	mov cx,[KernelSize]
+	shl ecx,9  ;Double words
+	mov esi,TempKernel
+	mov edi,FinalKernel
+	rep movsb
 
 ;---------------------------------------------------------------------------------------
 ;--------------Welcome screen for our bootloader----------------------------------------
 ;---------------------------------------------------------------------------------------
 mov ah,0x37
+mov ecx,2
 flashing_screen:
+push ecx
 mov ecx, 0x00ffffff
 timer:
 loop timer
+pop ecx
 
 ;mov ah,0x30
 sub ah,0x07
@@ -69,14 +96,14 @@ call set_cursor_32
 mov si,Stars
 call print_esi_32
 add ah,0x10 
-jmp flashing_screen
-cli
-hlt
+loop flashing_screen
+jmp 0x08:FinalKernel
+;cli
+;hlt
 
 %include "Boot/stage2/func16.asm"
 %include "Boot/stage2/func32.asm"
 %include "Boot/stage2/GDT.asm"
-
 Message16: db 0xa,0xd,'Welcome to your OS - 16 bit, press any key to continue...',0
 Welcome: db 'Rishi Ranjan is a Gay Boi',0
 Stars: db '***********************************************',0

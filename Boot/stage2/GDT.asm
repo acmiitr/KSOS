@@ -1,4 +1,5 @@
 ;GDT part
+;global gdt_descriptor
 null_segment:
 	dd 0
 	dd 0

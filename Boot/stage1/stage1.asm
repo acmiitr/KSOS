@@ -1,6 +1,7 @@
 ;This is our bootloader assembly code
 
 STAGE_2 equ 0x7e00
+TempKernel equ 0xf000
 RootLoad equ 0x1000
 FATLoad equ 0x6000
 [org 0x7c00]
@@ -77,12 +78,31 @@ LoadFAT:
 ;---------------------------------------------------------------------------------------
 	;Finds the file with given target name
 ;---------------------------------------------------------------------------------------
+
+mov bx,Stage2Name
+mov word[ReadWhere],STAGE_2
+call Findfile 
+mov bx,KernelName
+mov word[ReadWhere],TempKernel
+call Findfile 
+jmp END_OF_STAGE
+	
+;---------------------------------------------------------------------------------------
+END_OF_STAGE:
+mov ah,0x00  ;This is a cool thing... It waits for user input before going into 32 bit mode
+int 0x16
+jmp STAGE_2
+;---------------------------------------------------------------------------------------
+;Functions 
+%include "Boot/stage1/disk_read.asm"
+%include "Boot/stage1/print.asm"
+%include "Boot/stage1/CHS.asm"
+
 Findfile:  ;Returns cluster number in bx
 	mov si,.TargetMessage
 	call print_si_16
-	mov si,TargetName
+	mov si,bx
 	call print_si_16
-	mov bx,TargetName
 	cld  ;Clears the direction flag
 	mov di,RootLoad
 	mov cx,[bpbRootEntries]  ; Loop whatever number of times
@@ -93,8 +113,8 @@ Findfile:  ;Returns cluster number in bx
 		mov si,bx
 		rep cmpsb
 		pop di
-		je .Found
 		pop cx
+		je .Found
 		add di,0x20
 	loop .Loop
 	.NotFound 
@@ -115,22 +135,28 @@ Findfile:  ;Returns cluster number in bx
 ReadFile:
 	
 	;Read sector bx, get next sector, loop
-	mov bx,STAGE_2
+	xor cx,cx
+	mov bx,[ReadWhere]
 	.loop:
 	mov ax,dx   ;ax current, dx next
 	cmp ax,0xfff
-	je END_OF_STAGE
+	je .end
 	sub ax,2
 	add ax,[DATA_SECT_NO]
 	
 	push dx
+	push cx
 	call LBA_to_CHS
 	mov al,1 ;Read on sector at a time
 	call disk_read_16
+	pop cx
 	pop dx
 	call GetNextSector
 	add bx,512 ;Next sector memory location
+	inc cx
 	jmp .loop
+	.end:
+	ret
 
 GetNextSector:  ;dx is parameter
 	push bx
@@ -152,25 +178,14 @@ GetNextSector:  ;dx is parameter
 	shr dx,4   ; 0040 -> 0004
 	pop bx
 	ret
-		
-;---------------------------------------------------------------------------------------
-END_OF_STAGE:
-mov ah,0x00  ;This is a cool thing... It waits for user input before going into 32 bit mode
-int 0x16
-jmp STAGE_2
-;---------------------------------------------------------------------------------------
-;Functions 
-%include "Boot/stage1/disk_read.asm"
-%include "Boot/stage1/print.asm"
-%include "Boot/stage1/CHS.asm"
-
-
+	
 
 ;These are all hard disk addresses
 ROOT_SECT_NO: dw 0
 DATA_SECT_NO: dw 0   ; Corresponds to FAT table entry 2 (0,1,2..)
-
-TargetName: db 'STAGE2  BIN',0
+ReadWhere: dw 0x7e00
+KernelName: db 'KERNEL  BIN',0
+Stage2Name: db 'STAGE2  BIN',0
 times 510 - ($-$$) db 0
 dw 0xaa55
 ;---------------------------------------------------------------------------------------
