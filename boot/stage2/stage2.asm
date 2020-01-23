@@ -101,9 +101,9 @@ jmp 0x08:FinalKernel
 ;cli
 ;hlt
 
-%include "Boot/stage2/func16.asm"
-%include "Boot/stage2/func32.asm"
-%include "Boot/stage2/GDT.asm"
+%include "boot/stage2/func16.asm"
+%include "boot/stage2/func32.asm"
+%include "boot/stage2/GDT.asm"
 Message16: db 0xa,0xd,'Welcome to your OS - 16 bit, press any key to continue...',0
 Welcome: db 'Rishi Ranjan is a Gay Boi',0
 Stars: db '***********************************************',0

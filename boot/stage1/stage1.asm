@@ -85,8 +85,6 @@ call Findfile
 mov bx,KernelName
 mov word[ReadWhere],TempKernel
 call Findfile 
-jmp END_OF_STAGE
-	
 ;---------------------------------------------------------------------------------------
 END_OF_STAGE:
 mov ah,0x00  ;This is a cool thing... It waits for user input before going into 32 bit mode
@@ -94,9 +92,9 @@ int 0x16
 jmp STAGE_2
 ;---------------------------------------------------------------------------------------
 ;Functions 
-%include "Boot/stage1/disk_read.asm"
-%include "Boot/stage1/print.asm"
-%include "Boot/stage1/CHS.asm"
+%include "boot/stage1/disk_read.asm"
+%include "boot/stage1/print.asm"
+%include "boot/stage1/CHS.asm"
 
 Findfile:  ;Returns cluster number in bx
 	mov si,.TargetMessage
