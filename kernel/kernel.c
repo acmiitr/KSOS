@@ -7,7 +7,7 @@ void set_cursor(uint32_t);
 void printf(char* Message);
 void kmain()
 {
-	printf("This is working, so I'm losing my shit :)");
+	printf("This is working,\n so I'm losing my shit :)");
 	return;
 }
 

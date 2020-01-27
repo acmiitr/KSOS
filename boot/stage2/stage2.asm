@@ -1,7 +1,7 @@
 ;This is stage 2 of the Bootloader
 ;---------------------------------------------------------------------------------------
 FinalKernel equ 0X100000
-TempKernel equ 0Xf000
+TempKernel equ 0X3000
 [bits 16]
 [org 0x7e00]
 start:
@@ -81,19 +81,19 @@ add ah,0x07
 ;mov ah,0x37 ; Our printsi function is using this to do some crap
 mov bx, (80*9)+15
 call set_cursor_32
-mov si,Stars
+mov esi,Stars
 call print_esi_32
 mov bx, (80*11)+25
 call set_cursor_32
-mov si,Welcome
+mov esi,Welcome
 call print_esi_32
 mov bx, (80*13)+27
 call set_cursor_32
-mov si,DaddyOsWelcome
+mov esi,DaddyOsWelcome
 call print_esi_32
 mov bx, (80*15)+15
 call set_cursor_32
-mov si,Stars
+mov esi,Stars
 call print_esi_32
 add ah,0x10 
 loop flashing_screen

@@ -1,7 +1,7 @@
 ;This is our bootloader assembly code
 
 STAGE_2 equ 0x7e00
-TempKernel equ 0xf000
+TempKernel equ 0x3000
 RootLoad equ 0x1000
 FATLoad equ 0x6000
 [org 0x7c00]
