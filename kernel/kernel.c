@@ -1,3 +1,5 @@
+//This is chordia's work... He is gay boi... lolololololol
+
 #include<stdint.h> 
 #define COLOR 0x39
 #define VIDEO_MEMORY 0xb8000
