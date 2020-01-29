@@ -14,6 +14,7 @@ void kmain()
 	printf("This is working, so I'm\n \t losing my shit :)");
 	for(int i=0;i<1000000000;i++);
 	clear();
+	printf("This is working,\n so I'm losing my shit :)");
 	return;
 }
 void clear()

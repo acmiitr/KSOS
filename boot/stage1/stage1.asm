@@ -1,7 +1,7 @@
 ;This is our bootloader assembly code
 
 STAGE_2 equ 0x7e00
-TempKernel equ 0xf000
+TempKernel equ 0x3000
 RootLoad equ 0x1000
 FATLoad equ 0x6000
 [org 0x7c00]
@@ -121,7 +121,7 @@ Findfile:  ;Returns cluster number in bx
 		jmp $
 
 	.Error: db 0xa,0xd,'File not found!',0
-	.Message: db 0xa,0xd,'File found!',0
+	.Message: db 0xa,0xd,'Success!',0x0a,0x0d,0
 	.TargetMessage: db 'Searching for file: ',0
 	.Found:
 		mov si,.Message
