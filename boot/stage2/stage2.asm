@@ -1,29 +1,69 @@
 ;This is stage 2 of the Bootloader
-;---------------------------------------------------------------------------------------
+;-------------------------------------------------------------------------------------
+bits 16
+org 0x7e00
+
 FinalKernel equ 0X100000
 TempKernel equ 0X3000
-[bits 16]
-[org 0x7e00]
+MemMap equ 0x1000   ;Get the mapping table here.....
+
+
+
+;struc	MemoryMapEntry   -------- This will be working in qemu... I'll have to check
+;in real hardware
+;	.baseAddress		resq	1
+;	.length			resq	1
+;	.type			resd	1
+;	.acpi_null		resd	1
+;endstruc
+
+
 start:
 mov [KernelSize],cx
 mov bx,[KernelSize]
 
-jmp boot_stage_2
+;--------Need to get memory map-------
+GetMemoryMap:
+  xor ebx,ebx
+  mov es,bx
+  mov edi,MemMap
+.loop:
+  mov eax,0xe820 ;mov bx,0 is implicit
+  mov ecx,24
+  mov edx,'PAMS'
+  mov dword[es:edi + 20],0  ;Zeroing out 20-24
+  int 0x15
+  jc .error
+  cmp eax,'PAMS'
+  jne .error
+  cmp ebx,0
+  je .done
+  add edi,24
+  mov [.count],ebx
+  jmp .loop
+
+.error:
+  mov si,.error_msg
+  call print_si_16
+  jmp .done
+.error_msg: db 'Cannot read memory map, Aborting....',0
+.success_msg: db 'Read complete!, Count =',0
+.count: resd 1    ;Returns the number-1
+.done:
+  mov si,.success_msg
+  call print_si_16
+  mov bx,[.count]
+  call print_hex_bx
+
+main:
+jmp switch_to_pm
 
 KernelSize: dw 0
 		
-boot_stage_2:
+switch_to_pm:
 mov si,Message16
 call print_si_16
-
-;in al, 0x92
-;or al, 2
-;out 0x92, al  ;This enables A20 on my acer PC
-
-
-
-;---------------------------------------------------------------------------------------
-mov ah,0x00  ;This is a cool thing... It waits for user input before going into 32 bit mode
+mov ah,0x00  ;It waits for user input before going into 32 bit mode
 int 0x16
 
 ;---------------------------------------------------------------------------------------
@@ -64,7 +104,7 @@ KernelTransfer:
 ;--------------Welcome screen for our bootloader----------------------------------------
 ;---------------------------------------------------------------------------------------
 mov ah,0x37
-mov ecx,2
+mov ecx,4
 flashing_screen:
 push ecx
 mov ecx, 0x00ffffff
@@ -109,3 +149,6 @@ Welcome: db 'Rishi Ranjan is a Gay Boi',0
 Stars: db '***********************************************',0
 DaddyOsWelcome: db 'This is DADDY-OS',0
 
+;in al, 0x92
+;or al, 2
+;out 0x92, al  ;This enables A20 on my acer PC
