@@ -1,5 +1,6 @@
 *.bin
 *.elf
 *.o
+disk.img
 
 Experiment
