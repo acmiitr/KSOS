@@ -1,22 +1,14 @@
-//This is chordia's work... He is gay boi... lolololololol
 
-#include<stdint.h> 
-#define COLOR 0x39
+
+#include<stdint.h>
 #define VIDEO_MEMORY 0xb8000
 #define row 80
 #define col 25
-uint32_t get_cursor();
+#define COLOR 0x39
+int32_t get_cursor();
 void set_cursor(uint32_t);
-void printf(char* Message);
-void clear();
-void kmain()
-{
-	printf("This is working, so I'm\n \t losing my shit :)");
-	for(int i=0;i<1000000000;i++);
-	clear();
-	printf("This is working,\n so I'm losing my shit :)");
-	return;
-}
+
+
 void clear()
 {
 	char* cursor=(char*)VIDEO_MEMORY;

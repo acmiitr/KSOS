@@ -53,18 +53,15 @@ GetMemoryMap:
   mov si,.success_msg
   call print_si_16
   mov bx,[.count]
+  inc bx
   call print_hex_bx
 
-main:
-jmp switch_to_pm
-
-KernelSize: dw 0
 		
 switch_to_pm:
-mov si,Message16
-call print_si_16
-mov ah,0x00  ;It waits for user input before going into 32 bit mode
-int 0x16
+  mov si,Message16
+  call print_si_16
+  mov ah,0x00  ;It waits for user input before going into 32 bit mode
+  int 0x16
 
 ;---------------------------------------------------------------------------------------
 ;This is the switch to PMode
@@ -148,6 +145,7 @@ Message16: db 0xa,0xd,'Welcome to your OS - 16 bit, press any key to continue...
 Welcome: db 'Rishi Ranjan is a Gay Boi',0
 Stars: db '***********************************************',0
 DaddyOsWelcome: db 'This is DADDY-OS',0
+KernelSize: dw 0
 
 ;in al, 0x92
 ;or al, 2
