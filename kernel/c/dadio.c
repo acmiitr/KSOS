@@ -1,5 +1,3 @@
-
-
 #include<stdint.h>
 #define VIDEO_MEMORY 0xb8000
 #define row 80

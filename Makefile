@@ -1,17 +1,20 @@
-C_SOURCES = $(wildcard kernel/src/c/*.c)
-ASM_SOURCES = $(wildcard kernel/src/asm/*.asm)
+C_SOURCES = $(wildcard kernel/c/*.c)
+ASM_SOURCES = $(wildcard kernel/asm/*.asm)
 C_OBJECTS = ${C_SOURCES:.c=.o}
 ASM_OBJECTS = ${ASM_SOURCES:.asm=.o}
 
 
-.PHONY : all assemble run
+.PHONY : all assemble run clean
 
-all: assemble
+all: run
 
-run : 
+run : assemble
 #	qemu-system-i386 -hda disk.img
 	qemu-system-i386 -drive format=raw,file=disk.img  -monitor stdio
 
+debug: assemble
+	qemu-system-i386 -s -hda disk.img &
+	gdb -ex "target remote localhost:1234" -ex "symbol-file kernel/kernel.elf" -ex "b kmain" -ex "continue"
 
 assemble: disk.img kernel.bin stage1.bin stage2.bin 
 	dd if=stage1.bin of=disk.img bs=1 count=3 seek=0 skip=0 conv=notrunc
@@ -26,12 +29,13 @@ kernel.bin : kernel/kernel.elf  #perhaps I should name kernel.o as kernel.elf?
 	objcopy -O binary $^ $@
 	chmod -x $@
 
-
-kernel/kernel.elf : kernel/entry.o $(C_OBJECTS) $(ASM_OBJECTS)
-	i686-elf-ld  $^ -Ttext 0x100000 -e kmain -o $@
+#You can use the --print-map option to look at what the linker does
+kernel/kernel.elf : $(C_OBJECTS) $(ASM_OBJECTS)
+	i686-elf-ld  $^ -T kernel/linker.ld -e kmain -o $@ 
+	chmod -x $@
 
 %.o : %.c
-	i686-elf-gcc -ffreestanding $< -c -o $@ -Wall -Werror
+	i686-elf-gcc -ffreestanding $< -c -o $@ -Wall -Werror -g
 %.o : %.asm
 	nasm $< -o $@ -f elf32
 
