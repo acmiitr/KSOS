@@ -3,7 +3,7 @@ ENTRY(kmain)
 
 SECTIONS {
 
-. = 0x100000;
+. = 0xC0000000;
 
 __begin = .;
 .text : SUBALIGN(16)

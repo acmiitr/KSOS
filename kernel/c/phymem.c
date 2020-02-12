@@ -54,7 +54,7 @@ void  pmmngr_init(uint32_t mapentrycount)   //kernel size in 512 byte sectors - 
 	       	_physical_memory_table[i] = 0xffffffff; //Make everything 1 -- Everything is occupied initially
 	for( uint32_t i=0;i<mapentrycount;i++)
 	{
-		if((map_ptr -> type == 1)&&(map_ptr -> startLo >= KERNEL_P))
+		if((map_ptr -> type == 1)&&(map_ptr -> startLo >= KERNEL_P) && !(map_ptr -> startHi))
 			pmmngr_toggle_range(map_ptr->startLo, map_ptr->startLo + map_ptr ->sizeLo);
 		map_ptr ++;
 	}				

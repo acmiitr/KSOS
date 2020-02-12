@@ -3,8 +3,9 @@
 bits 16
 org 0x7e00
 
-FinalKernel equ 0X100000
+FinalKernel equ 0x100000
 TempKernel equ 0X3000
+KernelVirt equ 0xC0000000
 MemMap equ 0x1000   ;Get the mapping table here.....
 
 
@@ -135,16 +136,22 @@ mov esi,Stars
 call print_esi_32
 add ah,0x10 
 loop flashing_screen
+;----------------------Virtual memory!--------------------------
+
+call EnablePaging
+
 ;------------------Prepare to jump into kernel-------------------
+
 mov eax,[GetMemoryMap.count]
 push eax
-jmp 0x08:FinalKernel
+jmp 0x08:KernelVirt
 ;cli
 ;hlt
 
 %include "boot/stage2/func16.asm"
 %include "boot/stage2/func32.asm"
 %include "boot/stage2/GDT.asm"
+%include "boot/stage2/pagingsetup.asm"
 Message16: db 0xa,0xd,'Welcome to your OS - 16 bit, press any key to continue...',0
 Welcome: db 'Rishi Ranjan is a Gay Boi',0
 Stars: db '***********************************************',0
