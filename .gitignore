@@ -1,6 +1,7 @@
 *.bin
 *.elf
 *.o
-disk.img
+*.swp
+./disk.img
 
 Experiment

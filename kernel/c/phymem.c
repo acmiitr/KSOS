@@ -1,5 +1,6 @@
 // Standard includes:
 #include<stdint.h> 
+#include<stdbool.h>
 
 // Constant definitions:
 #define PMMAP 0x1000
@@ -14,7 +15,7 @@
 // Interface and responsibilities:
 void  pmmngr_init(uint32_t mapentrycount);
 uint32_t* pmmngr_allocate_block();
-uint8_t pmmngr_free_block(uint32_t* address);
+bool pmmngr_free_block(uint32_t* address);
 
 // External routines/variables:
 extern uint32_t __begin[], __end[];  //Why arrays? This is a pretty cool concept to distinguish pointers
@@ -26,12 +27,11 @@ static inline uint32_t block_number(uint32_t address);
 static uint8_t get_lowest_bit(uint32_t hexinp);
 static uint8_t extract_bit(uint32_t hexinp,uint8_t bitnumber); 
 
-//static uint32_t* _lazy_byte;
 
 // Data structues and user defined data types:
 
-uint32_t _mapentrycount;
-uint32_t _physical_memory_table[0x8000];
+static uint32_t _mapentrycount;
+static uint32_t _physical_memory_table[0x8000];   //Why 8000? This is a hardcoded value (4GB needs this much)
 
 typedef struct mmap_entry
 {
@@ -78,27 +78,31 @@ uint32_t* pmmngr_allocate_block()
 		}
 	return 0;
 }
-uint8_t pmmngr_free_block(uint32_t* address)
+bool pmmngr_free_block(uint32_t* address)
 {
 	if((uint32_t)address % BLOCK_SIZE != 0) return 0;
-
 	mmap_entry_t* map_ptr= (mmap_entry_t*)PMMAP;
 	for( uint32_t i=0;i<_mapentrycount;i++)
 	{
 		if(((map_ptr->startLo) <= (uint32_t)address)&& (((uint32_t)address-map_ptr->startLo) < map_ptr->sizeLo))
 		{
-			if (map_ptr -> type !=1) return 0;
-			else break;
+			if (map_ptr -> type ==1)
+			{
+
+				uint32_t block = block_number((uint32_t)address);
+				uint32_t dword = block >> 5;
+				uint8_t offset = block % 32;
+				if(extract_bit((uint32_t)(_physical_memory_table + dword),offset)) return 0;
+				pmmngr_toggle_block(block);
+				return 1;
+
+			}
+			else return 0;
 		}
 		map_ptr ++;
 	}
+	return 0;
 
-	uint32_t block = block_number((uint32_t)address);
-	uint32_t word = block >> 5;
-	uint8_t offset = block % 32;
-	if(extract_bit((uint32_t)(_physical_memory_table + word),offset)) return 0;
-	pmmngr_toggle_block(block);
-	return 1;
 }
 // Helper function implementations:
 static uint8_t get_lowest_bit(uint32_t hexinp)
@@ -111,13 +115,9 @@ static uint8_t get_lowest_bit(uint32_t hexinp)
 	}
 	return 0xff;
 }
-static uint8_t extract_bit(uint32_t hexinp,uint8_t bitnumber)  //bitnumber < 32
+static inline uint8_t extract_bit(uint32_t hexinp,uint8_t bitnumber)  //bitnumber < 32
 {
-	for(int i=0;i< bitnumber;i++)
-	{
-		hexinp >>= 1;
-	}
-	return hexinp%2;
+	return (hexinp >> bitnumber) & 1;
 }
 static inline uint32_t block_number(uint32_t address)
 {
@@ -126,10 +126,11 @@ static inline uint32_t block_number(uint32_t address)
 
 static inline void pmmngr_toggle_block(uint32_t block_number)   //This must not be exposed to the programmer!!!
 {
-	uint8_t bit = block_number % 8; 
-	uint8_t* byte = (uint8_t*)(block_number >> 3);
-	byte += (uint32_t)_physical_memory_table;
-	*byte ^= (1<<bit);
+	_physical_memory_table[block_number >> 5] ^= (1ul << (block_number & 31));
+//	uint8_t bit = block_number % 8; 
+//	uint8_t* byte = (uint8_t*)(block_number >> 3);
+//	byte += (uint32_t)_physical_memory_table;
+//	*byte ^= (1<<bit);
 }
 /** start and end are addresses**/
 static void pmmngr_toggle_range(uint32_t start,uint32_t end)    //Optimize the crap out of this later
@@ -152,9 +153,10 @@ static void pmmngr_toggle_range(uint32_t start,uint32_t end)    //Optimize the c
 			pmmngr_toggle_block(block_number(start));
 			start += BLOCK_SIZE;
 		}
-//	_lazy_byte = (uint32_t*)start;
 	}
 }
 
+//	_lazy_byte = (uint32_t*)start;
+//static uint32_t* _lazy_byte;
 //	_physical_memory_table = __end;   //Debug here!
 //	uint32_t kernel_block_count  = kernelsize >> SECTORS_PER_BLOCK_B;

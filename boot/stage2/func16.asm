@@ -21,10 +21,10 @@ print_si_16:
 print_hex_bx:
 	pusha
 	mov ah,0x0e
-	mov al,10
-	int 0x10
-	mov al,13
-	int 0x10
+;	mov al,10
+;	int 0x10
+;	mov al,13
+;	int 0x10
 	mov al,'0'
 	int 0x10
 	mov al,'x'

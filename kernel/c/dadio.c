@@ -3,7 +3,7 @@
 #define row 80
 #define col 25
 #define COLOR 0x39
-int32_t get_cursor();
+uint32_t get_cursor();
 void set_cursor(uint32_t);
 
 

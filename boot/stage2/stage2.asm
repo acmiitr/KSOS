@@ -47,13 +47,14 @@ GetMemoryMap:
   call print_si_16
   jmp .done
 .error_msg: db 'Cannot read memory map, Aborting....',0
-.success_msg: db 'Read complete!, Count =',0
+.success_msg: db 'Read complete!, Count = ',0
 .count: dd 0    ;Returns the number-1
 .done:
   mov si,.success_msg
   call print_si_16
   mov bx,[.count]
   inc bx
+  mov [.count],bx
   call print_hex_bx
 
 		
@@ -135,6 +136,8 @@ call print_esi_32
 add ah,0x10 
 loop flashing_screen
 ;------------------Prepare to jump into kernel-------------------
+mov eax,[GetMemoryMap.count]
+push eax
 jmp 0x08:FinalKernel
 ;cli
 ;hlt
