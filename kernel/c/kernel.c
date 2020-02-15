@@ -1,6 +1,7 @@
 #include<stdint.h> 
 #include "dadio.h"
 #include "phymem.h"
+#include "virtmem.h"
 
 void kmain(uint32_t mmapsize)
 {
@@ -8,12 +9,10 @@ void kmain(uint32_t mmapsize)
 	printf("This is your C code executing! Time to party!\n");
 	printf("Hello Divyanshu!");
 	pmmngr_init(mmapsize);
-	uint32_t* chunk = pmmngr_allocate_block();
-	uint32_t* chunk2 = pmmngr_allocate_block();
-	printf((char*) chunk);
-	printf((char*) chunk2);
-	pmmngr_free_block(chunk);
-	chunk = pmmngr_allocate_block();
+	vmmngr_init();
+	map_page(0xD0000000,0xb8000);
+	*(char*)0xD0000000 = 'm';
+
 	return;
 }
 

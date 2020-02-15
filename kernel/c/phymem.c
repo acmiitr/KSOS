@@ -61,7 +61,7 @@ void  pmmngr_init(uint32_t mapentrycount)   //kernel size in 512 byte sectors - 
 	//Now we free the space occupied by the kernel and this memory manager :)
 	uint32_t kernel_start = (uint32_t)__begin;
 	uint32_t kernel_end = (uint32_t)__end;
-	pmmngr_toggle_range (kernel_start,kernel_end);
+	pmmngr_toggle_range (KERNEL_P,KERNEL_P + kernel_end - kernel_start);
 }
 
 uint32_t* pmmngr_allocate_block()
@@ -81,6 +81,8 @@ uint32_t* pmmngr_allocate_block()
 bool pmmngr_free_block(uint32_t* address)
 {
 	if((uint32_t)address % BLOCK_SIZE != 0) return 0;
+	
+	/*
 	mmap_entry_t* map_ptr= (mmap_entry_t*)PMMAP;
 	for( uint32_t i=0;i<_mapentrycount;i++)
 	{
@@ -101,7 +103,15 @@ bool pmmngr_free_block(uint32_t* address)
 		}
 		map_ptr ++;
 	}
-	return 0;
+	*/
+	uint32_t block = block_number((uint32_t)address);
+	uint32_t dword = block >> 5;
+	uint8_t offset = block % 32;
+	if(!extract_bit((uint32_t)(_physical_memory_table + dword),offset)) return 0;
+	pmmngr_toggle_block(block);
+	return 1;
+
+//	return 0;
 
 }
 // Helper function implementations:
