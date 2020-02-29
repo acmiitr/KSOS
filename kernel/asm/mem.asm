@@ -6,6 +6,7 @@ get_pdbr:
 	ret
 
 flush_tlb_entry:
+;invlpg isn't present in i386, only from i486... Potential bug? Lol
 	mov eax,[esp+ 0x04]
 	invlpg [eax]
 	ret

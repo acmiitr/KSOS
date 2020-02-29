@@ -48,4 +48,4 @@ disk.img:
 	truncate $@ -s 1M
 	mkfs.vfat -F12 -S512 -s1 $@
 clean :
-	rm $(C_OBJECTS) $(ASM_OBJECTS)
+	rm $(C_OBJECTS) $(ASM_OBJECTS) *.bin

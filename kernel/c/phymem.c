@@ -1,6 +1,8 @@
 // Standard includes:
 #include<stdint.h> 
 #include<stdbool.h>
+#include"phymem.h"
+#include"dadio.h"
 
 // Constant definitions:
 #define PMMAP 0x1000
@@ -12,12 +14,7 @@
 #define SECTOR_SIZE_B 9
 #define SECTORS_PER_BLOCK_B 3
 
-// Interface and responsibilities:
-void  pmmngr_init(uint32_t mapentrycount);
-uint32_t* pmmngr_allocate_block();
-bool pmmngr_free_block(uint32_t* address);
-
-// External routines/variables:
+// External variables:
 extern uint32_t __begin[], __end[];  //Why arrays? This is a pretty cool concept to distinguish pointers
 
 // Routines internal to object:
@@ -30,8 +27,8 @@ static uint8_t extract_bit(uint32_t hexinp,uint8_t bitnumber);
 
 // Data structues and user defined data types:
 
-static uint32_t _mapentrycount;
-static uint32_t _physical_memory_table[0x8000];   //Why 8000? This is a hardcoded value (4GB needs this much)
+//static uint32_t _mapentrycount;
+static uint32_t physical_memory_bitmap[0x8000];   //Why 8000? This is a hardcoded value (4GB needs this much)
 
 typedef struct mmap_entry
 {
@@ -45,14 +42,33 @@ typedef struct mmap_entry
 
 
 // Function implementations:
+
 void  pmmngr_init(uint32_t mapentrycount)   //kernel size in 512 byte sectors - I'm not taking high into consideration because 32 bit
 { 
-	_mapentrycount = mapentrycount;
+	//_mapentrycount = mapentrycount;
 	mmap_entry_t* map_ptr= (mmap_entry_t*)PMMAP;
 
-	for (uint32_t i=0;i<0x8000;i++)
-	       	_physical_memory_table[i] = 0xffffffff; //Make everything 1 -- Everything is occupied initially
-	for( uint32_t i=0;i<mapentrycount;i++)
+
+//	for (uint32_t i=0;i<0x8000;i++)
+//	       	physical_memory_bitmap[i] = 0xffffffff; //Make everything 1 -- Everything is occupied initially
+//	printhex((uint32_t)physical_memory_bitmap);
+
+		printhex(physical_memory_bitmap[0]);
+		printhex(*(uint32_t*)((uint32_t)physical_memory_bitmap - 0xC0000000));
+	       	physical_memory_bitmap[0] = 0xffffffff; //Make everything 1 -- Everything is occupied initially
+		printhex(physical_memory_bitmap[0]);
+		printhex(*(uint32_t*)((uint32_t)physical_memory_bitmap - 0xC0000000));
+	/*
+
+	for (int i = 0; i< mapentrycount ; i++)
+        {
+                printf("\nStarting address:"); printhex((map_ptr+i) -> startLo);
+                printf("\tSize: "); printhex((map_ptr+i) -> sizeLo);
+                printf("\tType:"); printhex((map_ptr+i) -> type);
+         }
+*/
+
+	for(uint32_t i=0;i<mapentrycount;i++)
 	{
 		if((map_ptr -> type == 1)&&(map_ptr -> startLo >= KERNEL_P) && !(map_ptr -> startHi))
 			pmmngr_toggle_range(map_ptr->startLo, map_ptr->startLo + map_ptr ->sizeLo);
@@ -68,9 +84,9 @@ uint32_t* pmmngr_allocate_block()
 {
 	uint32_t* address;
 	for( uint32_t i=0;i<0x8000;i++)
-		if (_physical_memory_table[i] < 0xffffffff)
+		if (physical_memory_bitmap[i] < 0xffffffff)
 		{
-			uint8_t bit = get_lowest_bit(_physical_memory_table[i]);  //bit lies from 0 to 31
+			uint8_t bit = get_lowest_bit(physical_memory_bitmap[i]);  //bit lies from 0 to 31
 				if(bit == 0xff) return 0;
 			address = (uint32_t*)((i << 17) + (bit << 12));
 			pmmngr_toggle_block(block_number((uint32_t)address));
@@ -94,7 +110,7 @@ bool pmmngr_free_block(uint32_t* address)
 				uint32_t block = block_number((uint32_t)address);
 				uint32_t dword = block >> 5;
 				uint8_t offset = block % 32;
-				if(extract_bit((uint32_t)(_physical_memory_table + dword),offset)) return 0;
+				if(extract_bit((uint32_t)(physical_memory_bitmap + dword),offset)) return 0;
 				pmmngr_toggle_block(block);
 				return 1;
 
@@ -107,7 +123,7 @@ bool pmmngr_free_block(uint32_t* address)
 	uint32_t block = block_number((uint32_t)address);
 	uint32_t dword = block >> 5;
 	uint8_t offset = block % 32;
-	if(!extract_bit((uint32_t)(_physical_memory_table + dword),offset)) return 0;
+	if(!extract_bit((uint32_t)(physical_memory_bitmap + dword),offset)) return 0;
 	pmmngr_toggle_block(block);
 	return 1;
 
@@ -136,10 +152,10 @@ static inline uint32_t block_number(uint32_t address)
 
 static inline void pmmngr_toggle_block(uint32_t block_number)   //This must not be exposed to the programmer!!!
 {
-	_physical_memory_table[block_number >> 5] ^= (1ul << (block_number & 31));
+	physical_memory_bitmap[block_number >> 5] ^= (1ul << (block_number & 31));
 //	uint8_t bit = block_number % 8; 
 //	uint8_t* byte = (uint8_t*)(block_number >> 3);
-//	byte += (uint32_t)_physical_memory_table;
+//	byte += (uint32_t)physical_memory_bitmap;
 //	*byte ^= (1<<bit);
 }
 /** start and end are addresses**/
@@ -153,7 +169,7 @@ static void pmmngr_toggle_range(uint32_t start,uint32_t end)    //Optimize the c
 		if((end - start) >= 32* BLOCK_SIZE)
 		{
 			uint32_t* byte = (uint32_t*)(block_number(start) >> 3);
-			byte = (uint32_t*)((uint8_t*)byte +(uint32_t)_physical_memory_table);
+			byte = (uint32_t*)((uint8_t*)byte +(uint32_t)physical_memory_bitmap);
 			*byte ^= 0xffffffff;
 			start += (BLOCK_SIZE<<5);
 			
@@ -168,5 +184,5 @@ static void pmmngr_toggle_range(uint32_t start,uint32_t end)    //Optimize the c
 
 //	_lazy_byte = (uint32_t*)start;
 //static uint32_t* _lazy_byte;
-//	_physical_memory_table = __end;   //Debug here!
+//	physical_memory_bitmap = __end;   //Debug here!
 //	uint32_t kernel_block_count  = kernelsize >> SECTORS_PER_BLOCK_B;

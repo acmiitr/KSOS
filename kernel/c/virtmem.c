@@ -46,7 +46,7 @@ enum PAGE_PDE_FLAGS {
 	PDE_LV4_GLOBAL		=	0x200,	
    	PDE_FRAME		=	0xFFFFF000 
 };
-//Responsibitities
+//Helper functions
 static inline void entry_toggle_attrib (uint32_t* e, uint8_t attrib);  //This seems to be common for both the tables lol
 static inline void entry_set_frame (uint32_t*, uint32_t);
 static inline bool entry_is_present (uint32_t e);

@@ -1,21 +1,24 @@
 #include<stdint.h>
+#include "dadio.h"
+
 #define VIDEO_MEMORY 0xb8000
-#define row 80
-#define col 25
-#define COLOR 0x39
+#define ROW 80
+#define COL 25
+
 uint32_t get_cursor();
 void set_cursor(uint32_t);
 
+static char current_color = 0xf8;
 
 void clear()
 {
 	char* cursor=(char*)VIDEO_MEMORY;
 	*cursor=' ';
-	cursor++;*cursor=COLOR;cursor++;
-	while((uint32_t)(cursor-VIDEO_MEMORY)<2*row*col)
+	cursor++;*cursor=current_color;cursor++;
+	while((uint32_t)(cursor-VIDEO_MEMORY)<2*ROW*COL)
 		{
 			*cursor=' ';cursor++;
-			*cursor=COLOR;cursor++;
+			*cursor=current_color;cursor++;
 		}
 	set_cursor(0);
 }
@@ -24,40 +27,71 @@ void printf(char* Message)
 {
 	uint32_t pointer = get_cursor();
 	pointer <<= 1;
-	char* VGA_CURSOR = (char*) VIDEO_MEMORY;
-	VGA_CURSOR += pointer;
+	char* vga_cursor = (char*) VIDEO_MEMORY;
+	vga_cursor += pointer;
 	while	(*Message)
 	{
 		char c=*Message;
 		switch(c)
 		{
 		 case '\n':
-		 	pointer=(uint32_t)(VGA_CURSOR-VIDEO_MEMORY);
-		 	while(pointer%(2*row)){
+		 	pointer=(uint32_t)(vga_cursor-VIDEO_MEMORY);
+		 	while(pointer%(2*ROW)){
 			pointer++;
-			if(pointer==2*row*col)
+			if(pointer==2*ROW*COL)
 			{pointer=0;break;}
 			}	
 		 	Message++;
-		 	VGA_CURSOR=(char *)(VIDEO_MEMORY+pointer);
+		 	vga_cursor=(char *)(VIDEO_MEMORY+pointer);
 
     			break;
 		case '\t':
-			pointer=(uint32_t)(VGA_CURSOR-VIDEO_MEMORY);
+			pointer=(uint32_t)(vga_cursor-VIDEO_MEMORY);
 			pointer+=16;
-			VGA_CURSOR=(char*)(VIDEO_MEMORY+pointer);
+			vga_cursor=(char*)(VIDEO_MEMORY+pointer);
 			Message++;
 	       		break;
 		default:
-			  *VGA_CURSOR = *Message;
+			  *vga_cursor = *Message;
                		 Message++;
-               		 VGA_CURSOR ++;
-               		 *VGA_CURSOR = COLOR;
-               		 VGA_CURSOR ++;
+               		 vga_cursor ++;
+               		 *vga_cursor = current_color;
+               		 vga_cursor ++;
 		}
 	}
-	VGA_CURSOR -= VIDEO_MEMORY;
-	pointer = (uint32_t)VGA_CURSOR;
+	vga_cursor -= VIDEO_MEMORY;
+	pointer = (uint32_t)vga_cursor;
 	pointer >>= 1;
 	set_cursor(pointer);
+}
+
+
+void printhex(uint32_t input)
+{
+	char buffer[11] = "0x00000000";  //0x + 8 + null
+	uint8_t pointer = 9;
+	for(int i=0;i<8;i++)
+	{
+		int c = input & 0xF;
+		if(c<10)
+			c+=0x30;
+		else
+			c+=55;
+		buffer[pointer] = (char)c;
+		pointer --;
+		input >>=4;
+	}
+	printf(buffer);
+}
+
+void set_fg_color (enum vga_color c)
+{
+	current_color &= 0xf0;
+	current_color |= c;
+}
+
+void set_bg_color (enum vga_color c)
+{
+	current_color &= 0x0f;
+	current_color |= (c<<4);
 }
