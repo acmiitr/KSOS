@@ -4,7 +4,7 @@ bits 16
 org 0x7e00
 
 FinalKernel equ 0x100000
-TempKernel equ 0X3000
+TempKernel equ 0X30000
 KernelVirt equ 0xC0000000
 MemMap equ 0x1000   ;Get the mapping table here.....
 

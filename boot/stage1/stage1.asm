@@ -1,7 +1,7 @@
 ;This is our bootloader assembly code
 
-STAGE_2 equ 0x7e00
-TempKernel equ 0x3000
+Stage2Sector equ 0x7e0
+TempKernelSector equ 0x3000
 RootLoad equ 0x1000
 FATLoad equ 0x6000
 [org 0x7c00]
@@ -80,16 +80,18 @@ LoadFAT:
 ;---------------------------------------------------------------------------------------
 
 mov bx,Stage2Name
-mov word[ReadWhere],STAGE_2
+mov word[ReadWhere],Stage2Sector
 call Findfile 
+xor bx,bx
+mov es,bx
 mov bx,KernelName
-mov word[ReadWhere],TempKernel
+mov word[ReadWhere],TempKernelSector
 call Findfile 
 ;---------------------------------------------------------------------------------------
 END_OF_STAGE:
 mov ah,0x00  ;This is a cool thing... It waits for user input before going into 32 bit mode
 int 0x16
-jmp STAGE_2
+jmp (Stage2Sector << 4)
 ;---------------------------------------------------------------------------------------
 ;Functions 
 %include "boot/stage1/disk_read.asm"
@@ -131,10 +133,11 @@ Findfile:  ;Returns cluster number in bx
 
 
 ReadFile:
-	
 	;Read sector bx, get next sector, loop
 	xor cx,cx
 	mov bx,[ReadWhere]
+mov es,bx
+xor bx,bx
 	.loop:
 	mov ax,dx   ;ax current, dx next
 	cmp ax,0xfff
