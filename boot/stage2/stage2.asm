@@ -9,19 +9,16 @@ KernelVirt equ 0xC0000000
 MemMap equ 0x1000   ;Get the mapping table here.....
 
 
-
-;struc	MemoryMapEntry   -------- This will be working in qemu... I'll have to check
-;in real hardware
-;	.baseAddress		resq	1
-;	.length			resq	1
-;	.type			resd	1
-;	.acpi_null		resd	1
-;endstruc
-
-
 start:
 mov [KernelSize],cx
 mov bx,[KernelSize]
+
+
+EnableA20:
+in al, 0x92
+or al, 2
+out 0x92, al  ;This enables A20 on my acer PC -- A potential source for errors :(
+
 
 ;--------Need to get memory map-------
 GetMemoryMap:
@@ -57,6 +54,7 @@ GetMemoryMap:
   inc bx
   mov [.count],bx
   call print_hex_bx
+
 
 		
 switch_to_pm:
@@ -98,6 +96,7 @@ KernelTransfer:
 	mov esi,TempKernel
 	mov edi,FinalKernel
 	rep movsd
+
 
 ;---------------------------------------------------------------------------------------
 ;--------------Welcome screen for our bootloader----------------------------------------
@@ -158,6 +157,3 @@ Stars: db '***********************************************',0
 DaddyOsWelcome: db 'This is DADDY-OS',0
 KernelSize: dw 0
 
-;in al, 0x92
-;or al, 2
-;out 0x92, al  ;This enables A20 on my acer PC

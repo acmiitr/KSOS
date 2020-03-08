@@ -49,16 +49,10 @@ void  pmmngr_init(uint32_t mapentrycount)   //kernel size in 512 byte sectors - 
 	mmap_entry_t* map_ptr= (mmap_entry_t*)PMMAP;
 
 
-//	for (uint32_t i=0;i<0x8000;i++)
-//	       	physical_memory_bitmap[i] = 0xffffffff; //Make everything 1 -- Everything is occupied initially
-//	printhex((uint32_t)physical_memory_bitmap);
+	for (uint32_t i=0;i<0x8000;i++)
+	       	physical_memory_bitmap[i] = 0xffffffff; //Make everything 1 -- Everything is occupied initially
+	printhex((uint32_t)physical_memory_bitmap);
 
-		printhex(physical_memory_bitmap[0]);
-		printhex(*(uint32_t*)((uint32_t)physical_memory_bitmap - 0xC0000000));
-	       	physical_memory_bitmap[0] = 0xffffffff; //Make everything 1 -- Everything is occupied initially
-		printhex(physical_memory_bitmap[0]);
-		printhex(*(uint32_t*)((uint32_t)physical_memory_bitmap - 0xC0000000));
-	/*
 
 	for (int i = 0; i< mapentrycount ; i++)
         {
@@ -66,7 +60,6 @@ void  pmmngr_init(uint32_t mapentrycount)   //kernel size in 512 byte sectors - 
                 printf("\tSize: "); printhex((map_ptr+i) -> sizeLo);
                 printf("\tType:"); printhex((map_ptr+i) -> type);
          }
-*/
 
 	for(uint32_t i=0;i<mapentrycount;i++)
 	{
