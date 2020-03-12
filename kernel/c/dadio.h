@@ -24,10 +24,9 @@ enum vga_color {
 
 
 
-uint32_t get_cursor();
-void set_cursor(uint32_t);
 void printf(char* Message);
 void printhex (uint32_t input);
+void putc(char input);
 void set_fg_color(enum vga_color);
 void set_bg_color(enum vga_color);
 void clear();

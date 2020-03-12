@@ -68,7 +68,7 @@ void printf(char* Message)
 
 void printhex(uint32_t input)
 {
-	char buffer[11] = "0x00000000";  //0x + 8 + null
+	char buffer[11];  //0x + 8 + null
 	uint8_t pointer = 9;
 	for(int i=0;i<8;i++)
 	{
@@ -81,7 +81,22 @@ void printhex(uint32_t input)
 		pointer --;
 		input >>=4;
 	}
-	printf(buffer);
+	
+//This is to make the thing smaller
+	pointer = 2;
+	while(buffer[pointer] == '0') pointer ++;
+	pointer--;buffer[pointer] = 'x';
+	pointer--;buffer[pointer] = '0';
+	printf(buffer + pointer);
+}
+
+void putc (char x)
+{
+	uint32_t pointer = get_cursor();
+	char* vga_cursor = (char*) VIDEO_MEMORY;
+	vga_cursor += (pointer<<1);
+	*vga_cursor = x;
+	set_cursor(pointer+1);
 }
 
 void set_fg_color (enum vga_color c)

@@ -20,12 +20,9 @@ assemble: disk.img kernel.bin stage1.bin stage2.bin
 	dd if=stage1.bin of=disk.img bs=1 count=3 seek=0 skip=0 conv=notrunc
 	dd if=stage1.bin of=disk.img bs=1 count=451 seek=62 skip=62 conv=notrunc
 	mcopy -i disk.img stage2.bin kernel.bin ::  -D o
-#	sudo mount disk.img /mnt
-#	sudo cp stage2.bin kernel.bin /mnt
-#	sudo umount /mnt
 
 
-kernel.bin : kernel/kernel.elf  #perhaps I should name kernel.o as kernel.elf?
+kernel.bin : kernel/kernel.elf  
 	objcopy -O binary $^ $@
 	chmod -x $@
 

@@ -58,7 +58,7 @@ static bool alloc_page(uint32_t* table_entry);
 void vmmngr_init() //Probably needs to clear out the identity mapping also
 {
 	set_recursive_map();
-
+	//Need to set all the page frames that are in use by the kernel
 }
 bool map_page(uint32_t virtual_address,uint32_t physical_address)
 {

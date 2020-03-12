@@ -22,40 +22,45 @@ enum vga_color {
 #include "dadio.h"
 #include "phymem.h"
 #include "virtmem.h"
+#include "timer.h"
+#include "keyboard.h"
+#include "hal.h"
 
-
-typedef struct mmap_entry
-{
-    uint32_t  startLo;
-    uint32_t  startHi;
-    uint32_t  sizeLo;
-    uint32_t  sizeHi;
-    uint32_t  type;
-    uint32_t  acpi_3_0;
-} mmap_entry_t;
-
-void print_memory_map(uint32_t mmapsize);
-
+void initialize_all(uint32_t mmapsize);
 void kmain(uint32_t mmapsize)
 {
 	set_fg_color(CYAN);
 	set_bg_color(LIGHT_GREY);
 	clear();
- 
-	pmmngr_init(mmapsize);
-	vmmngr_init();
+
+	initialize_all(mmapsize);
+
+
+	uint32_t start = get_tick_count();
+
+	set_fg_color(WHITE);
+	set_bg_color(RED);
+
+	while(get_tick_count() < (start + 30))
+		kernel_wait();
+	printf("\nBtw");
+	while(get_tick_count() < (start + 60))
+		kernel_wait();
+	printf(" masih,");
+	while(get_tick_count() < (start + 90))
+		kernel_wait();
+	printf(" you're");
+	while(get_tick_count() < (start + 120))
+		kernel_wait();
+	printf(" gay");
 	return;
 }
-/*
-void print_memory_map(uint32_t mmapsize)
+
+void initialize_all(uint32_t mmapsize)
 {
-        mmap_entry_t* map= (mmap_entry_t*)0x1000;
-        for (int i = 0; i< mmapsize ; i++)
-        {
-                printf("\nStarting address:"); printhex((map+i) -> startLo);
-                printf("\tSize: "); printhex((map+i) -> sizeLo);
-                printf("\tType:"); printhex((map+i) -> type);
-         }
-}       
- 
-*/
+	pmmngr_init(mmapsize);
+	vmmngr_init();
+	interrupt_init();
+	kbc_init();
+	set_timer(0xffffff);
+}

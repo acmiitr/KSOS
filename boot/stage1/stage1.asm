@@ -136,8 +136,8 @@ ReadFile:
 	;Read sector bx, get next sector, loop
 	xor cx,cx
 	mov bx,[ReadWhere]
-mov es,bx
-xor bx,bx
+	mov es,bx
+	xor bx,bx
 	.loop:
 	mov ax,dx   ;ax current, dx next
 	cmp ax,0xfff
