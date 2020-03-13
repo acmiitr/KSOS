@@ -35,7 +35,6 @@ void kmain(uint32_t mmapsize)
 
 	initialize_all(mmapsize);
 
-
 	uint32_t start = get_tick_count();
 
 	set_fg_color(WHITE);

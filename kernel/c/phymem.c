@@ -14,6 +14,10 @@
 #define SECTOR_SIZE_B 9
 #define SECTORS_PER_BLOCK_B 3
 
+
+//THIS IS DEFINITELY SOME JUGAAD CHANGE THIS LATER
+#define KERNEL_MAPPED_SIZE 0x400000
+
 // External variables:
 extern uint32_t __begin[], __end[];  //Why arrays? This is a pretty cool concept to distinguish pointers
 
@@ -69,9 +73,9 @@ void  pmmngr_init(uint32_t mapentrycount)   //kernel size in 512 byte sectors - 
 		map_ptr ++;
 	}				
 	//Now we free the space occupied by the kernel and this memory manager :)
-	uint32_t kernel_start = (uint32_t)__begin;
-	uint32_t kernel_end = (uint32_t)__end;
-	pmmngr_toggle_range (KERNEL_P,KERNEL_P + kernel_end - kernel_start);
+//	uint32_t kernel_start = (uint32_t)__begin;
+//	uint32_t kernel_end = (uint32_t)__end;
+	pmmngr_toggle_range (KERNEL_P,KERNEL_P + KERNEL_MAPPED_SIZE);
 }
 
 uint32_t* pmmngr_allocate_block()

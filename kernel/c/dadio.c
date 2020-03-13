@@ -84,7 +84,7 @@ void printhex(uint32_t input)
 	
 //This is to make the thing smaller
 	pointer = 2;
-	while(buffer[pointer] == '0') pointer ++;
+	while((buffer[pointer] == '0')&& (pointer < 9)) pointer ++;
 	pointer--;buffer[pointer] = 'x';
 	pointer--;buffer[pointer] = '0';
 	printf(buffer + pointer);
@@ -95,6 +95,7 @@ void putc (char x)
 	uint32_t pointer = get_cursor();
 	char* vga_cursor = (char*) VIDEO_MEMORY;
 	vga_cursor += (pointer<<1);
+	vga_cursor[1] = (char) current_color;
 	*vga_cursor = x;
 	set_cursor(pointer+1);
 }
