@@ -25,6 +25,7 @@ enum vga_color {
 #include "timer.h"
 #include "keyboard.h"
 #include "hal.h"
+#include "inthandling.h"
 
 void initialize_all(uint32_t mmapsize);
 void kmain(uint32_t mmapsize)
@@ -56,7 +57,6 @@ void kmain(uint32_t mmapsize)
 	printf(" gay");
 
 
-
 	return;
 }
 
@@ -66,5 +66,5 @@ void initialize_all(uint32_t mmapsize)
 	vmmngr_init();
 	interrupt_init();
 	kbc_init();
-	set_timer(0xff);
+	set_timer(0xffff);
 }
