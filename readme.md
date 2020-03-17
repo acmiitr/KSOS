@@ -1,5 +1,5 @@
 # ACM DOS
-This OS is being built for **x86 architecture, Legacy BIOS** and started from scratch since November 2019. The OS is being developed on Linux Mint, using a CPU emulator called qemu. It starts out in 16 bit real mode, and switches to 32 bit protected mode implemented using C. Right now, the features are
+This OS is being built for **x86 architecture** using **Legacy BIOS** and started from scratch since November 2019. The OS is being developed on Linux Mint, using a CPU emulator called qemu. It starts out in 16 bit real mode, and switches to 32 bit protected mode implemented using C. Right now, the features are
 - Kernel
 - Interrupt handler
 - Timer
