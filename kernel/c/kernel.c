@@ -40,6 +40,8 @@ void kmain(uint32_t mmapsize)
 	set_fg_color(WHITE);
 	set_bg_color(RED);
 
+	printint(0x20);
+
 	while(get_tick_count() < (start + 30))
 		kernel_wait();
 	printf("\nBtw");
@@ -52,6 +54,9 @@ void kmain(uint32_t mmapsize)
 	while(get_tick_count() < (start + 120))
 		kernel_wait();
 	printf(" gay");
+
+
+
 	return;
 }
 

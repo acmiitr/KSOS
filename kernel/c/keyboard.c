@@ -254,8 +254,10 @@ bool is_input_empty();
 
 void keyboard_handler(){
 	uint8_t scan_code = read_port(0x60);
-	if(scan_code <0x57)
-		putc(_scancode_std[scan_code]);
+	printhex(scan_code);
+	(void)_scancode_std;
+//	if(scan_code <0x57)
+//		putc(_scancode_std[scan_code]);
 }
 
 bool kbc_init()

@@ -90,6 +90,18 @@ void printhex(uint32_t input)
 	printf(buffer + pointer);
 }
 
+void printint(uint32_t input)
+{
+	char buffer[11] = "0000000000";
+	for(int i=0;i<10;i++)
+	{
+		int temp = input %10;
+		buffer[10-i] = (char)(temp + 0x30);
+		input /= 10;
+	}
+	printf(buffer);
+}
+
 void putc (char x)
 {
 	uint32_t pointer = get_cursor();
