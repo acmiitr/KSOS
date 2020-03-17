@@ -2,6 +2,6 @@
 *.elf
 *.o
 *.swp
-./disk.img
+disk.img
 
 Experiment
