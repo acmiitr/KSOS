@@ -45,7 +45,6 @@ void install_idt(idtr_t* address);
 void enable_interrupts();
 void send_EOI_master();
 
-
 void isr32();
 void isr33();
 void isr34();

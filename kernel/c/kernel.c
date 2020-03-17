@@ -66,5 +66,5 @@ void initialize_all(uint32_t mmapsize)
 	vmmngr_init();
 	interrupt_init();
 	kbc_init();
-	set_timer(0xffffff);
+	set_timer(0xff);
 }
