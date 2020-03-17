@@ -28,6 +28,8 @@ Then, since most systems nowadays work on 64 bit, but this OS is 32 bit, we need
 
 `bash script.sh`
 
+If you don't believe that you need a cross complier, read this: https://wiki.osdev.org/Why_do_I_need_a_Cross_Compiler%3F and think again.
+
 To build the OS, we need to compile the C code, assemble the assembly code, link them, make a file system, copy the kernel to the file system and make the file system bootable. Did you catch all that xD? Thankfully, all of this is done using Makefile and we just need to run a single line
 
 `make`
