@@ -9,7 +9,7 @@ export PATH="$PREFIX/bin:$PATH"
 #if [ ! -d "$HOME/bin" ] ; then
 #	mkdir $HOME/bin
 #fi	
-
+echo "Building OS tools. Patience......."
 mkdir ~/src
 cd ~/src
 
