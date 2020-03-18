@@ -1,5 +1,5 @@
 # ACM DOS
-This OS is being built for **x86 architecture** using **Legacy BIOS** and started from scratch since November 2019. The OS is being developed on Linux Mint, using a CPU emulator called qemu. It starts out in 16 bit real mode, and switches to 32 bit protected mode implemented using C. Right now, the features are
+This OS is being built for **x86 architecture** system using **Legacy BIOS** and started from scratch since November 2019. The OS is being developed on Linux Mint, using a CPU emulator called qemu. It starts out in 16 bit real mode, and switches to 32 bit protected mode implemented using C. Right now, the features are
 - Kernel
 - Interrupt handler
 - Timer
@@ -27,6 +27,8 @@ You would need to install qemu using
 Then, since most systems nowadays work on 64 bit, but this OS is 32 bit, we need to build a cross compiler using gcc for 32 bit binaries. If this went over your head, don't worry, a bash script comes along with the repository and you just need to run the script, the rest is handled by the script. Go to the directory where script is stored and run
 
 `bash script.sh`
+
+If you don't believe that you need a cross complier, read this: https://wiki.osdev.org/Why_do_I_need_a_Cross_Compiler%3F and think again.
 
 To build the OS, we need to compile the C code, assemble the assembly code, link them, make a file system, copy the kernel to the file system and make the file system bootable. Did you catch all that xD? Thankfully, all of this is done using Makefile and we just need to run a single line
 

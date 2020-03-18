@@ -31,5 +31,6 @@ void putc(char input);
 void set_fg_color(enum vga_color);
 void set_bg_color(enum vga_color);
 void clear();
+char get_monitor_char();
 
 #endif
