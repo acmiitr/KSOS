@@ -1,5 +1,7 @@
 #include<stdint.h>
 #include "dadio.h"
+#include "keyboard.h"
+#include "hal.h"
 
 #define VIDEO_MEMORY 0xb8000
 #define ROW 80
@@ -122,4 +124,18 @@ void set_bg_color (enum vga_color c)
 {
 	current_color &= 0x0f;
 	current_color |= (c<<4);
+}
+
+char get_monitor_char()
+{
+	while(1)
+	{
+	kernel_wait();
+	if(_is_keyboard_interrupt)
+		{
+			_is_keyboard_interrupt = false;
+			char x = get_latest_char();
+			if(x) return (x);
+		}
+	}
 }

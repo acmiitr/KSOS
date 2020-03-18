@@ -246,6 +246,12 @@ static int _scancode_std [] = {
 	KEY_F12			//0x58
 };
 
+//Global variables
+static char _latest_char;
+static uint8_t _latest_scan_code;
+
+bool _is_keyboard_interrupt;
+
 
 //Helper functions
 bool is_output_full(); 
@@ -254,10 +260,20 @@ bool is_input_empty();
 
 void keyboard_handler(){
 	uint8_t scan_code = read_port(0x60);
-	printhex(scan_code);
-	(void)_scancode_std;
-//	if(scan_code <0x57)
-//		putc(_scancode_std[scan_code]);
+	_is_keyboard_interrupt = true; //It is the responsibility of the user to make this zero after access
+	_latest_scan_code = scan_code;
+	if(scan_code <0x57)
+		_latest_char = (_scancode_std[scan_code]);
+	else
+		_latest_char = 0;
+}
+
+char get_latest_char(){
+	return _latest_char;
+}
+
+uint8_t get_latest_scan_code(){
+	return _latest_scan_code;
 }
 
 bool kbc_init()
