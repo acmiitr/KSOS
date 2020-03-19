@@ -274,55 +274,55 @@ void keyboard_handler()
 			caps_toggle = !caps_toggle;
 		else if((is_shift_pressed ^ caps_toggle) && is_alphabet(temp_char))
 			_latest_char = (temp_char-0x20);
-		/*else if (is_shift_pressed)
+		else if (is_shift_pressed && !is_alphabet(temp_char))
 		{
 			switch(temp_char)
 			{	
-				case '1': temp_char = '!';
+				case '1': _latest_char = '!';
 					  break;
-				case '2': temp_char = '@';
+				case '2': _latest_char = '@';
 					  break;
-				case '3': temp_char = '#';
+				case '3': _latest_char = '#';
 					  break;
-				case '4': temp_char = '$';
+				case '4': _latest_char = '$';
 					  break;
-				case '5': temp_char = '%';
+				case '5': _latest_char = '%';
 					  break;
-				case '6': temp_char = '^';
+				case '6': _latest_char = '^';
 					  break;
-				case '7': temp_char = '&';
+				case '7': _latest_char = '&';
 					  break;
-				case '8': temp_char = '*';
+				case '8': _latest_char = '*';
 					  break;
-				case '9': temp_char = '(';
+				case '9': _latest_char = '(';
 					  break;
-				case '0': temp_char = ')';
+				case '0': _latest_char = ')';
 					  break;
-				case '-': temp_char = '_';
+				case '-': _latest_char = '_';
 					  break;
-				case '=': temp_char = '+';
+				case '=': _latest_char = '+';
 					  break;
-				case '[': temp_char = '{';
+				case '[': _latest_char = '{';
 					  break;
-				case ']': temp_char = '}';
+				case ']': _latest_char = '}';
 					  break;
-				case '\\': temp_char = '|';
+				case '\\': _latest_char = '|';
 					   break;
-				case ';': temp_char = ':';
+				case ';': _latest_char = ':';
 					  break;
-				case '\'': temp_char = '\"';
+				case '\'': _latest_char = '\"';
 					   break;
-				case ',': temp_char = '<';
+				case ',': _latest_char = '<';
 					  break;
-				case '.': temp_char = '>';
+				case '.': _latest_char = '>';
 					  break;
-			       	case '/': temp_char = '?';
+			       	case '/': _latest_char = '?';
 					  break;
- 				case '`': temp_char = '~';
+ 				case '`': _latest_char = '~';
 					  break;	
 			}
-		}*/
-		else
+		}
+		else //if(!is_shift_pressed && scan_code != 0x3a)
 			_latest_char = (temp_char);
 	}	
 	else
@@ -335,7 +335,7 @@ void keyboard_handler()
 
 bool is_alphabet(char c)
 {
-	if(c >= 'a' && c<='z') //&& c>='A' && c<='Z')
+	if(c >= 'a' && c<='z') 
 		return true;
 	else
 		return false;
