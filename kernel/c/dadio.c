@@ -112,11 +112,14 @@ void putc (char x)
 	char* vga_cursor = (char*) VIDEO_MEMORY;
 	if(x == '\b')
 	{
-		pointer--;
-		vga_cursor += (pointer<<1);
-		*vga_cursor = ' ';
-		vga_cursor[1] = 0x78;
-		set_cursor(pointer);
+		if(pointer)
+		{
+			pointer--;
+			vga_cursor += (pointer<<1);
+			*vga_cursor = ' ';
+			vga_cursor[1] = 0x78;
+			set_cursor(pointer);
+		}
 	}
 	else if(x == '\n')
 		printf("\n");
