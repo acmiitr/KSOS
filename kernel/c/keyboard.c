@@ -274,7 +274,7 @@ void keyboard_handler()
 			caps_toggle = !caps_toggle;
 		else if((is_shift_pressed ^ caps_toggle) && is_alphabet(temp_char))
 			_latest_char = (temp_char-0x20);
-		else if (is_shift_pressed)
+		else if (is_shift_pressed && !is_alphabet(temp_char))
 		{
 			switch(temp_char)
 			{	
@@ -322,7 +322,7 @@ void keyboard_handler()
 					  break;	
 			}
 		}
-		else
+		else //if(!is_shift_pressed && scan_code != 0x3a)
 			_latest_char = (temp_char);
 	}	
 	else
@@ -335,7 +335,7 @@ void keyboard_handler()
 
 bool is_alphabet(char c)
 {
-	if(c >= 'a' && c<='z') //&& c>='A' && c<='Z')
+	if(c >= 'a' && c<='z') 
 		return true;
 	else
 		return false;
