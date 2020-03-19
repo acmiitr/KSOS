@@ -47,7 +47,7 @@ enum KEYCODE {
 	KEY_Y                 = 'y',
 	KEY_Z                 = 'z',
 
-	KEY_RETURN            = '\r',
+	KEY_RETURN            = '\n',
 	KEY_ESCAPE            = 0x1001,
 	KEY_BACKSPACE         = '\b',
 
@@ -256,16 +256,89 @@ bool _is_keyboard_interrupt;
 //Helper functions
 bool is_output_full(); 
 bool is_input_empty();
+bool is_alphabet(char);
+static bool is_shift_pressed = false;
+static bool caps_toggle = false;
 
-
-void keyboard_handler(){
+void keyboard_handler()
+{
 	uint8_t scan_code = read_port(0x60);
+	char temp_char = (char)(_scancode_std[scan_code]);
 	_is_keyboard_interrupt = true; //It is the responsibility of the user to make this zero after access
 	_latest_scan_code = scan_code;
 	if(scan_code <0x57)
-		_latest_char = (_scancode_std[scan_code]);
+	{
+		if(scan_code == 0x2a || scan_code == 0x36)
+			is_shift_pressed = true;
+		else if(scan_code == 0x3a)
+			caps_toggle = !caps_toggle;
+		else if((is_shift_pressed ^ caps_toggle) && is_alphabet(temp_char))
+			_latest_char = (temp_char-0x20);
+		/*else if (is_shift_pressed)
+		{
+			switch(temp_char)
+			{	
+				case '1': temp_char = '!';
+					  break;
+				case '2': temp_char = '@';
+					  break;
+				case '3': temp_char = '#';
+					  break;
+				case '4': temp_char = '$';
+					  break;
+				case '5': temp_char = '%';
+					  break;
+				case '6': temp_char = '^';
+					  break;
+				case '7': temp_char = '&';
+					  break;
+				case '8': temp_char = '*';
+					  break;
+				case '9': temp_char = '(';
+					  break;
+				case '0': temp_char = ')';
+					  break;
+				case '-': temp_char = '_';
+					  break;
+				case '=': temp_char = '+';
+					  break;
+				case '[': temp_char = '{';
+					  break;
+				case ']': temp_char = '}';
+					  break;
+				case '\\': temp_char = '|';
+					   break;
+				case ';': temp_char = ':';
+					  break;
+				case '\'': temp_char = '\"';
+					   break;
+				case ',': temp_char = '<';
+					  break;
+				case '.': temp_char = '>';
+					  break;
+			       	case '/': temp_char = '?';
+					  break;
+ 				case '`': temp_char = '~';
+					  break;	
+			}
+		}*/
+		else
+			_latest_char = (temp_char);
+	}	
 	else
+	{
+		if(scan_code == 0xaa || scan_code == 0xb6)
+			is_shift_pressed = false;
 		_latest_char = 0;
+	}
+}
+
+bool is_alphabet(char c)
+{
+	if(c >= 'a' && c<='z') //&& c>='A' && c<='Z')
+		return true;
+	else
+		return false;
 }
 
 char get_latest_char(){
@@ -284,10 +357,12 @@ bool kbc_init()
 	return true;
 
 }
+
 bool is_output_full()  //This is in perspective of the controller
 {
 	return (read_port(0x64)&1);
 }
+
 bool is_input_empty()  //If this returns true, you can write into the buffer
 {
 	return (!(read_port(0x64)&2));

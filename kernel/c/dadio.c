@@ -38,6 +38,8 @@ void printf(char* Message)
 		{
 		 case '\n':
 		 	pointer=(uint32_t)(vga_cursor-VIDEO_MEMORY);
+			if(!(pointer%(2*ROW)))
+				pointer++;
 		 	while(pointer%(2*ROW)){
 			pointer++;
 			if(pointer==2*ROW*COL)
@@ -108,10 +110,23 @@ void putc (char x)
 {
 	uint32_t pointer = get_cursor();
 	char* vga_cursor = (char*) VIDEO_MEMORY;
-	vga_cursor += (pointer<<1);
-	vga_cursor[1] = (char) current_color;
-	*vga_cursor = x;
-	set_cursor(pointer+1);
+	if(x == '\b')
+	{
+		pointer--;
+		vga_cursor += (pointer<<1);
+		*vga_cursor = ' ';
+		vga_cursor[1] = 0x78;
+		set_cursor(pointer);
+	}
+	else if(x == '\n')
+		printf("\n");
+	else
+	{
+		vga_cursor += (pointer<<1);
+		vga_cursor[1] = (char) current_color;
+		*vga_cursor = x;
+		set_cursor(pointer+1);
+	}
 }
 
 void set_fg_color (enum vga_color c)
