@@ -57,6 +57,7 @@ void kmain(uint32_t mmapsize)
 		kernel_wait();
 	printf(" gay");
 
+
 	return;
 }
 
