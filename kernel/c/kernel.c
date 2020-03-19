@@ -30,34 +30,16 @@ enum vga_color {
 void initialize_all(uint32_t mmapsize);
 void kmain(uint32_t mmapsize)
 {
+	initialize_all(mmapsize);
+
 	set_fg_color(CYAN);
 	set_bg_color(LIGHT_GREY);
 	clear();
-
-	initialize_all(mmapsize);
-
-	uint32_t start = get_tick_count();
-
-	set_fg_color(WHITE);
-	set_bg_color(RED);
-
+	printf("Start typing now!\n");
+	set_fg_color(BLUE);
+	set_bg_color(WHITE);
 	while(1)
 		putc(get_monitor_char());
-
-	while(get_tick_count() < (start + 30))
-		kernel_wait();
-	printf("\nBtw");
-	while(get_tick_count() < (start + 60))
-		kernel_wait();
-	printf(" masih,");
-	while(get_tick_count() < (start + 90))
-		kernel_wait();
-	printf(" you're");
-	while(get_tick_count() < (start + 120))
-		kernel_wait();
-	printf(" gay");
-
-
 	return;
 }
 

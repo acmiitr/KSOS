@@ -45,15 +45,15 @@ GetMemoryMap:
   call print_si_16
   jmp .done
 .error_msg: db 'Cannot read memory map, Aborting....',0
-.success_msg: db 'Read complete!, Count = ',0
+;.success_msg: db 'Read complete!, Count = ',0
 .count: dd 0    ;Returns the number-1
 .done:
-  mov si,.success_msg
-  call print_si_16
+;  mov si,.success_msg
+;  call print_si_16
   mov bx,[.count]
   inc bx
   mov [.count],bx
-  call print_hex_bx
+;  call print_hex_bx
 
 
 		
@@ -121,11 +121,11 @@ mov bx, (80*9)+15
 call set_cursor_32
 mov esi,Stars
 call print_esi_32
-mov bx, (80*11)+25
+mov bx, (80*11)+23
 call set_cursor_32
 mov esi,Welcome
 call print_esi_32
-mov bx, (80*13)+27
+mov bx, (80*13)+25
 call set_cursor_32
 mov esi,DaddyOsWelcome
 call print_esi_32
@@ -151,9 +151,9 @@ jmp 0x08:KernelVirt
 %include "boot/stage2/func32.asm"
 %include "boot/stage2/GDT.asm"
 %include "boot/stage2/pagingsetup.asm"
-Message16: db 0xa,0xd,'Welcome to your OS - 16 bit, press any key to continue...',0
-Welcome: db 'Rishi Ranjan is a Gay Boi',0
+Message16: db 0xa,0xd,'Welcome to Stage2!!',0xa,0xd,'Press any key to continue...',0
+Welcome: db 'Everyone likes Flashiing Lights ;)',0
 Stars: db '***********************************************',0
-DaddyOsWelcome: db 'This is DADDY-OS',0
+DaddyOsWelcome: db 'Welcome to ACM DOS',0
 KernelSize: dw 0
 
