@@ -1,6 +1,6 @@
 # ACM DOS
-This OS is being built for **x86 architecture** system using **Legacy BIOS** and started from scratch since November 2019. The OS is being developed on Linux Mint, using a CPU emulator called qemu. It starts out in 16 bit real mode, and switches to 32 bit protected mode implemented using C. Right now, the features are
-- Kernel
+This OS is being built for **x86 architecture** system using **Legacy BIOS** and started from scratch since November 2019. The OS is being developed on Linux Mint, using a CPU emulator called qemu. As we write our own bootloader, we start out in 16 bit real mode. The bootloader handles the switch to 32 bit protected mode, parses the filesystem and loads the kernel before passing control to the it. The kernel has been implemented mostly using C . Right now, the features are
+
 - Interrupt handler
 - Timer
 - Keyboard driver
@@ -9,7 +9,7 @@ This OS is being built for **x86 architecture** system using **Legacy BIOS** and
 - Video driver
 - Memory manager
 
-A lot of the work from this stage can now be done mainly in C, and possible developments could include implementing more general standard input/output functions, file system driver, mini games etc
+A lot of the work from this stage can now be done mainly in C, and possible developments could include implementing more general standard input/output functions, file system (disk) driver, mini games etc
 
 And no, the DOS does **NOT** mean it's a disk operating system, but what it does mean shall remain a secret ;)
 
@@ -47,3 +47,10 @@ To actually run it directly on a PC without an emulator, you would need to have 
 where `sdx` is `sda/sdb/sdc` depending on the output of `lsblk`
 
 Then just plug in your USB into the system and the OS boots up!
+
+### Resources
+ * The OsDev wiki and forums : https://wiki.osdev.org/Main_Page , https://forum.osdev.org/
+ * BrokenThorn : http://www.brokenthorn.com/Resources/OSDevIndex.html
+ * Dr. Nick Blundell's book: https://www.cs.bham.ac.uk/~exr/lectures/opsys/10_11/lectures/os-dev.pdf
+ * StackOverflow (Obviously)
+ * #osdev on Freenode IRC (Try it! They're the best!)

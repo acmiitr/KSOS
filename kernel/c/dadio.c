@@ -117,7 +117,7 @@ void putc (char x)
 			pointer--;
 			vga_cursor += (pointer<<1);
 			*vga_cursor = ' ';
-			vga_cursor[1] = 0x78;
+			vga_cursor[1] = vga_cursor[3];
 			set_cursor(pointer);
 		}
 	}

@@ -124,7 +124,7 @@ Findfile:  ;Returns cluster number in bx
 
 	.Error: db 0xa,0xd,'File not found!',0
 	.Message: db 0xa,0xd,'Success!',0x0a,0x0d,0
-	.TargetMessage: db 'Searching for file: ',0
+	.TargetMessage: db 0xa,0xd,'Search Target:',0
 	.Found:
 		mov si,.Message
 		call print_si_16
