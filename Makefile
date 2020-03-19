@@ -3,13 +3,11 @@ ASM_SOURCES = $(wildcard kernel/asm/*.asm)
 C_OBJECTS = ${C_SOURCES:.c=.o}
 ASM_OBJECTS = ${ASM_SOURCES:.asm=.o}
 
-
 .PHONY : all assemble run clean
 
 all: run
 
 run : assemble
-#	qemu-system-i386 -hda disk.img
 	qemu-system-i386 -drive format=raw,file=disk.img  -monitor stdio
 
 debug: assemble
@@ -40,9 +38,10 @@ stage1.bin : boot/stage1/stage1.asm
 	nasm $^ -f bin -o $@
 stage2.bin: boot/stage2/stage2.asm
 	nasm $^ -f bin -o $@
-
+	
 disk.img: 
 	truncate $@ -s 1M
 	mkfs.vfat -F12 -S512 -s1 $@
+	
 clean :
 	rm $(C_OBJECTS) $(ASM_OBJECTS) *.bin
