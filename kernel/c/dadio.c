@@ -148,12 +148,8 @@ char get_monitor_char()
 {
 	while(1)
 	{
-	kernel_wait();
-	if(_is_keyboard_interrupt)
-		{
-			_is_keyboard_interrupt = false;
-			char x = get_latest_char();
-			if(x) return (x);
-		}
+		wait_for_keyboard();
+		char x = get_latest_char();
+		if(x) return (x);
 	}
 }

@@ -368,7 +368,18 @@ bool is_input_empty()  //If this returns true, you can write into the buffer
 	return (!(read_port(0x64)&2));
 }
 
-
+void wait_for_keyboard()
+{
+	while(1)
+	{
+		kernel_wait();
+		if(_is_keyboard_interrupt)
+		{
+			_is_keyboard_interrupt = false;
+			return;
+		}
+	}
+}
 /*
 	while((read_port(0x64) & 2)) {}
 	write_port(0x64,0xAD);
