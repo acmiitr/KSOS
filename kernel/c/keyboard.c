@@ -358,18 +358,9 @@ bool kbc_init()
 
 }
 
-bool is_output_full()  //This is in perspective of the controller
-{
-	return (read_port(0x64)&1);
-}
-
-bool is_input_empty()  //If this returns true, you can write into the buffer
-{
-	return (!(read_port(0x64)&2));
-}
-
 void wait_for_keyboard()
 {
+	_is_keyboard_interrupt = false;
 	while(1)
 	{
 		kernel_wait();
@@ -379,6 +370,16 @@ void wait_for_keyboard()
 			return;
 		}
 	}
+}
+
+bool is_output_full()  //This is in perspective of the controller
+{
+	return (read_port(0x64)&1);
+}
+
+bool is_input_empty()  //If this returns true, you can write into the buffer
+{
+	return (!(read_port(0x64)&2));
 }
 /*
 	while((read_port(0x64) & 2)) {}

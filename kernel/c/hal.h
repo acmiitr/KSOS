@@ -30,11 +30,14 @@ uint8_t			baseHi;
 
 void init_pic();
 void send_EOI_master();
+void send_EOI_slave();
 
 //Assembly defined
 void kernel_wait();
 uint8_t read_port(uint32_t);
 void write_port(uint32_t port,uint32_t data);
+uint16_t read_port_word(uint32_t);
+void write_port_word(uint32_t port,uint32_t data);
 void install_idt(idtr_t* address);
 void install_gdt(gdtr_t* address);
 void enable_interrupts();

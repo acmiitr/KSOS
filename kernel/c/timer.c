@@ -1,4 +1,5 @@
 #include <stdint.h>
+#include <stdbool.h>
 #include "hal.h"
 
 #define VIDEO_MEMORY 0xb8000
@@ -7,6 +8,7 @@
 
 //Global variables
 static uint32_t tick_counter = 0;
+static bool _is_timer_interrupt = false;
 
 //Helper functions
 static void rotate_pole(int x, int y);
@@ -17,6 +19,7 @@ uint32_t get_tick_count()
 }
 
 void timer_handler(){
+	_is_timer_interrupt = true;
 	tick_counter ++;
 	rotate_pole(79,0);
 }
@@ -31,6 +34,20 @@ void set_timer(uint16_t count)
 //	out	0x43, al
 	write_port(TIMER_DATA_PORT, count & 0xff);
 	write_port(TIMER_DATA_PORT, count >> 8);
+}
+
+void wait_for_timer()
+{
+	_is_timer_interrupt = false;
+	while(1)
+	{
+		kernel_wait();
+		if(_is_timer_interrupt)
+		{
+			_is_timer_interrupt = false;
+			return;
+		}
+	}
 }
 
 static void rotate_pole(int x, int y)

@@ -33,4 +33,8 @@ void set_bg_color(enum vga_color);
 void clear();
 char get_monitor_char();
 
+//Asm defined functions
+uint32_t get_cursor();
+void set_cursor(uint32_t);
+
 #endif

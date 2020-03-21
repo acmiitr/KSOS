@@ -7,9 +7,6 @@
 #define ROW 80
 #define COL 25
 
-uint32_t get_cursor();
-void set_cursor(uint32_t);
-
 static char current_color = 0xf8;
 
 void clear()

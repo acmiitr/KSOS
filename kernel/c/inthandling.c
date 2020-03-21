@@ -48,6 +48,9 @@ void isr37();
 void isr38();
 void isr39();
 
+void isr46(); //Primary ATA bus
+void isr47(); //Secondary ATA bus
+
 
 //Function implementations
 void interrupt_init()
@@ -74,6 +77,9 @@ void interrupt_init()
 	install_ir(35,IDT_DESC_BIT32|IDT_DESC_PRESENT,0x08,(uint32_t*)isr35);
 	install_ir(36,IDT_DESC_BIT32|IDT_DESC_PRESENT,0x08,(uint32_t*)isr36);
 	install_ir(37,IDT_DESC_BIT32|IDT_DESC_PRESENT,0x08,(uint32_t*)isr37);
+
+	install_ir(46,IDT_DESC_BIT32|IDT_DESC_PRESENT,0x08,(uint32_t*)isr46);
+	install_ir(47,IDT_DESC_BIT32|IDT_DESC_PRESENT,0x08,(uint32_t*)isr47);
 
 	//Exceptions - Need to distinguish between error and no error codes
 

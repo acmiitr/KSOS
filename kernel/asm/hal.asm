@@ -7,16 +7,28 @@ global get_pdbr
 global flush_tlb_entry
 global read_port
 global write_port
+global read_port_word
+global write_port_word
 
 read_port:
 	mov edx, [esp + 4]
 	in al, dx	
 	ret
-
 write_port:
 	mov   edx, [esp + 4]    
-	mov   al, [esp + 4 + 4]  
+	mov   eax, [esp + 4 + 4]  
 	out   dx, al  
+	ret
+
+read_port_word:
+	mov edx, [esp + 4]
+	in ax, dx	
+	ret
+
+write_port_word:
+	mov   edx, [esp + 4]    
+	mov   eax, [esp + 4 + 4]  
+	out   dx, ax
 	ret
 
 get_pdbr:

@@ -27,19 +27,14 @@ enum vga_color {
 #include "hal.h"
 #include "inthandling.h"
 
+extern void kshell();
+
 void initialize_all(uint32_t mmapsize);
 void kmain(uint32_t mmapsize)
 {
 	initialize_all(mmapsize);
 
-	set_fg_color(CYAN);
-	set_bg_color(LIGHT_GREY);
-	clear();
-	printf("Start typing now!\n");
-	set_fg_color(BLUE);
-	set_bg_color(WHITE);
-	while(1)
-		putc(get_monitor_char());
+	kshell();
 	return;
 }
 
