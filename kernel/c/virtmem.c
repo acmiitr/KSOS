@@ -9,6 +9,7 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include "dadio.h"
 #include "phymem.h"
 
 uint32_t get_pdbr();   //An assembly defined function
@@ -54,10 +55,16 @@ static void set_recursive_map();   //Sets the virtual address of the page direct
 static bool alloc_page(uint32_t* table_entry);
 
 //Implementations
-
+extern uint32_t __begin[];
+extern uint32_t __end[];
 void vmmngr_init() //Probably needs to clear out the identity mapping also
 {
 	set_recursive_map();
+	if ((uint32_t)__end - (uint32_t)__begin > (2<<22))
+	{
+		printf("Kernel spans more than 4M");
+		for(;;);
+	}
 	//Need to set all the page frames that are in use by the kernel
 }
 bool map_page(uint32_t virtual_address,uint32_t physical_address)
