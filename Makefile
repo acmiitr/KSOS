@@ -30,7 +30,7 @@ kernel/kernel.elf : $(C_OBJECTS) $(ASM_OBJECTS)
 	chmod -x $@
 
 %.o : %.c
-	i686-elf-gcc -ffreestanding $< -c -o $@ -Wall -Werror -g
+	i686-elf-gcc -ffreestanding $< -c -o $@ -Wall -Werror -g 
 %.o : %.asm
 	nasm $< -o $@ -f elf32
 

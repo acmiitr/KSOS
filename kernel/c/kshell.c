@@ -2,6 +2,7 @@
 //This is meant to be used at level 0
 #include"dadio.h"
 #include"stdbool.h"
+#include"timer.h"
 
 #define MAX_COMMAND_SIZE 50
 #define MAX_TOKEN_SIZE 25 
@@ -16,6 +17,8 @@ static bool string_compare(char* str1, char* str2);
 //Shell functions
 static void command_help();
 static void command_fresh();
+static void command_timer();
+static void command_picture();
 
 //Global variables 
 static char _cmd_buffer[MAX_COMMAND_SIZE];
@@ -51,6 +54,8 @@ static void parse_command()
 	extract_token(0);
 	if(string_compare(_tkn_buffer,"help")) {command_help();return;}
 	if(string_compare(_tkn_buffer,"fresh")){command_fresh();return;}
+	if(string_compare(_tkn_buffer,"timer")){command_timer();return;}
+	if(string_compare(_tkn_buffer,"picture")){command_picture();return;}
 
 	printf(" - Command not found: ");
 	printf(_tkn_buffer);
@@ -111,6 +116,8 @@ static void command_help()
 	printf("\nList of commands (case-sensitive):");
 	printf("\n\thelp");
 	printf("\n\tfresh");
+	printf("\n\ttimer");
+	printf("\n\tpicture");
 }
 
 static void command_fresh()
@@ -138,7 +145,7 @@ static void command_fresh()
 		if(string_compare(_tkn_buffer,"white")) color[i] = WHITE;
 		if(string_compare(_tkn_buffer,"help"))
 		{
-			printf("\nUsage: fresh c1 c2\nColors:");
+			printf("\tUsage: fresh c1 c2\ncolors:");
 			printf("  black");
 			printf("  blue");
 			printf("  green");
@@ -172,3 +179,33 @@ static void command_fresh()
 	set_fg_color(color[0]);
 	set_bg_color(color[1]);
 }
+
+void command_timer()
+{
+	extract_token(1);
+	if(string_compare(_tkn_buffer,"fast")) set_timer(0xff);
+	if(string_compare(_tkn_buffer,"medium")) set_timer(0xfff);
+	if(string_compare(_tkn_buffer,"slow")) set_timer(0xffff);
+	if(string_compare(_tkn_buffer,"help")) printf("\tUsage: timer fast/medium/slow");
+}
+
+void command_picture()
+{
+	printf("\nx;;;.',,,,,,,,;,;ckO000000000OxddddxxxkkkkkkkkOOOOOOO00OOOO00OOOkx");
+	printf("\nx;;'.,,,,,,,,,,,,',oOOOOO0000000OOO00OOOOOOOOOOOOO0OOO00OOOOOOxl::");
+	printf("\nx;,.',,,,,,,,,,,,,,,;ldxO0000000000000OOO0000000000000OOOOOkoc;;,,");
+	printf("\nx;'.,,,''','''''''',''lkO0000000000000OOO00OOOO0000000Okdoc;;;;;,,");
+	printf("\nx,.''''''''','.....'':kOOOOOOO00000000OO00OOOOOkkOOOO0OOkc,;;;;;,,");
+	printf("\nx..'''''''',,'....'',dOOOOddc,oOO0000OOOOOOOOddl':xOOOOOOkc,;;;;;;");
+	printf("\no.'''......'',,,,;;':kOOOkc,..;kOOOOOOOOOOOOOo,'.'dOOOOOOOx;;:cccc");
+	printf("\no.''.........,,,;;,'dOOOO0OdoldOOOkxxkOOOOOOOOxoldOOOOOOOOOl;ccccc");
+	printf("\nd,'..........,,;;;',loxkO00000OOOOxl:lkOOOOOOOOOOOOkxxxkOOOx:ccccc");
+	printf("\nx,,'''',,,,,;;;:;,.,::::dO0000000OOOOOOOOOOOOOOOOOdc::ccdOOkc:cccc");
+	printf("\nx,,,,,,,,,,;:::;;..;ccc:dO000000OkolclodxkOOOOOOOkl:ccc:ckOOx;;:::");
+	printf("\nx,,,,,,,,,,,,,,,,.;c::cokO000000Ol':odddlokOO000OOdccccldOOOOo;:::");
+	printf("\nx,,,,,,,,,,,,,,,''ckkkOO00000000Od:ldxxdookOO0000OOOkkkkOOOOOk::cc");
+	printf("\nx;;;;,,,;;;;;;;;;;,lOO00000000000OkolllllxOOOOOOOOOOOOOOOOOOOOo;::");
+	printf("\nd,,;::cccccccccccc:;oOOO0000OOOO00OOOOOOOOOOOOOOOOOOOOOOOOOOOOx;;;");
+	printf("\noo'',,,;;:::::::;,,,;dkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkx:,,");
+}
+
