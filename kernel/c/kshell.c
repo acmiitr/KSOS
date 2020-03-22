@@ -8,7 +8,10 @@
 //Helper functions
 static void flush_buffer();
 static void parse_command();
+
+//Shell functions
 static void command_help();
+static void command_fresh();
 
 //Global variables 
 static char cmd_buffer[MAX_COMMAND_SIZE];
@@ -16,18 +19,7 @@ static bool string_compare(char* str1, char* str2);
 
 void kshell()
 {
-	set_fg_color(BLUE);
-	set_bg_color(WHITE);
-	clear(); // This is the background color
-
-	set_fg_color(WHITE);
-	set_bg_color(BLUE);
-	for(int i=0;i<80;i++) putc(' ');
-	set_cursor(20);
-	printf("ACM DOS KERNEL SHELL 0.01");
-
-	set_fg_color(BLUE);
-	set_bg_color(WHITE);
+	command_fresh();
 	//This loop gets the commands from us
 	while(1)
 	{
@@ -54,13 +46,11 @@ static void parse_command()
 {
 	char* pointer = cmd_buffer;
 	while( *pointer == ' ')	pointer++;
-	if(string_compare(pointer,"help")) command_help();
+	if(string_compare(pointer,"help")) {command_help();return;}
+	if(string_compare(pointer,"fresh")){command_fresh();return;}
 
-	else
-	{
-		printf(" - Command not found: ");
-		printf(cmd_buffer);
-	}
+	printf(" - Command not found: ");
+	printf(cmd_buffer);
 }
 static void flush_buffer()
 {
@@ -79,7 +69,33 @@ static bool string_compare(char* str1, char* str2)
 	return true;
 }
 
+char* extract_token(int token_no)
+{
+	return 0;
+
+
+
+}
+
 static void command_help()
 {
-	printf("\nHelp yourself bitch");
+	printf("\nList of commands (case-sensitive):");
+	printf("\n\thelp");
+	printf("\n\tfresh");
+}
+
+static void command_fresh()
+{
+	set_fg_color(BLUE);
+	set_bg_color(WHITE);
+	clear(); // This is the background color
+
+	set_fg_color(WHITE);
+	set_bg_color(BLUE);
+	for(int i=0;i<80;i++) putc(' ');
+	set_cursor(20);
+	printf("ACM DOS KERNEL SHELL 0.01 (help displays commands)");
+
+	set_fg_color(BLUE);
+	set_bg_color(WHITE);
 }
