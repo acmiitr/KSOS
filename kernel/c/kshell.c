@@ -2,6 +2,8 @@
 //This is meant to be used at level 0
 #include"dadio.h"
 #include"stdbool.h"
+#include"keyboard.h"
+#include"hal.h"
 #include"timer.h"
 
 #define MAX_COMMAND_SIZE 50
@@ -22,6 +24,7 @@ static void command_fresh();
 static void command_timer();
 static void command_picture();
 static void command_name();
+static void command_ball();
 
 //Global variables 
 static char _cmd_buffer[MAX_COMMAND_SIZE];
@@ -60,6 +63,7 @@ static void parse_command()
 	if(string_compare(_tkn_buffer,"fresh")){command_fresh();return;}
 	if(string_compare(_tkn_buffer,"timer")){command_timer();return;}
 	if(string_compare(_tkn_buffer,"picture")){command_picture();return;}
+	if(string_compare(_tkn_buffer,"ball")){command_ball();return;}
 	if(string_compare(_tkn_buffer,"name")){command_name();return;}
 
 	printf(" - Command not found: ");
@@ -110,6 +114,7 @@ static void command_help()
 	printf(" fresh");
 	printf(" timer");
 	printf(" picture");
+	printf(" ball");
 	printf(" name\n");
 }
 
@@ -176,8 +181,8 @@ static void command_fresh()
 static void command_timer()
 {
 	extract_token(1);
-	if(string_compare(_tkn_buffer,"fast")) set_timer(0xff);
-	if(string_compare(_tkn_buffer,"medium")) set_timer(0xfff);
+	if(string_compare(_tkn_buffer,"fast")) set_timer(0xffff>>2);
+	if(string_compare(_tkn_buffer,"medium")) set_timer(0xffff>>1);
 	if(string_compare(_tkn_buffer,"slow")) set_timer(0xffff);
 	if(string_compare(_tkn_buffer,"help")) printf("\tUsage: timer fast/medium/slow");
 }
@@ -214,6 +219,66 @@ static void command_name()
 	string_copy(_shell_name,_tkn_buffer);
 }
 
+#define BALL 'o'
+static void command_ball()
+{
+	extract_token(1);
+	if(string_compare(_tkn_buffer,"help"))
+		{printf("\tPlay with a ball (w/a/s/d)"); return;}
+	clear();
+	set_cursor(25*80);
+	char* vga_pointer = (char*) 0xb8000;
+	int ball_x = 0; int ball_y = 0;
+	int y_dir=1,x_dir=1;
+
+	int start = get_tick_count();
+	while(1)
+	{
+		kernel_wait();
+		if(_is_keyboard_interrupt)
+		{
+			_is_keyboard_interrupt = 0;
+			char input = get_latest_char();
+			switch(input)
+			{
+				case 'w':   //w pressed
+					y_dir = -1;
+					break;
+				case 's':   //s pressed
+					y_dir = 1;
+					break;
+				case 'a':   //a pressed
+					x_dir = -1;
+					break;
+				case 'd':   //d pressed
+					x_dir = 1;
+			}
+		}
+		if(_is_timer_interrupt)
+		{
+			_is_timer_interrupt = 0;
+			vga_pointer[2*ball_x+(160*ball_y)] = 0;
+			ball_x+=x_dir;
+			ball_y+=y_dir;
+			if (ball_x == 80 || ball_x <0 || ball_y <0 || ball_y == 25)
+			{
+				set_cursor(0);
+			       	printf("You lose!");
+				int end = get_tick_count();
+				printf(" Score: ");printhex(end-start);
+				printf("\nPress x to exit");
+				while(1)
+				{
+					if(get_monitor_char() == 'x')
+						break;
+				}
+				break;
+			}
+			vga_pointer[2*ball_x+(160*ball_y)] = BALL;
+		}
+	}
+	command_fresh();
+}
 static void string_copy(char* strd,char* strs)
 {
 	for(int i=0;strs[i];i++)

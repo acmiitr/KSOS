@@ -8,7 +8,7 @@
 
 //Global variables
 static uint32_t tick_counter = 0;
-static bool _is_timer_interrupt = false;
+bool _is_timer_interrupt = false;
 
 //Helper functions
 static void rotate_pole(int x, int y);
