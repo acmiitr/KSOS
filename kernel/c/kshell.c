@@ -6,6 +6,7 @@
 
 #define MAX_COMMAND_SIZE 50
 #define MAX_TOKEN_SIZE 25 
+#define MAX_NAME_SIZE 20 
 
 //Helper functions
 static void extract_token(int token_no);  //Takes token number n from command and puts it into buffer
@@ -13,16 +14,19 @@ static void parse_command();
 static void flush_token_buffer();
 static void flush_command_buffer();
 static bool string_compare(char* str1, char* str2);
+static void string_copy(char* strd,char* strs);
 
 //Shell functions
 static void command_help();
 static void command_fresh();
 static void command_timer();
 static void command_picture();
+static void command_name();
 
 //Global variables 
 static char _cmd_buffer[MAX_COMMAND_SIZE];
 static char _tkn_buffer[MAX_TOKEN_SIZE];
+static char _shell_name[MAX_NAME_SIZE] = "shell";
 
 void kshell()
 {
@@ -30,7 +34,7 @@ void kshell()
 	//This loop gets the commands from us
 	while(1)
 	{
-		printf("\nshell >");
+		printf("\n"); printf(_shell_name); printf(" >");
 		flush_command_buffer();
 		for(int i=0;i<MAX_COMMAND_SIZE;i++)
 		{
@@ -56,6 +60,7 @@ static void parse_command()
 	if(string_compare(_tkn_buffer,"fresh")){command_fresh();return;}
 	if(string_compare(_tkn_buffer,"timer")){command_timer();return;}
 	if(string_compare(_tkn_buffer,"picture")){command_picture();return;}
+	if(string_compare(_tkn_buffer,"name")){command_name();return;}
 
 	printf(" - Command not found: ");
 	printf(_tkn_buffer);
@@ -98,31 +103,19 @@ static void flush_token_buffer()
 	}
 }
 
-static bool string_compare(char* str1, char* str2)
-{
-	int i = 0;
-	while (str1[i])
-	{
-		if(str1[i] != str2[i]) return false;
-		i++;
-	}
-	if(str2[i]) return false;
-	return true;
-}
-
-
 static void command_help()
 {
-	printf("\nList of commands (case-sensitive):");
-	printf("\n\thelp");
-	printf("\n\tfresh");
-	printf("\n\ttimer");
-	printf("\n\tpicture");
+	printf("\nList of commands (use `command` help for usage):");
+	printf("\nhelp");
+	printf(" fresh");
+	printf(" timer");
+	printf(" picture");
+	printf(" name\n");
 }
 
 static void command_fresh()
 {
-	static int color[2] = {BLUE,WHITE};
+	static int color[2] = {LIGHT_BLUE,BLACK};
 
 	for(int i =0;i<2;i++)
 	{
@@ -180,7 +173,7 @@ static void command_fresh()
 	set_bg_color(color[1]);
 }
 
-void command_timer()
+static void command_timer()
 {
 	extract_token(1);
 	if(string_compare(_tkn_buffer,"fast")) set_timer(0xff);
@@ -189,7 +182,7 @@ void command_timer()
 	if(string_compare(_tkn_buffer,"help")) printf("\tUsage: timer fast/medium/slow");
 }
 
-void command_picture()
+static void command_picture()
 {
 	printf("\nx;;;.',,,,,,,,;,;ckO000000000OxddddxxxkkkkkkkkOOOOOOO00OOOO00OOOkx");
 	printf("\nx;;'.,,,,,,,,,,,,',oOOOOO0000000OOO00OOOOOOOOOOOOO0OOO00OOOOOOxl::");
@@ -208,4 +201,37 @@ void command_picture()
 	printf("\nd,,;::cccccccccccc:;oOOO0000OOOO00OOOOOOOOOOOOOOOOOOOOOOOOOOOOx;;;");
 	printf("\noo'',,,;;:::::::;,,,;dkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkx:,,");
 }
+
+static void command_name()
+{
+	extract_token(1);
+	if(string_compare(_tkn_buffer,"help"))
+		{printf("\tUsage: name string"); return;}
+	if(string_compare(_tkn_buffer,"masih"))
+		string_copy(_tkn_buffer,"asshole");
+			
+	for(int i=0;i<MAX_NAME_SIZE;i++) _shell_name[i] = 0; //Flush
+	string_copy(_shell_name,_tkn_buffer);
+}
+
+static void string_copy(char* strd,char* strs)
+{
+	for(int i=0;strs[i];i++)
+	{
+		strd[i]=strs[i];
+	}
+}
+
+static bool string_compare(char* str1, char* str2)
+{
+	int i = 0;
+	while (str1[i])
+	{
+		if(str1[i] != str2[i]) return false;
+		i++;
+	}
+	if(str2[i]) return false;
+	return true;
+}
+
 
