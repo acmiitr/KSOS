@@ -25,6 +25,7 @@ static void command_timer();
 static void command_picture();
 static void command_name();
 static void command_ball();
+static void command_quote();
 
 //Global variables 
 static char _cmd_buffer[MAX_COMMAND_SIZE];
@@ -64,6 +65,7 @@ static void parse_command()
 	if(string_compare(_tkn_buffer,"timer")){command_timer();return;}
 	if(string_compare(_tkn_buffer,"picture")){command_picture();return;}
 	if(string_compare(_tkn_buffer,"ball")){command_ball();return;}
+	if(string_compare(_tkn_buffer,"quote")){command_quote();return;}
 	if(string_compare(_tkn_buffer,"name")){command_name();return;}
 
 	printf(" - Command not found: ");
@@ -220,6 +222,7 @@ static void command_name()
 }
 
 #define BALL 'o'
+#define STAR '*'
 static void command_ball()
 {
 	extract_token(1);
@@ -228,10 +231,11 @@ static void command_ball()
 	clear();
 	set_cursor(25*80);
 	char* vga_pointer = (char*) 0xb8000;
-	int ball_x = 0; int ball_y = 0;
-	int y_dir=1,x_dir=1;
+	int ball1_x = 0; int ball1_y = 0;
+	int ball2_x = 79; int ball2_y = 24;
+	int y1_dir=0,x1_dir=0;
+	int y2_dir=0,x2_dir=0;
 
-	int start = get_tick_count();
 	while(1)
 	{
 		kernel_wait();
@@ -242,42 +246,87 @@ static void command_ball()
 			switch(input)
 			{
 				case 'w':   //w pressed
-					y_dir = -1;
+					y1_dir += -1;
 					break;
 				case 's':   //s pressed
-					y_dir = 1;
+					y1_dir += 1;
 					break;
 				case 'a':   //a pressed
-					x_dir = -1;
+					x1_dir += -1;
 					break;
 				case 'd':   //d pressed
-					x_dir = 1;
+					x1_dir += 1;
+					break;
+
+
+				case 'i':   //w pressed
+					y2_dir += -1;
+					break;
+				case 'k':   //s pressed
+					y2_dir += 1;
+					break;
+				case 'j':   //a pressed
+					x2_dir += -1;
+					break;
+				case 'l':   //d pressed
+					x2_dir += 1;
+					break;
 			}
 		}
 		if(_is_timer_interrupt)
 		{
 			_is_timer_interrupt = 0;
-			vga_pointer[2*ball_x+(160*ball_y)] = 0;
-			ball_x+=x_dir;
-			ball_y+=y_dir;
-			if (ball_x == 80 || ball_x <0 || ball_y <0 || ball_y == 25)
+			vga_pointer[2*ball1_x+(160*ball1_y)] = 0;
+			vga_pointer[2*ball2_x+(160*ball2_y)] = 0;
+			ball1_x+=x1_dir;ball1_y+=y1_dir;
+			ball2_x+=x2_dir;ball2_y+=y2_dir;
+			if (ball1_x == ball2_x && ball1_y == ball2_y)
+			{
+				int temp = x1_dir;x1_dir=x2_dir;x2_dir=temp;
+				temp = y1_dir;y1_dir=y2_dir;y2_dir=temp;
+			}
+			if (ball1_x == 80 || ball1_x <0 || ball1_y <0 || ball1_y == 25)
 			{
 				set_cursor(0);
-			       	printf("You lose!");
-				int end = get_tick_count();
-				printf(" Score: ");printhex(end-start);
+			       	printf("P1 loses!");
 				printf("\nPress x to exit");
-				while(1)
-				{
-					if(get_monitor_char() == 'x')
-						break;
-				}
+				while(get_monitor_char()!='x');
 				break;
 			}
-			vga_pointer[2*ball_x+(160*ball_y)] = BALL;
+
+			if (ball2_x == 80 || ball2_x <0 || ball2_y <0 || ball2_y == 25)
+			{
+				set_cursor(0);
+			       	printf("P2 loses!");
+				printf("\nPress x to exit");
+				while(get_monitor_char()!='x');
+				break;
+			}
+	
+			vga_pointer[2*ball1_x+(160*ball1_y)] = BALL;
+			vga_pointer[2*ball2_x+(160*ball2_y)] = STAR;
 		}
 	}
 	command_fresh();
+}
+
+static void command_quote()
+{
+	int sel = get_tick_count() % 5;
+	switch(sel)
+	{
+		case 0:
+			printf("\tTap that ass and step on the gas");
+			break;
+		case 1:
+			printf("\tAlways stay grounded to your roots");
+			break;
+		case 2:
+			printf("\tSometimes change is necessary");
+			break;
+		default:
+			printf("\tTrust that good will happen");
+	}
 }
 static void string_copy(char* strd,char* strs)
 {

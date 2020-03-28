@@ -8,9 +8,7 @@ section .text.entry
 
 _start:
 	call kmain
-	add esp,0x04;   I have a single argument... This is all making sure everything is chill :)
-
-intloop:
+	add esp,4*4
+	cli
 	hlt
-	jmp intloop
 
