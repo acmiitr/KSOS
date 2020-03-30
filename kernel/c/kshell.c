@@ -42,6 +42,23 @@ void kshell()
 		for(int i=0;i<MAX_COMMAND_SIZE;i++)
 		{
 			char input = get_monitor_char();
+			if(input =='\0')
+			{
+				uint8_t scanned=get_latest_scan_code();
+				uint32_t pointer=get_cursor();
+				if(scanned==0x4b)
+					{
+						i-=2;
+						if(i<0)i=0;
+						else pointer--;	
+					}
+				else if(scanned==0x4d)
+				{	i--;
+					pointer++;
+				}
+				set_cursor(pointer);
+				continue;
+			}
 			if(input == '\b')
 			{
 				if(i>0){putc('\b');i--; _cmd_buffer[i]=0;}
