@@ -151,8 +151,6 @@ char get_monitor_char()
 	{
 		wait_for_keyboard();
 		char x = get_latest_char();
-		if(x=='\0')
-			return x;
 		if (x)
 			return (x);
 	}
