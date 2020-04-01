@@ -2,9 +2,11 @@ global gen_interrupt
 global install_idt
 global install_gdt
 global enable_interrupts
+global clear_interrupts
 global kernel_wait
 global get_pdbr
 global flush_tlb_entry
+global flush_tlb
 global read_port
 global write_port
 global read_port_word
@@ -41,6 +43,11 @@ flush_tlb_entry:
 	invlpg [eax]
 	ret
 
+flush_tlb:
+	mov eax,cr3
+	mov cr3,eax
+	ret
+
 
 gen_interrupt:
 	mov al,[esp+4]
@@ -64,6 +71,13 @@ enable_interrupts:
 	sti
 	ret
 
+clear_interrupts:
+	cli
+	ret
+
+switch_to_user:
+	
+	ret
 kernel_wait:
 	hlt
 	ret

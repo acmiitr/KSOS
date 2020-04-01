@@ -24,7 +24,7 @@ enum vga_color {
 
 
 
-void printf(char* Message);
+void monitor_puts(char* Message);
 void printhex (uint32_t input);
 void printint (uint32_t input);
 void putc(char input);

@@ -7,8 +7,6 @@ global _start
 section .text.entry
 
 _start:
-	call kmain
-	add esp,4*4
-	cli
-	hlt
-
+	sub esp,4 ;For the ABI
+	jmp kmain
+;We had a call followed by cli,hlt... The kernel takes it up from here

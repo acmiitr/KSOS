@@ -3,18 +3,18 @@
 #include "keyboard.h"
 #include "hal.h"
 
-#define VIDEO_MEMORY 0xb8000
 #define ROW 80
 #define COL 25
 
+extern char __VGA_text_memory[];
 static char current_color = 0xf8;
 
 void clear()
 {
-	char* cursor=(char*)VIDEO_MEMORY;
+	char* cursor=(char*)__VGA_text_memory;
 	*cursor=' ';
 	cursor++;*cursor=current_color;cursor++;
-	while((uint32_t)(cursor-VIDEO_MEMORY)<2*ROW*COL)
+	while((uint32_t)(cursor-__VGA_text_memory)<2*ROW*COL)
 		{
 			*cursor=' ';cursor++;
 			*cursor=current_color;cursor++;
@@ -22,11 +22,11 @@ void clear()
 	set_cursor(0);
 }
 
-void printf(char* Message)
+void monitor_puts(char* Message)
 {
 	uint32_t pointer = get_cursor();
 	pointer <<= 1;
-	char* vga_cursor = (char*) VIDEO_MEMORY;
+	char* vga_cursor = (char*) __VGA_text_memory;
 	vga_cursor += pointer;
 	while	(*Message)
 	{
@@ -34,7 +34,7 @@ void printf(char* Message)
 		switch(c)
 		{
 		 case '\n':
-		 	pointer=(uint32_t)(vga_cursor-VIDEO_MEMORY);
+		 	pointer=(uint32_t)(vga_cursor-__VGA_text_memory);
 			if(!(pointer%(2*ROW)))
 				pointer++;
 		 	while(pointer%(2*ROW)){
@@ -43,13 +43,13 @@ void printf(char* Message)
 			{pointer=0;break;}
 			}	
 		 	Message++;
-		 	vga_cursor=(char *)(VIDEO_MEMORY+pointer);
+		 	vga_cursor=(char *)(__VGA_text_memory+pointer);
 
     			break;
 		case '\t':
-			pointer=(uint32_t)(vga_cursor-VIDEO_MEMORY);
+			pointer=(uint32_t)(vga_cursor-__VGA_text_memory);
 			pointer+=16;
-			vga_cursor=(char*)(VIDEO_MEMORY+pointer);
+			vga_cursor=(char*)(__VGA_text_memory+pointer);
 			Message++;
 	       		break;
 		default:
@@ -60,7 +60,7 @@ void printf(char* Message)
                		 vga_cursor ++;
 		}
 	}
-	vga_cursor -= VIDEO_MEMORY;
+	vga_cursor -= (uint32_t)__VGA_text_memory;
 	pointer = (uint32_t)vga_cursor;
 	pointer >>= 1;
 	set_cursor(pointer);
@@ -88,7 +88,7 @@ void printhex(uint32_t input)
 	while((buffer[pointer] == '0')&& (pointer < 9)) pointer ++;
 	pointer--;buffer[pointer] = 'x';
 	pointer--;buffer[pointer] = '0';
-	printf(buffer + pointer);
+	monitor_puts(buffer + pointer);
 }
 
 void printint(uint32_t input)
@@ -100,13 +100,13 @@ void printint(uint32_t input)
 		buffer[10-i] = (char)(temp + 0x30);
 		input /= 10;
 	}
-	printf(buffer);
+	monitor_puts(buffer);
 }
 
 void putc (char x)
 {
 	uint32_t pointer = get_cursor();
-	char* vga_cursor = (char*) VIDEO_MEMORY;
+	char* vga_cursor = __VGA_text_memory;
 	if(x == '\b')
 	{
 		if(pointer)
@@ -119,7 +119,7 @@ void putc (char x)
 		}
 	}
 	else if(x == '\n')
-		printf("\n");
+		monitor_puts("\n");
 	else
 	{
 		vga_cursor += (pointer<<1);

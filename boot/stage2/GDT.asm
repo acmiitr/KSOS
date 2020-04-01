@@ -18,21 +18,6 @@ data_segment:
 	db 10010010b ;present|privilage 00|S=codedata or traps|1=code|0=not conforming|Readable|Accessed (some debug)
 	db 11001111b ;Granularity|32 bit code|is64?|Userbit|segment limit 4 more bits
 	db 0
-code_segment_u:
-	dw 0xffff  ;limit
-	dw 0       ;starting address
-	db 0
-	db 11111010b ;present|privilage 0|S=codedata or traps|1=code|0=not conforming|Readable|Accessed (some debug)
-	db 11001111b ;Granularity|32 bit code|is64?|Userbit|segment limit 4 more bits
-	db 0
-data_segment_u:
-	dw 0xffff  ;limit
-	dw 0       ;starting address
-	db 0
-	db 11110010b ;present|privilage 00|S=codedata or traps|1=code|0=not conforming|Readable|Accessed (some debug)
-	db 11001111b ;Granularity|32 bit code|is64?|Userbit|segment limit 4 more bits
-	db 0
-
 
 GDT_end:
 

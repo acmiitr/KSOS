@@ -1,5 +1,5 @@
-C_SOURCES = $(wildcard kernel/c/*.c)
-ASM_SOURCES = $(wildcard kernel/asm/*.asm)
+C_SOURCES = $(wildcard kernel/*/*.c)
+ASM_SOURCES = $(wildcard kernel/*/*.asm)
 C_OBJECTS = ${C_SOURCES:.c=.o}
 ASM_OBJECTS = ${ASM_SOURCES:.asm=.o}
 
@@ -30,7 +30,7 @@ kernel/kernel.elf : $(C_OBJECTS) $(ASM_OBJECTS)
 	chmod -x $@
 
 %.o : %.c
-	i686-elf-gcc -ffreestanding $< -c -o $@ -Wall -Werror -g 
+	i686-elf-gcc -Ikernel/include -ffreestanding $< -c -o $@ -Wall -Werror -g 
 %.o : %.asm
 	nasm $< -o $@ -f elf32
 

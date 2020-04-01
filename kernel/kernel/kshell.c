@@ -10,6 +10,8 @@
 #define MAX_TOKEN_SIZE 25 
 #define MAX_NAME_SIZE 20 
 
+//External variables
+extern char __VGA_text_memory[];
 //Helper functions
 static void extract_token(int token_no);  //Takes token number n from command and puts it into buffer
 static void parse_command();
@@ -38,7 +40,7 @@ void kshell()
 	//This loop gets the commands from us
 	while(1)
 	{
-		printf("\n"); printf(_shell_name); printf(" >");
+		monitor_puts("\n"); monitor_puts(_shell_name); monitor_puts(" >");
 		flush_command_buffer();
 		for(int i=0;i<MAX_COMMAND_SIZE;i++)
 		{
@@ -52,7 +54,7 @@ void kshell()
 			if(input == '\n')
 				{parse_command(); break;}
 			_cmd_buffer[i] = input;
-		       	putc(input);
+	       	putc(input);
 		}
 	}
 }
@@ -68,8 +70,8 @@ static void parse_command()
 	if(string_compare(_tkn_buffer,"quote")){command_quote();return;}
 	if(string_compare(_tkn_buffer,"name")){command_name();return;}
 
-	printf(" - Command not found: ");
-	printf(_tkn_buffer);
+	monitor_puts(" - Command not found: ");
+	monitor_puts(_tkn_buffer);
 }
 
 static void extract_token(int token_no)  //Takes token number n from command and puts it into buffer
@@ -111,13 +113,13 @@ static void flush_token_buffer()
 
 static void command_help()
 {
-	printf("\nList of commands (use `command` help for usage):");
-	printf("\nhelp");
-	printf(" fresh");
-	printf(" timer");
-	printf(" picture");
-	printf(" ball");
-	printf(" name\n");
+	monitor_puts("\nList of commands (use `command` help for usage):");
+	monitor_puts("\nhelp");
+	monitor_puts(" fresh");
+	monitor_puts(" timer");
+	monitor_puts(" picture");
+	monitor_puts(" ball");
+	monitor_puts(" name\n");
 }
 
 static void command_fresh()
@@ -145,23 +147,23 @@ static void command_fresh()
 		if(string_compare(_tkn_buffer,"white")) color[i] = WHITE;
 		if(string_compare(_tkn_buffer,"help"))
 		{
-			printf("\tUsage: fresh c1 c2\ncolors:");
-			printf("  black");
-			printf("  blue");
-			printf("  green");
-			printf("  cyan");
-			printf("  red");
-			printf("  magenta");
-			printf("  brown");
-			printf("  light_grey");
-			printf("  dark_grey");
-			printf("  light_blue");
-			printf("  light_green");
-			printf("  light_cyan");
-			printf("  light_red");
-			printf("  light_magenta");
-			printf("  light_brown");
-			printf("  white");
+			monitor_puts("\tUsage: fresh c1 c2\ncolors:");
+			monitor_puts("  black");
+			monitor_puts("  blue");
+			monitor_puts("  green");
+			monitor_puts("  cyan");
+			monitor_puts("  red");
+			monitor_puts("  magenta");
+			monitor_puts("  brown");
+			monitor_puts("  light_grey");
+			monitor_puts("  dark_grey");
+			monitor_puts("  light_blue");
+			monitor_puts("  light_green");
+			monitor_puts("  light_cyan");
+			monitor_puts("  light_red");
+			monitor_puts("  light_magenta");
+			monitor_puts("  light_brown");
+			monitor_puts("  white");
 			return;
 		}
 	}
@@ -174,7 +176,7 @@ static void command_fresh()
 	set_bg_color(color[0]);
 	for(int i=0;i<80;i++) putc(' ');
 	set_cursor(20);
-	printf("ACM DOS KERNEL SHELL 0.01 (help displays commands)");
+	monitor_puts("ACM DOS KERNEL SHELL 0.01 (help displays commands)");
 
 	set_fg_color(color[0]);
 	set_bg_color(color[1]);
@@ -186,34 +188,34 @@ static void command_timer()
 	if(string_compare(_tkn_buffer,"fast")) set_timer(0xffff>>2);
 	if(string_compare(_tkn_buffer,"medium")) set_timer(0xffff>>1);
 	if(string_compare(_tkn_buffer,"slow")) set_timer(0xffff);
-	if(string_compare(_tkn_buffer,"help")) printf("\tUsage: timer fast/medium/slow");
+	if(string_compare(_tkn_buffer,"help")) monitor_puts("\tUsage: timer fast/medium/slow");
 }
 
 static void command_picture()
 {
-	printf("\nx;;;.',,,,,,,,;,;ckO000000000OxddddxxxkkkkkkkkOOOOOOO00OOOO00OOOkx");
-	printf("\nx;;'.,,,,,,,,,,,,',oOOOOO0000000OOO00OOOOOOOOOOOOO0OOO00OOOOOOxl::");
-	printf("\nx;,.',,,,,,,,,,,,,,,;ldxO0000000000000OOO0000000000000OOOOOkoc;;,,");
-	printf("\nx;'.,,,''','''''''',''lkO0000000000000OOO00OOOO0000000Okdoc;;;;;,,");
-	printf("\nx,.''''''''','.....'':kOOOOOOO00000000OO00OOOOOkkOOOO0OOkc,;;;;;,,");
-	printf("\nx..'''''''',,'....'',dOOOOddc,oOO0000OOOOOOOOddl':xOOOOOOkc,;;;;;;");
-	printf("\no.'''......'',,,,;;':kOOOkc,..;kOOOOOOOOOOOOOo,'.'dOOOOOOOx;;:cccc");
-	printf("\no.''.........,,,;;,'dOOOO0OdoldOOOkxxkOOOOOOOOxoldOOOOOOOOOl;ccccc");
-	printf("\nd,'..........,,;;;',loxkO00000OOOOxl:lkOOOOOOOOOOOOkxxxkOOOx:ccccc");
-	printf("\nx,,'''',,,,,;;;:;,.,::::dO0000000OOOOOOOOOOOOOOOOOdc::ccdOOkc:cccc");
-	printf("\nx,,,,,,,,,,;:::;;..;ccc:dO000000OkolclodxkOOOOOOOkl:ccc:ckOOx;;:::");
-	printf("\nx,,,,,,,,,,,,,,,,.;c::cokO000000Ol':odddlokOO000OOdccccldOOOOo;:::");
-	printf("\nx,,,,,,,,,,,,,,,''ckkkOO00000000Od:ldxxdookOO0000OOOkkkkOOOOOk::cc");
-	printf("\nx;;;;,,,;;;;;;;;;;,lOO00000000000OkolllllxOOOOOOOOOOOOOOOOOOOOo;::");
-	printf("\nd,,;::cccccccccccc:;oOOO0000OOOO00OOOOOOOOOOOOOOOOOOOOOOOOOOOOx;;;");
-	printf("\noo'',,,;;:::::::;,,,;dkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkx:,,");
+	monitor_puts("\nx;;;.',,,,,,,,;,;ckO000000000OxddddxxxkkkkkkkkOOOOOOO00OOOO00OOOkx");
+	monitor_puts("\nx;;'.,,,,,,,,,,,,',oOOOOO0000000OOO00OOOOOOOOOOOOO0OOO00OOOOOOxl::");
+	monitor_puts("\nx;,.',,,,,,,,,,,,,,,;ldxO0000000000000OOO0000000000000OOOOOkoc;;,,");
+	monitor_puts("\nx;'.,,,''','''''''',''lkO0000000000000OOO00OOOO0000000Okdoc;;;;;,,");
+	monitor_puts("\nx,.''''''''','.....'':kOOOOOOO00000000OO00OOOOOkkOOOO0OOkc,;;;;;,,");
+	monitor_puts("\nx..'''''''',,'....'',dOOOOddc,oOO0000OOOOOOOOddl':xOOOOOOkc,;;;;;;");
+	monitor_puts("\no.'''......'',,,,;;':kOOOkc,..;kOOOOOOOOOOOOOo,'.'dOOOOOOOx;;:cccc");
+	monitor_puts("\no.''.........,,,;;,'dOOOO0OdoldOOOkxxkOOOOOOOOxoldOOOOOOOOOl;ccccc");
+	monitor_puts("\nd,'..........,,;;;',loxkO00000OOOOxl:lkOOOOOOOOOOOOkxxxkOOOx:ccccc");
+	monitor_puts("\nx,,'''',,,,,;;;:;,.,::::dO0000000OOOOOOOOOOOOOOOOOdc::ccdOOkc:cccc");
+	monitor_puts("\nx,,,,,,,,,,;:::;;..;ccc:dO000000OkolclodxkOOOOOOOkl:ccc:ckOOx;;:::");
+	monitor_puts("\nx,,,,,,,,,,,,,,,,.;c::cokO000000Ol':odddlokOO000OOdccccldOOOOo;:::");
+	monitor_puts("\nx,,,,,,,,,,,,,,,''ckkkOO00000000Od:ldxxdookOO0000OOOkkkkOOOOOk::cc");
+	monitor_puts("\nx;;;;,,,;;;;;;;;;;,lOO00000000000OkolllllxOOOOOOOOOOOOOOOOOOOOo;::");
+	monitor_puts("\nd,,;::cccccccccccc:;oOOO0000OOOO00OOOOOOOOOOOOOOOOOOOOOOOOOOOOx;;;");
+	monitor_puts("\noo'',,,;;:::::::;,,,;dkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkx:,,");
 }
 
 static void command_name()
 {
 	extract_token(1);
 	if(string_compare(_tkn_buffer,"help"))
-		{printf("\tUsage: name string"); return;}
+		{monitor_puts("\tUsage: name string"); return;}
 	if(string_compare(_tkn_buffer,"masih"))
 		string_copy(_tkn_buffer,"asshole");
 			
@@ -227,10 +229,10 @@ static void command_ball()
 {
 	extract_token(1);
 	if(string_compare(_tkn_buffer,"help"))
-		{printf("\tPlay with a ball (w/a/s/d)"); return;}
+		{monitor_puts("\nPlay with balls. Kick out the other ball to win! (w/a/s/d) (i/j/k/l)"); return;}
 	clear();
 	set_cursor(25*80);
-	char* vga_pointer = (char*) 0xb8000;
+	char* vga_pointer = (char*) __VGA_text_memory;
 	int ball1_x = 0; int ball1_y = 0;
 	int ball2_x = 79; int ball2_y = 24;
 	int y1_dir=0,x1_dir=0;
@@ -247,29 +249,37 @@ static void command_ball()
 			{
 				case 'w':   //w pressed
 					y1_dir += -1;
+					if(y1_dir<-1)y1_dir=-1;
 					break;
 				case 's':   //s pressed
 					y1_dir += 1;
+					if(y1_dir>1)y1_dir=1;
 					break;
 				case 'a':   //a pressed
 					x1_dir += -1;
+					if(x1_dir<-1)x1_dir=-1;
 					break;
 				case 'd':   //d pressed
 					x1_dir += 1;
+					if(x1_dir>1)x1_dir=1;
 					break;
 
 
 				case 'i':   //w pressed
 					y2_dir += -1;
+					if(y2_dir<-1)y2_dir=-1;
 					break;
 				case 'k':   //s pressed
 					y2_dir += 1;
+					if(y2_dir>1)y2_dir=1;
 					break;
 				case 'j':   //a pressed
 					x2_dir += -1;
+					if(x2_dir<-1)x2_dir=-1;
 					break;
 				case 'l':   //d pressed
 					x2_dir += 1;
+					if(x2_dir>1)x2_dir=1;
 					break;
 			}
 		}
@@ -279,17 +289,17 @@ static void command_ball()
 			vga_pointer[2*ball1_x+(160*ball1_y)] = 0;
 			vga_pointer[2*ball2_x+(160*ball2_y)] = 0;
 			ball1_x+=x1_dir;ball1_y+=y1_dir;
-			ball2_x+=x2_dir;ball2_y+=y2_dir;
 			if (ball1_x == ball2_x && ball1_y == ball2_y)
 			{
 				int temp = x1_dir;x1_dir=x2_dir;x2_dir=temp;
 				temp = y1_dir;y1_dir=y2_dir;y2_dir=temp;
 			}
+			ball2_x+=x2_dir;ball2_y+=y2_dir; //Move one ball and then the next
 			if (ball1_x == 80 || ball1_x <0 || ball1_y <0 || ball1_y == 25)
 			{
 				set_cursor(0);
-			       	printf("P1 loses!");
-				printf("\nPress x to exit");
+			       	monitor_puts("P1 loses!");
+				monitor_puts("\nPress x to exit");
 				while(get_monitor_char()!='x');
 				break;
 			}
@@ -297,8 +307,8 @@ static void command_ball()
 			if (ball2_x == 80 || ball2_x <0 || ball2_y <0 || ball2_y == 25)
 			{
 				set_cursor(0);
-			       	printf("P2 loses!");
-				printf("\nPress x to exit");
+			       	monitor_puts("P2 loses!");
+				monitor_puts("\nPress x to exit");
 				while(get_monitor_char()!='x');
 				break;
 			}
@@ -316,16 +326,16 @@ static void command_quote()
 	switch(sel)
 	{
 		case 0:
-			printf("\tTap that ass and step on the gas");
+			monitor_puts("\tTap that ass and step on the gas");
 			break;
 		case 1:
-			printf("\tAlways stay grounded to your roots");
+			monitor_puts("\tAlways stay grounded to your roots");
 			break;
 		case 2:
-			printf("\tSometimes change is necessary");
+			monitor_puts("\tSometimes change is necessary");
 			break;
 		default:
-			printf("\tTrust that good will happen");
+			monitor_puts("\tTrust that good will happen");
 	}
 }
 static void string_copy(char* strd,char* strs)

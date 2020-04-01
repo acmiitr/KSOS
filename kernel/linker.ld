@@ -22,7 +22,9 @@ __begin = .;
 		*(COMMON)            /* all COMMON sections from all files */
 		*(.bss)              /* all BSS sections from all files */
 	}
-. = ALIGN(4);
+
+. = ALIGN(4k);
+__VGA_text_memory = .;
 
 /*    __bss_end = .;
     __bss_sizeb = __bss_end - __bss_start;        BSS size in bytes 
