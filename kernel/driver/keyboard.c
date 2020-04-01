@@ -342,6 +342,7 @@ void keyboard_handler()
 	}
 	else if (scan_code == 0xe0)
 	{
+		
 		uint8_t scan_code_2 = read_port(0x60);
 		_latest_scan_code = scan_code_2;
 		if (scan_code_2 == 0x4b)
