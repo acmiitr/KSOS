@@ -141,6 +141,11 @@ char get_monitor_char()
 	{
 		wait_for_keyboard();
 		char x = get_latest_char();
+		uint8_t scanned=get_latest_scan_code();
+		if(scanned==0x4b)
+			return 17;
+		else if(scanned==0x4d)
+			return 18;
 		if (x)
 			return (x);
 	}

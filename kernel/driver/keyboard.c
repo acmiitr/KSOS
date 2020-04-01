@@ -339,6 +339,18 @@ void keyboard_handler()
 		}	
 		else //if(!is_shift_pressed && scan_code != 0x3a)
 			_latest_char = (temp_char);
+	}
+	else if (scan_code == 0xe0)
+	{
+		uint8_t scan_code_2 = read_port(0x60);
+		_latest_scan_code = scan_code_2;
+		if (scan_code_2 == 0x4b)
+			_latest_char = 17;
+		else if (scan_code_2 == 0x4d)
+			_latest_char = 18;
+		else
+			_latest_char = 0;
+		return;
 	}	
 	else
 	{
