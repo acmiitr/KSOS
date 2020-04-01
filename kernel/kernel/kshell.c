@@ -74,8 +74,22 @@ void kshell()
 					if (i > 0)
 					{
 						putc('\b');
+						if(_cmd_buffer[i]!=0)
+						{
+							i--;
+							int k=i;uint32_t pointer=get_cursor();
+							while(_cmd_buffer[k]!=0)
+							{
+								_cmd_buffer[k]=_cmd_buffer[k+1];
+								putc(_cmd_buffer[k]);
+								k++;
+							}
+							set_cursor(pointer);
+						}
+						else
+						{
 						i--;
-						_cmd_buffer[i] = 0;
+						_cmd_buffer[i] = 0;}
 					}
 					i--;
 					continue;
