@@ -45,16 +45,63 @@ void kshell()
 		for(int i=0;i<MAX_COMMAND_SIZE;i++)
 		{
 			char input = get_monitor_char();
-			if(input == '\b')
-			{
-				if(i>0){putc('\b');i--; _cmd_buffer[i]=0;}
-				i--;
+			if (input == 17)
+			{	
+				//uint8_t scanned=get_latest_scan_code();
+				if(i!=0)
+				{	uint32_t pointer = get_cursor();
+					i-=2;
+					pointer--;
+					set_cursor(pointer);
+				}
+				else i--;
 				continue;
 			}
-			if(input == '\n')
-				{parse_command(); break;}
+			else if (input == 18)
+			{
+				if(i==0&&_cmd_buffer[i]==0)
+					{i--;continue;}	
+				uint32_t pointer = get_cursor();
+				if(_cmd_buffer[i]!=0)
+					{pointer++;}
+				else
+					i--;
+				set_cursor(pointer);
+				continue;				
+			}
+			else if (input == '\b')
+				{
+					if (i > 0)
+					{
+						putc('\b');
+						if(_cmd_buffer[i]!=0)
+						{
+							i--;
+							int k=i;uint32_t pointer=get_cursor();
+							while(_cmd_buffer[k]!=0)
+							{
+								_cmd_buffer[k]=_cmd_buffer[k+1];
+								putc(_cmd_buffer[k]);
+								k++;
+							}
+							set_cursor(pointer);
+						}
+						else
+						{
+						i--;
+						_cmd_buffer[i] = 0;}
+					}
+					i--;
+					continue;
+				}
+			else if (input == '\n')
+			{
+				parse_command();
+				break;
+			}
+			else
 			_cmd_buffer[i] = input;
-	       	putc(input);
+			putc(input);
 		}
 	}
 }
