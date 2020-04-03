@@ -11,11 +11,20 @@ __begin = .;
 		*(.text.entry)       /* Ensure .text.entry appears first */
 		*(.text*)
 	}
-.data : SUBALIGN(16)
+
+.user : ALIGN(4k) 
+	{
+		__user_begin = . ;
+		*(.user);
+		__user_end = . ;
+	}
+
+.data : SUBALIGN(4k)
 	{
 		*(.rodata)
 		*(.data)
 	}
+
 .bss : SUBALIGN(16)
 	{
 		__bss_start = .;

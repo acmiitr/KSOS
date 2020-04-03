@@ -63,7 +63,7 @@ void monitor_puts(char* Message)
 
 void printhex(uint32_t input)
 {
-	char buffer[11]; //0x + 8 + null
+	char buffer[11]  = "0x00000000";
 	uint8_t pointer = 9;
 	for (int i = 0; i < 8; i++)
 	{

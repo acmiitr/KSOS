@@ -11,8 +11,8 @@
 
 extern void kshell();
 extern void refresh_stack();
-uint8_t array[512];
-void initialize_all(uint32_t mmapsize);
+extern void init();
+
 void kmain(uint32_t mmapsize,uint32_t data_sect,uint32_t root_sect,uint32_t fat_sect)
 {
 	gdt_init();
@@ -33,6 +33,7 @@ void kmain(uint32_t mmapsize,uint32_t data_sect,uint32_t root_sect,uint32_t fat_
 
 	get_monitor_char();
 
+	init();
 	kshell();
 
 	clear_interrupts();
