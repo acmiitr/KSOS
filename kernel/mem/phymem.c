@@ -78,21 +78,21 @@ void  pmmngr_init(uint32_t mapentrycount)   //kernel size in 512 byte sectors - 
 	pmmngr_toggle_range (KERNEL_P,KERNEL_P + KERNEL_MAPPED_SIZE);
 }
 
-uint32_t* pmmngr_allocate_block()
+uint32_t pmmngr_allocate_block()
 {
-	uint32_t* address;
+	uint32_t address;
 	for( uint32_t i=0;i<0x8000;i++)
 		if (physical_memory_bitmap[i] < 0xffffffff)
 		{
 			uint8_t bit = get_lowest_bit(physical_memory_bitmap[i]);  //bit lies from 0 to 31
 				if(bit == 0xff) return 0;
-			address = (uint32_t*)((i << 17) + (bit << 12));
-			pmmngr_toggle_block(block_number((uint32_t)address));
+			address = (i << 17) + (bit << 12);
+			pmmngr_toggle_block(block_number(address));
 			return address;
 		}
 	return 0;
 }
-bool pmmngr_free_block(uint32_t* address)
+bool pmmngr_free_block(uint32_t address)
 {
 	if((uint32_t)address % BLOCK_SIZE != 0) return 0;
 	

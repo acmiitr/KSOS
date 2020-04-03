@@ -8,12 +8,13 @@
 
 extern void switch_to_user();
 
-extern uint8_t __user_begin[];
+extern uint32_t __user_begin[];
 
 __attribute__((section (".user")))void init()
 {
 	map_page(USERSTACK - PAGE_SIZE,USERSTACK_PHY - PAGE_SIZE,true);
 	printhex ((uint32_t)__user_begin);
+	printhex (virtual_to_physical(__user_begin));
 	map_page((uint32_t)__user_begin,0x103000,true);
 	switch_to_user();
 	for(;;);

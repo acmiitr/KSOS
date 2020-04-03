@@ -122,6 +122,31 @@ static void set_recursive_map()   //Sets the virtual address of the page directo
 	_page_directory = (uint32_t*)PAGE_DIRECTORY; //Page directory is the last address
 	flush_tlb();
 }
+uint32_t virtual_to_physical (uint32_t* virt)
+{
+	uint32_t virtual_address = (uint32_t)virt;
+	uint32_t pd_index = virtual_address >> 22;
+
+	if (!(_page_directory[pd_index] & PDE_PRESENT)) return 0;
+
+	uint32_t* page_table = (uint32_t*)(PAGE_TABLE | (pd_index<<12)); //This is the virtual address of the page table 
+	uint32_t pt_index = ((virtual_address >> 12) & 0x3FF); //Using recursive page table technique
+
+	if (!(page_table[pt_index] & PTE_PRESENT)) return 0;
+	return ((page_table[pt_index] & PTE_FRAME) | (virtual_address & ~PTE_FRAME));
+}
+
+static bool alloc_page(uint32_t* table_entry)   //Given a page table/directory entry, 'fill' it automatically
+{
+	uint32_t physical_address = pmmngr_allocate_block();
+	if(!physical_address) return 0;
+
+	*table_entry = physical_address;
+	*table_entry |= PTE_PRESENT;
+	return 1;
+
+}
+
 /*
 void free_page(uint32_t* table_entry)  //Makes any entry free
 {
@@ -130,16 +155,6 @@ void free_page(uint32_t* table_entry)  //Makes any entry free
 	pmmngr_free_block( (uint32_t*) physical_address);
 	entry_toggle_attrib (table_entry,PDE_PRESENT); //This seems like a bad idea?? Not flexible enough
 }*/
-static bool alloc_page(uint32_t* table_entry)   //Given a page table/directory entry, 'fill' it automatically
-{
-	uint32_t* physical_address = pmmngr_allocate_block();
-	if(!physical_address) return 0;
-
-	*table_entry = (uint32_t)physical_address;
-	*table_entry |= PTE_PRESENT;
-	return 1;
-
-}
 
 /*
 static inline void entry_toggle_attrib (uint32_t* e, uint8_t attrib)  //uint8_t or 32? Maybe change this .... 
@@ -167,16 +182,5 @@ static inline uint32_t entry_physical (uint32_t e)  //Extract the physical addre
 {
 	return (e & PTE_FRAME);
 }
-
-uint32_t virtual_to_physical (uint32_t virtual_address)
-{
-	uint32_t tab_entry = virtual_address >> 12;
-	uint32_t dir_entry = tab_entry  >> 10;
-	uint32_t* page_table = (uint32_t*) (_page_directory[dir_entry] & PDE_FRAME);
-	uint32_t physical_address = page_table[tab_entry] & PTE_FRAME;
-	physical_address += (virtual_address & 0xFFF);
-	return physical_address;
-}
 */
-
 
