@@ -61,9 +61,9 @@ void  pmmngr_init(uint32_t mapentrycount)   //kernel size in 512 byte sectors - 
 
 	for (int i = 0; i< mapentrycount ; i++)
         {
-                printf("\nStarting address:"); printhex((map_ptr+i) -> startLo);
-                printf("\tSize: "); printhex((map_ptr+i) -> sizeLo);
-                printf("\tType:"); printhex((map_ptr+i) -> type);
+                monitor_puts("\nStarting address:"); printhex((map_ptr+i) -> startLo);
+                monitor_puts("\tSize: "); printhex((map_ptr+i) -> sizeLo);
+                monitor_puts("\tType:"); printhex((map_ptr+i) -> type);
          }
 */
 	for(uint32_t i=0;i<mapentrycount;i++)

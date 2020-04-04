@@ -154,8 +154,7 @@ enum KEYCODE {
 	KEY_SCROLLLOCK        = 0x4010,
 	KEY_PAUSE             = 0x4011,
 
-	KEY_UNKNOWN,
-	KEY_NUMKEYCODES
+	KEY_UNKNOWN
 };
 
 //Global scancode table
@@ -232,9 +231,15 @@ static int _scancode_std [] = {
 	KEY_F10,		//0x44
 	KEY_KP_NUMLOCK,	//0x45
 	KEY_SCROLLLOCK,	//0x46
-	KEY_HOME,		//0x47
+	KEY_KP_7,		//0x47
 	KEY_KP_8,		//0x48	//keypad up arrow
-	KEY_PAGEUP,		//0x49
+	KEY_KP_9,		//0x49
+	KEY_KP_MINUS,	//0x4a
+	KEY_KP_4,		//0x4b	//keypad left arrow
+	KEY_KP_5,		//0x4c
+	KEY_KP_6,		//0x4d	//keypad right arrow
+	KEY_UNKNOWN,	//0x4e
+	KEY_KP_1,		//0x4f
 	KEY_KP_2,		//0x50	//keypad down arrow
 	KEY_KP_3,		//0x51	//keypad page down
 	KEY_KP_0,		//0x52	//keypad insert key
@@ -257,9 +262,10 @@ bool _is_keyboard_interrupt;
 bool is_output_full(); 
 bool is_input_empty();
 bool is_alphabet(char);
+bool is_on_keypad(uint8_t);
 static bool is_shift_pressed = false;
 static bool caps_toggle = false;
-
+static bool num_lock_toggle = false;
 void keyboard_handler()
 {
 	uint8_t scan_code = read_port(0x60);
@@ -272,6 +278,8 @@ void keyboard_handler()
 			is_shift_pressed = true;
 		else if(scan_code == 0x3a)
 			caps_toggle = !caps_toggle;
+		else if(scan_code == 0x45)
+			num_lock_toggle=!num_lock_toggle;
 		else if((is_shift_pressed ^ caps_toggle) && is_alphabet(temp_char))
 			_latest_char = (temp_char-0x20);
 		else if (is_shift_pressed && !is_alphabet(temp_char))
@@ -322,8 +330,28 @@ void keyboard_handler()
 					  break;	
 			}
 		}
+		else if(is_on_keypad(scan_code))
+		{
+			if(num_lock_toggle)
+			_latest_char=temp_char;
+			else
+			_latest_char=0;
+		}	
 		else //if(!is_shift_pressed && scan_code != 0x3a)
 			_latest_char = (temp_char);
+	}
+	else if (scan_code == 0xe0)
+	{
+		
+		uint8_t scan_code_2 = read_port(0x60);
+		_latest_scan_code = scan_code_2;
+		if (scan_code_2 == 0x4b)
+			_latest_char = 17;
+		else if (scan_code_2 == 0x4d)
+			_latest_char = 18;
+		else
+			_latest_char = 0;
+		return;
 	}	
 	else
 	{
@@ -381,34 +409,9 @@ bool is_input_empty()  //If this returns true, you can write into the buffer
 {
 	return (!(read_port(0x64)&2));
 }
-/*
-	while((read_port(0x64) & 2)) {}
-	write_port(0x64,0xAD);
-	while((read_port(0x64) & 2)) {}
-	write_port(0x64,0xA7);
-	
-	read_port(0x60);
-
-	printf("\nRunning ps2 self test");
-	while((read_port(0x64) & 2)) {}
-	write_port(0x64,0x55);
-	while(!(read_port(0x64) & 1)) {}
-	if(read_port(0x60) != 0xFF) return false;
-	printf("\nSelf-test passed");
-
-	//Enabling interrupts
-
-	while((read_port(0x64) & 2)) {}
-	write_port(0x64,0x20);
-	while(!(read_port(0x64) & 1)) {}
-	uint8_t ccb = read_port(0x60);
-	printf("\nccb =");printhex(ccb);
-
-
-
-	while((read_port(0x64) & 2)) {}
-	write_port(0x64,0xAE);
-	while((read_port(0x64) & 2)) {}
-	write_port(0x64,0xA8);
-
-*/
+bool is_on_keypad(uint8_t scan_code)
+{
+	if(scan_code>=0x47&&scan_code<=0x52&&scan_code!=0x4e)
+		return true;
+	return false;
+}

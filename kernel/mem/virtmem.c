@@ -6,14 +6,19 @@
 #define BLOCK_SIZE 4096
 #define PAGE_TABLE 0xFFC00000
 #define PAGE_DIRECTORY 0xFFFFF000
+#define STACK 0xFFC00000
+#define STACK_PHY 0x90000
+#define VGA_TEXT 0xB8000
+#define PAGE_SIZE (1<<12)
 
 #include <stdint.h>
 #include <stdbool.h>
 #include "dadio.h"
+#include "hal.h"
 #include "phymem.h"
+#include "virtmem.h"
 
-uint32_t get_pdbr();   //An assembly defined function
-uint32_t* _page_directory = (uint32_t*)0x9C000;  //This is the virtual address of the page directory
+static uint32_t* _page_directory = (uint32_t*)0x9C000;  //This is the initial virtual address of the page directory
 
 //Source: BrokenThorn 
 //A page table entry is just a 32 bit integer in our case :)
@@ -57,17 +62,34 @@ static bool alloc_page(uint32_t* table_entry);
 //Implementations
 extern uint32_t __begin[];
 extern uint32_t __end[];
-void vmmngr_init() //Probably needs to clear out the identity mapping also
+extern char  __VGA_text_memory[];  //This is the virtual address of the VGA memory
+void vmmngr_init() 
 {
 	set_recursive_map();
-	if ((uint32_t)__end - (uint32_t)__begin > (2<<22))
+	//Need to remap video memory...
+	if(!map_page((uint32_t)__VGA_text_memory,VGA_TEXT))
+		for(;;); //monitor_puts("VGA remap failed");  //Keep another debug print
+	if(!map_page(STACK-PAGE_SIZE,STACK_PHY-PAGE_SIZE))
+		monitor_puts("Stack remap failed");
+	if ((uint32_t)__end - (uint32_t)__begin > (2<<22))  
 	{
-		printf("Kernel spans more than 4M");
+		monitor_puts("Kernel spans more than 4M");
 		for(;;);
 	}
 	//Need to set all the page frames that are in use by the kernel
 }
-bool map_page(uint32_t virtual_address,uint32_t physical_address)
+
+void remove_identity_map()  //This would remove the 4M identity map
+{
+	//This requires a stack_reset, and gdt reset so far.
+	if (entry_is_present(_page_directory[0]))
+//		_page_directory[0] ^=1;
+		_page_directory[0] = 0;
+
+	flush_tlb();  //Clean that boi
+}
+
+bool map_page(uint32_t virtual_address,uint32_t physical_address)   //TODO: Need to deal with freed frames
 {
 	if (virtual_address % BLOCK_SIZE) 
 		virtual_address -= (virtual_address%BLOCK_SIZE);
@@ -82,12 +104,16 @@ bool map_page(uint32_t virtual_address,uint32_t physical_address)
 		if(!entry_is_writable (_page_directory[pd_index]))
 			entry_toggle_attrib (_page_directory + pd_index,PDE_WRITABLE);
 	}
-	uint32_t* page_table = (uint32_t*)(PAGE_TABLE | (pd_index<<12)); //This is the virtual address of the page table
+	uint32_t* page_table = (uint32_t*)(PAGE_TABLE | (pd_index<<12)); //This is the virtual address of the page table  -- Uses the recursive page table
 	uint32_t pt_index = ((virtual_address >> 12) & 0x3FF);
 
-	entry_set_frame(page_table + pt_index,physical_address);
+	entry_set_frame(page_table + pt_index,physical_address);  //Force switch! Even if already mapped this will change?
+
 	if(!entry_is_present (page_table[pt_index]))
 		entry_toggle_attrib (page_table + pt_index,PTE_PRESENT);
+
+	if(!entry_is_writable (page_table[pt_index]))
+		entry_toggle_attrib (page_table + pt_index,PTE_WRITABLE);
 
 	return true;
 }
@@ -107,9 +133,9 @@ void free_page(uint32_t* table_entry)  //Makes any entry free
 	if(!entry_is_present(*table_entry)) return;
 	uint32_t physical_address = entry_physical (*table_entry);
 	pmmngr_free_block( (uint32_t*) physical_address);
-	entry_toggle_attrib (table_entry,PDE_PRESENT);
+	entry_toggle_attrib (table_entry,PDE_PRESENT); //This seems like a bad idea?? Not flexible enough
 }
-static bool alloc_page(uint32_t* table_entry)   //Given a page table/directory entry, 'fill' it
+static bool alloc_page(uint32_t* table_entry)   //Given a page table/directory entry, 'fill' it automatically
 {
 	uint32_t* physical_address = pmmngr_allocate_block();
 	if(!physical_address) return 0;

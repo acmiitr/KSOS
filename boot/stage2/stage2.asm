@@ -10,10 +10,10 @@ MemMap equ 0x1000   ;Get the mapping table here.....
 
 
 start:
-mov [KernelSize],cx
-mov bx,[KernelSize]
-
-
+mov [KernelSize],cx  ;Use only stack
+pop word[DataSect]
+pop word[RootSect]
+pop word[FATSect]
 EnableA20:
 in al, 0x92
 or al, 2
@@ -141,6 +141,9 @@ call EnablePaging
 
 ;------------------Prepare to jump into kernel-------------------
 
+push dword[FATSect]
+push dword[RootSect]
+push dword[DataSect]
 mov eax,[GetMemoryMap.count]
 push eax
 jmp 0x08:KernelVirt
@@ -156,4 +159,7 @@ Welcome: db 'Everyone likes Flashiing Lights ;)',0
 Stars: db '***********************************************',0
 DaddyOsWelcome: db 'Welcome to ACM DOS',0
 KernelSize: dw 0
+DataSect: dd 0
+RootSect: dd 0
+FATSect: dd 0
 

@@ -91,6 +91,11 @@ call Findfile
 END_OF_STAGE:
 mov ah,0x00  ;This is a cool thing... It waits for user input before going into 32 bit mode
 int 0x16
+
+push word[bpbReservedSectors] ;FAT start
+push word[ROOT_SECT_NO] ;Root Start
+push word[DATA_SECT_NO] ;Data start
+
 jmp (Stage2Sector << 4)
 ;---------------------------------------------------------------------------------------
 ;Functions 
@@ -122,9 +127,9 @@ Findfile:  ;Returns cluster number in bx
 		call print_si_16
 		jmp $
 
-	.Error: db 0xa,0xd,'File not found!',0
+	.Error: db 0xa,0xd,'Not found!',0
 	.Message: db 0xa,0xd,'Success!',0x0a,0x0d,0
-	.TargetMessage: db 0xa,0xd,'Search Target:',0
+	.TargetMessage: db 0xa,0xd,'Target:',0
 	.Found:
 		mov si,.Message
 		call print_si_16
@@ -184,7 +189,7 @@ GetNextSector:  ;dx is parameter
 ;These are all hard disk addresses
 ROOT_SECT_NO: dw 0
 DATA_SECT_NO: dw 0   ; Corresponds to FAT table entry 2 (0,1,2..)
-ReadWhere: dw 0x7e00
+ReadWhere: dw 0
 KernelName: db 'KERNEL  BIN',0
 Stage2Name: db 'STAGE2  BIN',0
 times 510 - ($-$$) db 0

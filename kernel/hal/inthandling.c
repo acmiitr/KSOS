@@ -53,6 +53,47 @@ void isr47(); //Secondary ATA bus
 
 
 //Function implementations
+
+void init_pic()
+{
+	
+	//ICW 1  Expect IC4|single?|0|level?|init?|000
+	write_port(0x20,0x11);
+	write_port(0xA0,0x11);
+	
+	//ICW 2  Remapping the IRQs
+	write_port(0x21,0x20);
+	write_port(0xA1,0x28);
+
+	// Send ICW 3 to primary PIC
+	// 0x4 = 0100 Second bit (IR Line 2)
+	write_port(0x21,0x04);
+
+	// Send ICW 3 to secondary PIC
+	// 010=> IR line 2
+	// write to data register of secondary PIC
+	write_port(0xA1,0x02);
+
+	// Send ICW 4 - Set x86 mode --------------------------------
+	// bit 0 enables 80x86 mode
+	write_port(0x21,0x01);
+	write_port(0xA1,0x01);
+ 
+	
+	// Setting the IMR - All interrupts enabled
+	write_port(0x21,0);
+	write_port(0xA1,0);
+}
+
+void send_EOI_master()
+{
+	write_port(0x20,0x20);
+}
+
+void send_EOI_slave()
+{
+	write_port(0xA0,0x20);
+}
 void interrupt_init()
 {
 	_idtr.base = (uint32_t)_idt;
@@ -123,20 +164,20 @@ void install_ir(uint32_t index,uint16_t flags, uint16_t sel, uint32_t* handler_a
 //These are the simple exception handlers
 void default_handler()
 {
-	printf("This is the default exception handler");
+	monitor_puts("This is the default exception handler");
 	for (;;);
 }
 
 void divide_by_zero_fault (uint32_t eip, uint32_t cs, uint32_t flags) {
 
-	printf ("Divide by 0 :");
+	monitor_puts ("Divide by 0 :");
 	printhex(cs);printhex(eip);printhex(flags);
 	for (;;);
 }
 
 void single_step_trap (uint32_t cs, uint32_t eip, uint32_t flags) {
 
-	printf ("Single step :");
+	monitor_puts ("Single step :");
 	printhex(cs);printhex(eip);printhex(flags);
 	for (;;);
 }
@@ -144,7 +185,7 @@ void single_step_trap (uint32_t cs, uint32_t eip, uint32_t flags) {
 //! non maskable interrupt trap
 void nmi_trap (uint32_t cs, uint32_t eip, uint32_t flags) {
 
-	printf ("NMI :");
+	monitor_puts ("NMI :");
 	printhex(cs);printhex(eip);printhex(flags);
 	for (;;);
 }
@@ -152,7 +193,7 @@ void nmi_trap (uint32_t cs, uint32_t eip, uint32_t flags) {
 //! breakpoint hit
 void breakpoint_trap (uint32_t cs, uint32_t eip, uint32_t flags) {
 
-	printf ("Breakpoint :");
+	monitor_puts ("Breakpoint :");
 	printhex(cs);printhex(eip);printhex(flags);
 	for (;;);
 }
@@ -160,7 +201,7 @@ void breakpoint_trap (uint32_t cs, uint32_t eip, uint32_t flags) {
 //! overflow
 void overflow_trap (uint32_t cs, uint32_t eip, uint32_t flags) {
 
-	printf ("Overflow :");
+	monitor_puts ("Overflow :");
 	printhex(cs);printhex(eip);printhex(flags);
 	for (;;);
 }
@@ -168,7 +209,7 @@ void overflow_trap (uint32_t cs, uint32_t eip, uint32_t flags) {
 //! bounds check
 void bounds_check_fault (uint32_t cs, uint32_t  eip, uint32_t flags) {
 
-	printf ("Bounds check :");
+	monitor_puts ("Bounds check :");
 	printhex(cs);printhex(eip);printhex(flags);
 	for (;;);
 }
@@ -176,7 +217,7 @@ void bounds_check_fault (uint32_t cs, uint32_t  eip, uint32_t flags) {
 //! invalid opcode / instruction
 void invalid_opcode_fault (uint32_t cs, uint32_t  eip, uint32_t flags) {
 
-	printf ("Invalid opcode :");
+	monitor_puts ("Invalid opcode :");
 	printhex(cs);printhex(eip);printhex(flags);
 	for (;;);
 }
@@ -184,7 +225,7 @@ void invalid_opcode_fault (uint32_t cs, uint32_t  eip, uint32_t flags) {
 //! device not available
 void no_device_fault (uint32_t cs, uint32_t eip, uint32_t flags) {
 
-	printf ("Invalid device :");
+	monitor_puts ("Invalid device :");
 	printhex(cs);printhex(eip);printhex(flags);
 	for (;;);
 }
@@ -192,7 +233,7 @@ void no_device_fault (uint32_t cs, uint32_t eip, uint32_t flags) {
 //! double fault
 void double_fault_abort (uint32_t eip,uint32_t cs,uint32_t flags,uint32_t err)  {
 
-	printf ("Doublefault :");
+	monitor_puts ("Doublefault :");
 	printhex(cs);printhex(eip);printhex(flags);printhex(err);
 	for (;;);
 }
@@ -200,7 +241,7 @@ void double_fault_abort (uint32_t eip,uint32_t cs,uint32_t flags,uint32_t err)  
 //! invalid Task State Segment (TSS)
 void invalid_tss_fault (uint32_t eip,uint32_t cs,uint32_t flags,uint32_t err) {
 
-	printf ("Invalid TSS :");
+	monitor_puts ("Invalid TSS :");
 	printhex(cs);printhex(eip);printhex(flags);printhex(err);
 	for (;;);
 }
@@ -208,7 +249,7 @@ void invalid_tss_fault (uint32_t eip,uint32_t cs,uint32_t flags,uint32_t err) {
 //! segment not present
 void no_segment_fault (uint32_t eip,uint32_t cs,uint32_t flags,uint32_t err)  {
 
-	printf ("Invalid segment:");
+	monitor_puts ("Invalid segment:");
 	printhex(cs);printhex(eip);printhex(flags);printhex(err);
 	for (;;);
 }
@@ -216,7 +257,7 @@ void no_segment_fault (uint32_t eip,uint32_t cs,uint32_t flags,uint32_t err)  {
 //! stack fault
 void stack_fault (uint32_t eip,uint32_t cs,uint32_t flags,uint32_t err)  {
 
-	printf ("Stack fault :");
+	monitor_puts ("Stack fault :");
 	printhex(cs);printhex(eip);printhex(flags);printhex(err);
 	for (;;);
 }
@@ -224,7 +265,7 @@ void stack_fault (uint32_t eip,uint32_t cs,uint32_t flags,uint32_t err)  {
 //! general protection fault
 void general_protection_fault (uint32_t eip,uint32_t cs,uint32_t flags,uint32_t err)  {
 
-	printf ("GP :");
+	monitor_puts ("GP :");
 	printhex(cs);printhex(eip);printhex(flags);printhex(err);
 	for (;;);
 }
@@ -232,7 +273,7 @@ void general_protection_fault (uint32_t eip,uint32_t cs,uint32_t flags,uint32_t 
 
 //! page fault
 void page_fault (uint32_t eip,uint32_t cs,uint32_t flags,uint32_t err) {
-	printf ("Page fault :");
+	monitor_puts ("Page fault :");
 	printhex(cs);printhex(eip);printhex(flags);printhex(err);
        	for (;;);
 }
@@ -240,7 +281,7 @@ void page_fault (uint32_t eip,uint32_t cs,uint32_t flags,uint32_t err) {
 //! Floating Point Unit (FPU) error
 void fpu_fault  (uint32_t cs, uint32_t  eip, uint32_t flags)  {
 
-	printf ("FPU fault :");
+	monitor_puts ("FPU fault :");
 	printhex(cs);printhex(eip);printhex(flags);
 	for (;;);
 }
@@ -248,21 +289,21 @@ void fpu_fault  (uint32_t cs, uint32_t  eip, uint32_t flags)  {
 //! alignment check
 void alignment_check_fault (uint32_t eip,uint32_t cs,uint32_t flags,uint32_t err)  {
 
-	printf ("Alignment check :");
+	monitor_puts ("Alignment check :");
 	printhex(cs);printhex(eip);printhex(flags),printhex(err);
 	for (;;);
 }
 //! machine check
 void machine_check_abort (uint32_t cs, uint32_t  eip, uint32_t flags)  {
 
-	printf ("Machine check :");
+	monitor_puts ("Machine check :");
 	printhex(cs);printhex(eip);printhex(flags);
 	for (;;);
 }
 
 void simd_fpu_fault (uint32_t cs, uint32_t  eip, uint32_t flags)  {
 
-	printf ("FPU SIMD :");
+	monitor_puts ("FPU SIMD :");
 	printhex(cs);printhex(eip);printhex(flags);
 	for (;;);
 }

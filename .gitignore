@@ -3,5 +3,5 @@
 *.o
 *.swp
 disk.img
-
+build/*
 Experiment

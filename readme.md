@@ -38,6 +38,10 @@ And voila!, it creates a disk.img file that you need to run using the emulator t
 
 `qemu-system-i386 disk.img`
 
+Or even simpler
+
+`make run`
+
 This results in a new window that runs the OS. Enjoy the bright colours!
 
 To actually run it directly on a PC without an emulator, you would need to have a Legacy BIOS system. Let's say you did have one lying around for 12+ years, first we would have to copy it to a USB by plugging it into your system where you have built the OS and run

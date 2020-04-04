@@ -2,10 +2,11 @@
 #include <stdbool.h>
 #include "hal.h"
 
-#define VIDEO_MEMORY 0xb8000
 #define TIMER_CONTROL_PORT 0x43
 #define TIMER_DATA_PORT 0x40
 
+//Video memory
+extern char __VGA_text_memory[];
 //Global variables
 static uint32_t tick_counter = 0;
 bool _is_timer_interrupt = false;
@@ -52,7 +53,7 @@ void wait_for_timer()
 
 static void rotate_pole(int x, int y)
 {
-	char* sym = (char*)(VIDEO_MEMORY + 2*(x+80*y));
+	char* sym = (char*)(__VGA_text_memory + 2*(x+80*y));
 	switch(*sym){
 		case '|':
 			*sym = '/';
