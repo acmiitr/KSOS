@@ -2,6 +2,7 @@
 #include"dadio.h"
 #include"hal.h"
 #include"inthandling.h"
+#include"hardware.h"
 
 #define MAX_INTERRUPTS 256
 #define IDT_DESC_TRAP 0x01	//00000001
@@ -10,12 +11,27 @@
 #define IDT_DESC_RING1 0x40	//01000000
 #define IDT_DESC_RING2 0x20	//00100000
 #define IDT_DESC_RING3 0x60	//01100000
-#define IDT_DESC_PRESENT 0x80//10000000
+#define IDT_DESC_PRESENT 0x80	//10000000
+
+
+//Structs
+typedef struct __attribute__ ((__packed__)) idtr {
+	uint16_t		limit;
+	uint32_t		base;
+}idtr_t;
+
+
+typedef struct __attribute__ ((__packed__)) idt_descriptor {
+uint16_t		baseLo;
+uint16_t		sel;
+uint8_t			reserved;
+uint8_t			flags;
+uint16_t		baseHi;
+}idt_descriptor_t;
 
 //Global variables in this routine
 static idt_descriptor_t _idt[MAX_INTERRUPTS];
 static idtr_t _idtr;
-
 
 //Exception Handlers
 void default_handler();
@@ -32,11 +48,11 @@ void invalid_tss_fault (uint32_t eip,uint32_t cs,uint32_t flags,uint32_t err) ;
 void no_segment_fault (uint32_t eip,uint32_t cs,uint32_t flags,uint32_t err)  ;
 void stack_fault (uint32_t eip,uint32_t cs,uint32_t flags,uint32_t err)  ;
 void general_protection_fault (uint32_t eip,uint32_t cs,uint32_t flags,uint32_t err)  ;
-void page_fault (uint32_t eip,uint32_t cs,uint32_t flags,uint32_t err) ;
-void fpu_fault  (uint32_t cs, uint32_t  eip, uint32_t flags)  ;
-void alignment_check_fault (uint32_t eip,uint32_t cs,uint32_t flags,uint32_t err) ;
-void machine_check_abort (uint32_t cs, uint32_t  eip, uint32_t flags)  ;
-void simd_fpu_fault (uint32_t cs, uint32_t  eip, uint32_t flags)  ;
+void bc_fault (uint32_t eip,uint32_t cs,uint32_t flags,uint32_t err);
+void fpu_fault  (uint32_t cs, uint32_t  eip, uint32_t flags);
+void page_fault (uint32_t eip,uint32_t cs,uint32_t flags,uint32_t err);
+void machine_check_abort (uint32_t cs, uint32_t  eip, uint32_t flags);
+void simd_fpu_fault (uint32_t cs, uint32_t  eip, uint32_t flags);
 
 //Interrupt handler assembly stubs
 void isr32();
@@ -54,46 +70,6 @@ void isr47(); //Secondary ATA bus
 
 //Function implementations
 
-void init_pic()
-{
-	
-	//ICW 1  Expect IC4|single?|0|level?|init?|000
-	write_port(0x20,0x11);
-	write_port(0xA0,0x11);
-	
-	//ICW 2  Remapping the IRQs
-	write_port(0x21,0x20);
-	write_port(0xA1,0x28);
-
-	// Send ICW 3 to primary PIC
-	// 0x4 = 0100 Second bit (IR Line 2)
-	write_port(0x21,0x04);
-
-	// Send ICW 3 to secondary PIC
-	// 010=> IR line 2
-	// write to data register of secondary PIC
-	write_port(0xA1,0x02);
-
-	// Send ICW 4 - Set x86 mode --------------------------------
-	// bit 0 enables 80x86 mode
-	write_port(0x21,0x01);
-	write_port(0xA1,0x01);
- 
-	
-	// Setting the IMR - All interrupts enabled
-	write_port(0x21,0);
-	write_port(0xA1,0);
-}
-
-void send_EOI_master()
-{
-	write_port(0x20,0x20);
-}
-
-void send_EOI_slave()
-{
-	write_port(0xA0,0x20);
-}
 void interrupt_init()
 {
 	_idtr.base = (uint32_t)_idt;
@@ -136,14 +112,14 @@ void interrupt_init()
 	install_ir(9,IDT_DESC_BIT32|IDT_DESC_PRESENT,0x08,(uint32_t*)no_segment_fault);
 	install_ir(10,IDT_DESC_BIT32|IDT_DESC_PRESENT,0x08,(uint32_t*)stack_fault);
 	install_ir(11,IDT_DESC_BIT32|IDT_DESC_PRESENT,0x08,(uint32_t*)general_protection_fault);
-	install_ir(12,IDT_DESC_BIT32|IDT_DESC_PRESENT,0x08,(uint32_t*)page_fault);
+	install_ir(12,IDT_DESC_BIT32|IDT_DESC_PRESENT,0x08,(uint32_t*)bc_fault);
 	install_ir(13,IDT_DESC_BIT32|IDT_DESC_PRESENT,0x08,(uint32_t*)fpu_fault);
-	install_ir(14,IDT_DESC_BIT32|IDT_DESC_PRESENT,0x08,(uint32_t*)alignment_check_fault);
+	install_ir(14,IDT_DESC_BIT32|IDT_DESC_PRESENT,0x08,(uint32_t*)page_fault);
 	install_ir(15,IDT_DESC_BIT32|IDT_DESC_PRESENT,0x08,(uint32_t*)machine_check_abort);
 	install_ir(16,IDT_DESC_BIT32|IDT_DESC_PRESENT,0x08,(uint32_t*)simd_fpu_fault);
 
 	init_pic();
-	install_idt(& _idtr);
+	install_idt((uint32_t)&_idtr);
 	enable_interrupts();
 }
 
@@ -158,6 +134,7 @@ void install_ir(uint32_t index,uint16_t flags, uint16_t sel, uint32_t* handler_a
 	_idt[index].flags = flags;
 	_idt[index].sel = sel;
 }
+
 
 
 
@@ -271,8 +248,7 @@ void general_protection_fault (uint32_t eip,uint32_t cs,uint32_t flags,uint32_t 
 }
 
 
-//! page fault
-void page_fault (uint32_t eip,uint32_t cs,uint32_t flags,uint32_t err) {
+void bc_fault (uint32_t eip,uint32_t cs,uint32_t flags,uint32_t err) {
 	monitor_puts ("Page fault :");
 	printhex(cs);printhex(eip);printhex(flags);printhex(err);
        	for (;;);
@@ -286,10 +262,9 @@ void fpu_fault  (uint32_t cs, uint32_t  eip, uint32_t flags)  {
 	for (;;);
 }
 
-//! alignment check
-void alignment_check_fault (uint32_t eip,uint32_t cs,uint32_t flags,uint32_t err)  {
+void page_fault (uint32_t eip,uint32_t cs,uint32_t flags,uint32_t err)  {
 
-	monitor_puts ("Alignment check :");
+	monitor_puts ("Page fault :");
 	printhex(cs);printhex(eip);printhex(flags),printhex(err);
 	for (;;);
 }
@@ -307,3 +282,4 @@ void simd_fpu_fault (uint32_t cs, uint32_t  eip, uint32_t flags)  {
 	printhex(cs);printhex(eip);printhex(flags);
 	for (;;);
 }
+

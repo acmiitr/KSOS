@@ -4,10 +4,9 @@
 #include "phymem.h"
 #include "virtmem.h"
 #include "timer.h"
-#include "keyboard.h"
+#include "hardware.h"
 #include "hal.h"
 #include "inthandling.h"
-#include "ATA.h"
 #include "FAT12.h"
 
 #define USERSTACK_PHY 0x40000
@@ -42,7 +41,7 @@ void kmain(uint32_t mmapsize,uint32_t data_sect,uint32_t root_sect,uint32_t fat_
 	kbc_init();
 	set_timer(0xffff);
 
-	if (get_monitor_char() == 's')  kshell();
+	if(get_monitor_char() == 's') kshell();
 
 	map_page(USERSTACK - PAGE_SIZE,USERSTACK_PHY - PAGE_SIZE,true,true);
 	map_page((uint32_t)__user_begin,virtual_to_physical(__user_begin),true,true);

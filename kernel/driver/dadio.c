@@ -1,6 +1,6 @@
 #include <stdint.h>
 #include "dadio.h"
-#include "keyboard.h"
+#include "hardware.h"
 #include "hal.h"
 
 #define ROW 80
