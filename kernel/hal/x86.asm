@@ -1,6 +1,7 @@
 global gen_interrupt
 global install_idt
 global install_gdt
+global install_tss
 global enable_interrupts
 global clear_interrupts
 global kernel_wait
@@ -65,6 +66,10 @@ install_idt:
 install_gdt:
 	mov eax,[esp+4]
 	lgdt [eax]
+	ret
+
+install_tss:
+	ltr [esp+4]
 	ret
 
 enable_interrupts:

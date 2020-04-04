@@ -19,7 +19,7 @@ __begin = .;
 		__user_end = . ;
 	}
 
-.data : SUBALIGN(4k)
+.data : ALIGN (4k) SUBALIGN(16)
 	{
 		*(.rodata)
 		*(.data)

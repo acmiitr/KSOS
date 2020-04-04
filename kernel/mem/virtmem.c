@@ -64,9 +64,9 @@ void vmmngr_init()
 {
 	set_recursive_map();
 	//Need to remap video memory...
-	if(!map_page((uint32_t)__VGA_text_memory,VGA_TEXT,false))
+	if(!map_page((uint32_t)__VGA_text_memory,VGA_TEXT,false,true))
 		for(;;); //monitor_puts("VGA remap failed");  //Keep another debug print
-	if(!map_page(STACK-PAGE_SIZE,STACK_PHY-PAGE_SIZE,false))
+	if(!map_page(STACK-PAGE_SIZE,STACK_PHY-PAGE_SIZE,false,true))
 		monitor_puts("Stack remap failed");
 	if ((uint32_t)__end - (uint32_t)__begin > (2<<22))  
 	{
@@ -79,26 +79,21 @@ void vmmngr_init()
 void remove_identity_map()  //This would remove the 4M identity map
 {
 	//This requires a stack_reset, and gdt reset so far.
-//	if (entry_is_present(_page_directory[0]))
-//	_page_directory[0] ^=1;
 	_page_directory[0] = 0;
 	flush_tlb();  //Clean that boi
 }
 
-bool map_page(uint32_t virtual_address,uint32_t physical_address,bool isUser)   //TODO: Need to deal with freed frames  && Make this cleaner!!
+bool map_page(uint32_t virtual_address,uint32_t physical_address,bool isUser,bool isWritable)   //TODO: Need to deal with freed frames  && Make this cleaner!!
 {
-	if (virtual_address % BLOCK_SIZE) 
-		virtual_address -= (virtual_address%BLOCK_SIZE);
-	if (physical_address % BLOCK_SIZE) 
-		physical_address -= (physical_address%BLOCK_SIZE);
+	virtual_address -= (virtual_address%BLOCK_SIZE) ? virtual_address%BLOCK_SIZE : 0;
+	physical_address -= (physical_address%BLOCK_SIZE) ? physical_address%BLOCK_SIZE : 0;
 
 	uint32_t pd_index = virtual_address >> 22;
 	if (!(_page_directory[pd_index] & PDE_PRESENT))
-	{
 		if(!alloc_page(_page_directory+pd_index)) return false;
-		_page_directory[pd_index] |= PDE_WRITABLE;
-		if(isUser) _page_directory[pd_index]|= PDE_USER;
-	}
+
+	if(isWritable) _page_directory[pd_index] |= PDE_WRITABLE;
+	if(isUser) _page_directory[pd_index]|= PDE_USER;
 
 	uint32_t* page_table = (uint32_t*)(PAGE_TABLE | (pd_index<<12)); //This is the virtual address of the page table 
 	uint32_t pt_index = ((virtual_address >> 12) & 0x3FF); //Using recursive page table technique
@@ -106,10 +101,20 @@ bool map_page(uint32_t virtual_address,uint32_t physical_address,bool isUser)   
 	page_table[pt_index] = physical_address;
 	page_table[pt_index] |= PTE_PRESENT;
 	page_table[pt_index] |= PTE_WRITABLE;
-	if(isUser) page_table[pt_index]|= PTE_USER;
 	
-	flush_tlb();
+	if(isUser)
+       	{
+		page_table[pt_index]|= PTE_USER;
+	       	if(isWritable) page_table[pt_index] |= PTE_WRITABLE;
+		else page_table[pt_index] &= ~PTE_WRITABLE;
+	}
+	else 
+	{
+		page_table[pt_index] &= ~PTE_USER;
+	       	page_table[pt_index] |= PTE_WRITABLE;   //Writable anyway in kmode
+	}
 
+	flush_tlb_entry(virtual_address);
 	return true;
 }
 static void set_recursive_map()   //Sets the virtual address of the page directory to 0xFFFFF000 -- Some kind of dual reference XD

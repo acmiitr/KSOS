@@ -1,7 +1,7 @@
 #include <stdint.h>
 #include "hal.h"
 
-#define GDT_DESCRIPTOR_COUNT 5 
+#define GDT_DESCRIPTOR_COUNT 6 
 
 #define I86_GDT_DESC_ACCESS		0x0001		//00000001
 #define I86_GDT_DESC_READWRITE		0x0002		//00000010
