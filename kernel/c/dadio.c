@@ -119,7 +119,22 @@ void putc (char x)
 		}
 	}
 	else if(x == '\n')
-		printf("\n");
+	{
+		if(!(pointer % ROW))
+			pointer++;
+	 	while(pointer % ROW)
+		{	
+			pointer++;
+			if(pointer == ROW*COL)
+			{
+				pointer = 0;
+				break;
+			}
+		}	
+		vga_cursor += pointer<<1;
+		set_cursor(pointer+1);
+		//printf("\n");
+	}
 	else
 	{
 		vga_cursor += (pointer<<1);
