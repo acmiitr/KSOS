@@ -24,48 +24,12 @@ void clear()
 
 void printf(char* Message)
 {
-	/*uint32_t pointer = get_cursor();
-	pointer <<= 1;
-	char* vga_cursor = (char*) VIDEO_MEMORY;
-	vga_cursor += pointer;*/
 	while(*Message)
 	{
 		char c = *Message;
 		putc(c);
-		/*switch(c)
-		{
-		 case '\n':
-		 	pointer=(uint32_t)(vga_cursor-VIDEO_MEMORY);
-			if(!(pointer%(2*ROW)))
-				pointer++;
-		 	while(pointer%(2*ROW)){
-			pointer++;
-			if(pointer==2*ROW*COL)
-			{pointer=0;break;}
-			}	
-		 	Message++;
-		 	vga_cursor=(char *)(VIDEO_MEMORY+pointer);
-
-    			break;
-		case '\t':
-			pointer=(uint32_t)(vga_cursor-VIDEO_MEMORY);
-			pointer+=16;
-			vga_cursor=(char*)(VIDEO_MEMORY+pointer);
-			Message++;
-	       		break;
-		default:
-			  *vga_cursor = *Message;
-               		 Message++;
-               		 vga_cursor ++;
-               		 *vga_cursor = current_color;
-               		 vga_cursor ++;
-		}*/
 		Message++;
 	}
-	/*vga_cursor -= VIDEO_MEMORY;
-	pointer = (uint32_t)vga_cursor;
-	pointer >>= 1;
-	set_cursor(pointer);*/
 }
 
 
@@ -135,7 +99,6 @@ void putc (char x)
 		}	
 		vga_cursor += pointer<<1;
 		set_cursor(pointer+1);
-		//printf("\n");
 	}
 	else
 	{
