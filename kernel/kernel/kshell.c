@@ -2,9 +2,8 @@
 //This is meant to be used at level 0
 #include"dadio.h"
 #include"stdbool.h"
-#include"keyboard.h"
+#include"hardware.h"
 #include"hal.h"
-#include"timer.h"
 
 #define MAX_COMMAND_SIZE 50
 #define MAX_TOKEN_SIZE 25 

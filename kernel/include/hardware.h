@@ -20,6 +20,16 @@ void init_pic();
 void send_EOI_master();
 void send_EOI_slave();
 
+//Timer
+
+extern bool _is_timer_interrupt;
+
+void set_timer(uint16_t delay); 
+void wait_for_timer();
+uint32_t get_tick_count();
+
 #endif
 
 
+
+	
