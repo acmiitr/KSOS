@@ -113,7 +113,12 @@ void putc(char x)
 		}
 	}
 	else if(x == '\n')
-		monitor_puts("\n");
+		{
+			 pointer=pointer-(pointer%ROW)+ROW;
+			 if(pointer==ROW*COL)
+			 	pointer=0;
+			 set_cursor(pointer);
+		}
 	else
 	{
 		vga_cursor += (pointer << 1);
