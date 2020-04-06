@@ -85,3 +85,5 @@ int_nerr 44
 int_nerr 45
 int_nerr 46
 int_nerr 47
+
+int_nerr 128  ;Syscall
