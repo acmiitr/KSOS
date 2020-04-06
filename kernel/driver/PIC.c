@@ -5,7 +5,7 @@
 #define PIC1_DATA 0x21
 #define PIC2_DATA 0xA1
 
-void init_pic()
+void pic_init()
 {
 	
 	//ICW 1  Expect IC4|single?|0|level?|init?|000

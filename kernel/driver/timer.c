@@ -1,5 +1,6 @@
 #include <stdint.h>
 #include <stdbool.h>
+#include "hardware.h"
 #include "hal.h"
 
 #define TIMER_CONTROL_PORT 0x43
@@ -20,6 +21,7 @@ uint32_t get_tick_count()
 }
 
 void timer_handler(){
+	send_EOI_master();
 	_is_timer_interrupt = true;
 	tick_counter ++;
 	rotate_pole(79,0);
@@ -51,7 +53,7 @@ void wait_for_timer()
 	}
 }
 
-static void rotate_pole(int x, int y)
+static void rotate_pole(int x, int y) 
 {
 	char* sym = (char*)(__VGA_text_memory + 2*(x+80*y));
 	switch(*sym){

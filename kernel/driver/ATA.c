@@ -25,7 +25,6 @@ static void ATA_wait_BSY();
 static void ATA_wait_DRQ();
 void read_sectors_ATA_PIO(uint32_t target_address, uint32_t LBA, uint8_t sector_count)
 {
-
 	ATA_wait_BSY();
 	write_port(0x1F6,0xE0 | ((LBA >>24) & 0xF));
 	write_port(0x1F2,sector_count);

@@ -3,7 +3,6 @@
 #include "dadio.h"
 #include "phymem.h"
 #include "virtmem.h"
-#include "timer.h"
 #include "hardware.h"
 #include "hal.h"
 #include "inthandling.h"
@@ -38,7 +37,6 @@ void kmain(uint32_t mmapsize,uint32_t data_sect,uint32_t root_sect,uint32_t fat_
 
 	interrupt_init();
 	tss_kernel_init();
-	kbc_init();
 	set_timer(0xffff);
 
 	if(get_monitor_char() == 's') kshell();

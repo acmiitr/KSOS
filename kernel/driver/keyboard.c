@@ -2,6 +2,7 @@
 #include<stdbool.h>
 #include"dadio.h"
 #include"hal.h"
+#include"hardware.h"
 
 //These are helpful enums, i.e. names of keys - courtesy brokenthorn
 enum KEYCODE {
@@ -268,6 +269,7 @@ static bool caps_toggle = false;
 static bool num_lock_toggle = false;
 void keyboard_handler()
 {
+	send_EOI_master(); //Tell the keyboard to send interrupts again
 	uint8_t scan_code = read_port(0x60);
 	char temp_char = (char)(_scancode_std[scan_code]);
 	_is_keyboard_interrupt = true; //It is the responsibility of the user to make this zero after access
@@ -388,7 +390,7 @@ bool kbc_init()
 
 void wait_for_keyboard()
 {
-	_is_keyboard_interrupt = false;
+	_is_keyboard_interrupt = false;  //Wait for this thing to be flicked on
 	while(1)
 	{
 		kernel_wait();
