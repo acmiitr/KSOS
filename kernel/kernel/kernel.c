@@ -31,7 +31,8 @@ void kmain(uint32_t mmapsize,uint32_t data_sect,uint32_t root_sect,uint32_t fat_
 	monitor_puts("Data starts: ");printhex(data_sect*512);
 	monitor_puts("\nRoot starts: ");printhex(root_sect*512);
 	monitor_puts("\nFAT starts: ");printhex(fat_sect*512);
-
+	initialize_FAT (data_sect,root_sect,fat_sect);
+	
 	refresh_stack(); //This is some next level function: It forces stack remapping, some legend.. Debugging will get confused here
 	remove_identity_map();
 
