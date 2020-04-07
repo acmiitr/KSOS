@@ -1,5 +1,17 @@
 #include <string.h>
+#include <stdbool.h>
 
+bool strcmp(char *s1,char *s2)
+{
+    int i = 0;
+	while (s1[i])
+	{
+		if(s1[i] != s2[i]) return false;
+		i++;
+	}
+	if(s2[i]) return false;
+	return true;
+}
 char *strcpy(char *s1, const char *s2)
 {
     char *s1_p = s1;
