@@ -32,7 +32,7 @@ uint8_t			flags;
 uint16_t		baseHi;
 }idt_descriptor_t;
 
-struct itrpt_reg_state {
+typedef struct itrpt_reg_state {
 	seg16_t gs;
 	seg16_t fs;
 	seg16_t es;
@@ -52,7 +52,7 @@ struct itrpt_reg_state {
 	reg32_t eip;
 	seg16_t cs;
 	uint32_t flag;
-};
+}itrpt_reg_state_t;
 
 
 //Global variables in this routine
@@ -60,12 +60,15 @@ static idt_descriptor_t _idt[MAX_INTERRUPTS];
 static idtr_t _idtr;
 
 void default_handler();
+void system_call_handler(itrpt_reg_state_t* inp_ptr);
 void isr0(); void isr1(); void isr2(); void isr3(); void isr4(); void isr5(); void isr6(); void isr7(); void isr8(); 
 void isr9(); void isr10(); void isr11(); void isr12(); void isr13(); void isr14(); void isr15(); void isr16(); 
 void isr17(); void isr18(); void isr19(); void isr20(); void isr21(); void isr22(); void isr23(); void isr24();
 void isr25(); void isr26(); void isr27(); void isr28(); void isr29(); void isr30(); void isr31(); void isr32(); 
 void isr33(); void isr34(); void isr35(); void isr36(); void isr37(); void isr38(); void isr39(); void isr40(); 
 void isr41(); void isr42(); void isr43(); void isr44(); void isr45(); void isr46(); void isr47(); 
+
+void isr128(); //int 0x80
 
 //Function implementations
 void interrupt_init()
@@ -112,11 +115,14 @@ void interrupt_init()
 
 	install_ir(46,IDT_DESC_BIT32|IDT_DESC_PRESENT,0x08,(uint32_t*)isr46);
 	install_ir(47,IDT_DESC_BIT32|IDT_DESC_PRESENT,0x08,(uint32_t*)isr47);
-
+	
+//User mode interrupts
+	install_ir(0x80,IDT_DESC_BIT32|IDT_DESC_PRESENT|IDT_DESC_RING3|IDT_DESC_TRAP,0x08,(uint32_t*)isr128); //This is syscall
 
 
 	pic_init();
 	kbc_init();
+	set_timer(0xFFFF);
 	install_idt((uint32_t)&_idtr);
 	enable_interrupts();
 }
@@ -133,7 +139,7 @@ void install_ir(uint32_t index,uint16_t flags, uint16_t sel, uint32_t* handler_a
 	_idt[index].sel = sel;
 }
 
-void general_interrupt_handler(struct itrpt_reg_state input)
+void general_interrupt_handler(itrpt_reg_state_t input)
 {
 	switch (input.vector_number)
 	{
@@ -151,6 +157,9 @@ void general_interrupt_handler(struct itrpt_reg_state input)
 			send_EOI_slave();
 			break;
 
+		case 0x80:
+			system_call_handler(&input);
+			break;
 		default:
 			monitor_puts("\nException number:"); printhex(input.vector_number);
 			monitor_puts("\nError code:"); printhex(input.error_code);
@@ -164,4 +173,20 @@ void default_handler()
 {
 	monitor_puts("This is the default handler - This is a really messed up interrupt");
 	for(;;);
+}
+
+void system_call_handler(itrpt_reg_state_t* inp_ptr)  //Kernel-level
+{
+
+	switch(inp_ptr->eax)
+	{
+		case 0:
+			monitor_puts((char*)inp_ptr->esi);
+			break;
+
+		default:
+			monitor_puts("Welcome to the syscall interface\nSyscall_number:");
+			printhex(inp_ptr->eax);
+	}
+
 }
