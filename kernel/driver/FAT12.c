@@ -3,6 +3,7 @@
 #include "FAT12.h"
 #include "hardware.h"
 #include "dadio.h"
+#include"string.h"
 
 #define bpbBytesPerSector 512
 #define bpbSectorsPerCluster 1
@@ -53,18 +54,25 @@ bool FAT_find_file(char *filename)
     char root_name[13] ;
     for (int i = 0; i < bpbRootEntries; i++)
     {
+        int j;
         //Get the file name with extension
         //--------------------------------------------
-        for (int j = 0; j < 8; j++)
+        for (j = 0; j < 8; j++)
+            {
+                if(pointer[j]==' ')
+                break;
             root_name[j] = pointer[j];
-        root_name[8] = '.';
-        for (int j = 8; j < 11; j++)
-            root_name[j + 1] = pointer[j];
+            }
+        root_name[j] = '.';
+        root_name[j+1]=pointer[8];
+        root_name[j+2]=pointer[9];
+        root_name[j+3]=pointer[10];
+        root_name[j+4]=0;
         //--------------------------------------------
         if (string_compare(root_name, filename))
         {
-            file.starting_data_cluster_number = pointer[26] + (pointer[27] << 8);                            //Considering the little endian encoding
-            file.file_size = pointer[28] + (pointer[29] << 8) + (pointer[30] << 24) + (pointer[31] << 16); //Considering the little endian encoding
+            file.starting_data_cluster_number = pointer[26] + (pointer[27] << 8);                           //Considering the little endian encoding
+            file.file_size = pointer[28] + (pointer[29] << 8) + (pointer[30] << 24) + (pointer[31] << 16);  //Considering the little endian encoding
             return true;
         }
         pointer += 32;
@@ -76,53 +84,39 @@ bool FAT_find_file(char *filename)
 
 void read_file(char *filename)
 {
-    /*uint32_t buffer[512 / 4];
-    read_sectors_ATA_PIO((uint32_t)buffer, 0xDA00 / 512, 1);
-    monitor_puts((char *)buffer);
-    */if(!FAT_find_file(filename))
+    if(!FAT_find_file(filename))
         monitor_puts("File not found!");
 
-    else                     //If  file found
+    else //If  file found
     {   
         uint32_t data_cluster_address=data_sect_address+(file.starting_data_cluster_number-2)*512;
-        //uint32_t fat_sector_address= fat_sect_address;
         
         uint16_t fat_buffer_read[256*(root_sect_no-fat_sect_no)];
-        char buffer_read_[512];
+        char buffer_read_[513];
         char file_read[file.file_size+1];
 
-        //read_sectors_ATA_PIO(buffer_read_,data_cluster_address,1);
         read_sectors_ATA_PIO((uint32_t)fat_buffer_read,fat_sect_no,root_sect_no-fat_sect_no);
         
-        uint16_t fat_value=get_next_cluster(file.starting_data_cluster_number,(uint8_t*)fat_buffer_read);
-        printhex(fat_value);
-        printhex(file.starting_data_cluster_number);printhex(file.file_size);
+        uint16_t fat_value=file.starting_data_cluster_number;
         int count=0,t;
         do
         {
-            read_sectors_ATA_PIO((uint32_t)buffer_read_,data_cluster_address/512,1);
+            data_cluster_address=data_sect_address+(fat_value-2)*512;
+            fat_value=get_next_cluster(fat_value,(uint8_t*)fat_buffer_read);
             
-            char* reading=(char*)buffer_read_;
+            read_sectors_ATA_PIO((uint32_t)buffer_read_,data_cluster_address/512,1);            //reads the data from data cluster
             t=0;
+            
+            //-------------------------------------
             while(t<512 && count<file.file_size)
             {   
                 file_read[count]=buffer_read_[t];
-                count++;t++;reading++;
-                putc(*reading);
+                count++;t++;
             }
-            //Defining the next cluster number from FAT and next adress in the data sector
-                     //next_cluster_number-2  as first and second not there
-            if(fat_value!=0xfff)                                               //update only if it is not the last 
-            {
-                data_cluster_address=data_sect_address+(fat_value-2)*512;
-                fat_value=get_next_cluster(fat_value,(uint8_t*)fat_buffer_read);
-                
-            }
+            //----------------------------------------
         }
         while(fat_value!=0xfff);
-        monitor_puts(file_read);
-        printint(count);
-        printhex(fat_value);
+        monitor_puts(file_read);//Display the read file
         
     }
 }
@@ -131,14 +125,13 @@ uint16_t get_next_cluster(uint16_t cluster_number,uint8_t* pointer_to_fat)
     int offset=(cluster_number/2)*3;
     if(cluster_number&1)
     offset+=1;
-    //pointer_to_fat+=offset;
     uint16_t next_cluster_number;
     if(cluster_number&1)
         next_cluster_number=(pointer_to_fat[offset+1]<<4)+((pointer_to_fat[offset]&0xF0)>>4);
     else
         next_cluster_number=pointer_to_fat[offset]+((pointer_to_fat[offset+1]&0x0F)<<8);
-return next_cluster_number;    
 
+return next_cluster_number;
 }
 
 static bool string_compare(char *str1, char *str2)
