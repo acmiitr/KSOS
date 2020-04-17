@@ -51,25 +51,22 @@ enum PAGE_PDE_FLAGS {
    	PDE_FRAME		=	0xFFFFF000 
 };
 //Helper functions
-static inline void entry_toggle_attrib (uint32_t* e, uint8_t attrib);  //This seems to be common for both the tables lol
-static inline void entry_set_frame (uint32_t*, uint32_t);
-static inline bool entry_is_present (uint32_t e);
-static inline bool entry_is_writable (uint32_t e);
-static inline uint32_t entry_physical (uint32_t e);  //Extract the physical address of the 32 bit entry
 static void set_recursive_map();   //Sets the virtual address of the page directory to 0xFFFFF000 -- Some kind of dual reference XD
 static bool alloc_page(uint32_t* table_entry);
 
-//Implementations
+//External linker symbols
 extern uint32_t __begin[];
 extern uint32_t __end[];
 extern char  __VGA_text_memory[];  //This is the virtual address of the VGA memory
+
+//Implementations
 void vmmngr_init() 
 {
 	set_recursive_map();
 	//Need to remap video memory...
-	if(!map_page((uint32_t)__VGA_text_memory,VGA_TEXT))
+	if(!map_page((uint32_t)__VGA_text_memory,VGA_TEXT,false,true))
 		for(;;); //monitor_puts("VGA remap failed");  //Keep another debug print
-	if(!map_page(STACK-PAGE_SIZE,STACK_PHY-PAGE_SIZE))
+	if(!map_page(STACK-PAGE_SIZE,STACK_PHY-PAGE_SIZE,false,true))
 		monitor_puts("Stack remap failed");
 	if ((uint32_t)__end - (uint32_t)__begin > (2<<22))  
 	{
@@ -82,71 +79,89 @@ void vmmngr_init()
 void remove_identity_map()  //This would remove the 4M identity map
 {
 	//This requires a stack_reset, and gdt reset so far.
-	if (entry_is_present(_page_directory[0]))
-//		_page_directory[0] ^=1;
-		_page_directory[0] = 0;
-
+	_page_directory[0] = 0;
 	flush_tlb();  //Clean that boi
 }
 
-bool map_page(uint32_t virtual_address,uint32_t physical_address)   //TODO: Need to deal with freed frames
+bool map_page(uint32_t virtual_address,uint32_t physical_address,bool isUser,bool isWritable)   //TODO: Need to deal with freed frames  && Make this cleaner!!
 {
-	if (virtual_address % BLOCK_SIZE) 
-		virtual_address -= (virtual_address%BLOCK_SIZE);
-	if (physical_address % BLOCK_SIZE) 
-		physical_address -= (physical_address%BLOCK_SIZE);
+	virtual_address -= (virtual_address%BLOCK_SIZE) ? virtual_address%BLOCK_SIZE : 0;
+	physical_address -= (physical_address%BLOCK_SIZE) ? physical_address%BLOCK_SIZE : 0;
 
 	uint32_t pd_index = virtual_address >> 22;
-	if (!entry_is_present(_page_directory[pd_index]))
-	{
-		if(!alloc_page(_page_directory+pd_index))
-		       	return false;
-		if(!entry_is_writable (_page_directory[pd_index]))
-			entry_toggle_attrib (_page_directory + pd_index,PDE_WRITABLE);
+	if (!(_page_directory[pd_index] & PDE_PRESENT))
+		if(!alloc_page(_page_directory+pd_index)) return false;
+
+	if(isWritable) _page_directory[pd_index] |= PDE_WRITABLE;
+	if(isUser) _page_directory[pd_index]|= PDE_USER;
+
+	uint32_t* page_table = (uint32_t*)(PAGE_TABLE | (pd_index<<12)); //This is the virtual address of the page table 
+	uint32_t pt_index = ((virtual_address >> 12) & 0x3FF); //Using recursive page table technique
+
+	page_table[pt_index] = physical_address;
+	page_table[pt_index] |= PTE_PRESENT;
+	page_table[pt_index] |= PTE_WRITABLE;
+	
+	if(isUser)
+       	{
+		page_table[pt_index]|= PTE_USER;
+	       	if(isWritable) page_table[pt_index] |= PTE_WRITABLE;
+		else page_table[pt_index] &= ~PTE_WRITABLE;
 	}
-	uint32_t* page_table = (uint32_t*)(PAGE_TABLE | (pd_index<<12)); //This is the virtual address of the page table  -- Uses the recursive page table
-	uint32_t pt_index = ((virtual_address >> 12) & 0x3FF);
+	else 
+	{
+		page_table[pt_index] &= ~PTE_USER;
+	       	page_table[pt_index] |= PTE_WRITABLE;   //Writable anyway in kmode
+	}
 
-	entry_set_frame(page_table + pt_index,physical_address);  //Force switch! Even if already mapped this will change?
-
-	if(!entry_is_present (page_table[pt_index]))
-		entry_toggle_attrib (page_table + pt_index,PTE_PRESENT);
-
-	if(!entry_is_writable (page_table[pt_index]))
-		entry_toggle_attrib (page_table + pt_index,PTE_WRITABLE);
-
+	flush_tlb_entry(virtual_address);
 	return true;
 }
 static void set_recursive_map()   //Sets the virtual address of the page directory to 0xFFFFF000 -- Some kind of dual reference XD
 {
 	uint32_t phy_dir = get_pdbr();
 	uint32_t* vir_dir = _page_directory;
-	entry_set_frame(vir_dir + 1023,phy_dir);
-	if(!entry_is_present (vir_dir[1023]))
-		entry_toggle_attrib (vir_dir + 1023,PDE_PRESENT);
-	if(!entry_is_writable (vir_dir[1023]))
-		entry_toggle_attrib (vir_dir + 1023,PDE_WRITABLE);
+	vir_dir[1023]=phy_dir;
+	vir_dir[1023]|=PDE_PRESENT;
+	vir_dir[1023]|=PDE_WRITABLE;
 	_page_directory = (uint32_t*)PAGE_DIRECTORY; //Page directory is the last address
+	flush_tlb();
 }
-void free_page(uint32_t* table_entry)  //Makes any entry free
+uint32_t virtual_to_physical (uint32_t* virt)
 {
-	if(!entry_is_present(*table_entry)) return;
-	uint32_t physical_address = entry_physical (*table_entry);
-	pmmngr_free_block( (uint32_t*) physical_address);
-	entry_toggle_attrib (table_entry,PDE_PRESENT); //This seems like a bad idea?? Not flexible enough
+	uint32_t virtual_address = (uint32_t)virt;
+	uint32_t pd_index = virtual_address >> 22;
+
+	if (!(_page_directory[pd_index] & PDE_PRESENT)) return 0;
+
+	uint32_t* page_table = (uint32_t*)(PAGE_TABLE | (pd_index<<12)); //This is the virtual address of the page table 
+	uint32_t pt_index = ((virtual_address >> 12) & 0x3FF); //Using recursive page table technique
+
+	if (!(page_table[pt_index] & PTE_PRESENT)) return 0;
+	return ((page_table[pt_index] & PTE_FRAME) | (virtual_address & ~PTE_FRAME));
 }
+
 static bool alloc_page(uint32_t* table_entry)   //Given a page table/directory entry, 'fill' it automatically
 {
-	uint32_t* physical_address = pmmngr_allocate_block();
+	uint32_t physical_address = pmmngr_allocate_block();
 	if(!physical_address) return 0;
 
-	entry_set_frame(table_entry, (uint32_t)physical_address);
-	if(!entry_is_present (*table_entry))
-		entry_toggle_attrib (table_entry,PDE_PRESENT);
+	*table_entry = physical_address;
+	*table_entry |= PTE_PRESENT;
 	return 1;
 
 }
 
+/*
+void free_page(uint32_t* table_entry)  //Makes any entry free
+{
+	if(!entry_is_present(*table_entry)) return;
+	uint32_t physical_address = *table_entry & PTE_FRAME;
+	pmmngr_free_block( (uint32_t*) physical_address);
+	entry_toggle_attrib (table_entry,PDE_PRESENT); //This seems like a bad idea?? Not flexible enough
+}*/
+
+/*
 static inline void entry_toggle_attrib (uint32_t* e, uint8_t attrib)  //uint8_t or 32? Maybe change this .... 
 {
 	*e ^= attrib;
@@ -172,18 +187,5 @@ static inline uint32_t entry_physical (uint32_t e)  //Extract the physical addre
 {
 	return (e & PTE_FRAME);
 }
-
-/*
-uint32_t virtual_to_physical (uint32_t virtual_address)
-{
-	uint32_t tab_entry = virtual_address >> 12;
-	uint32_t dir_entry = tab_entry  >> 10;
-	uint32_t* page_table = (uint32_t*) (_page_directory[dir_entry] & PDE_FRAME);
-	uint32_t physical_address = page_table[tab_entry] & PTE_FRAME;
-	physical_address += (virtual_address & 0xFFF);
-	return physical_address;
-}
 */
-
-//This should be the first method to run or something because it 'sets' the virtual address of the page directory and we can get away from that identity mapping
 

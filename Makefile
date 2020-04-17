@@ -12,7 +12,7 @@ run : assemble
 
 debug: assemble
 	qemu-system-i386 -s -hda disk.img &
-	gdb -ex "target remote localhost:1234" -ex "symbol-file kernel/kernel.elf" -ex "b kmain" -ex "continue"
+	gdb -ex "target remote localhost:1234" -ex "symbol-file kernel/kernel.elf" -ex "b kmain" -ex "continue" 
 
 assemble: disk.img kernel.bin stage1.bin stage2.bin 
 	dd if=stage1.bin of=disk.img bs=1 count=3 seek=0 skip=0 conv=notrunc

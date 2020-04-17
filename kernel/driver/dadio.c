@@ -1,6 +1,6 @@
 #include <stdint.h>
 #include "dadio.h"
-#include "keyboard.h"
+#include "hardware.h"
 #include "hal.h"
 
 #define ROW 80
@@ -63,7 +63,7 @@ void monitor_puts(char* Message)
 
 void printhex(uint32_t input)
 {
-	char buffer[11]; //0x + 8 + null
+	char buffer[11]  = "0x00000000";
 	uint8_t pointer = 9;
 	for (int i = 0; i < 8; i++)
 	{
@@ -113,7 +113,12 @@ void putc(char x)
 		}
 	}
 	else if(x == '\n')
-		monitor_puts("\n");
+		{
+			 pointer=pointer-(pointer%ROW)+ROW;
+			 if(pointer==ROW*COL)
+			 	pointer=0;
+			 set_cursor(pointer);
+		}
 	else
 	{
 		vga_cursor += (pointer << 1);
