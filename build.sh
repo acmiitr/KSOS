@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-export PROJECTS=${PROJECTS:-"libc kernel"}
+export PROJECTS=${PROJECTS:-"boot libc kernel"}
 
 export MAKE=${MAKE:-make}
 export HOST=${HOST:-$(./configure/default-host.sh)}
@@ -30,7 +30,7 @@ if echo "$HOST" | grep -Eq -- '-elf($|-)'; then
 fi
 
 echo $CC
-#Header installation
+#Header installation  -- Note why we do headers first and then binaries... It's pretty smart!
 mkdir -p "$SYSROOT"
 
 for PROJECT in $PROJECTS; do

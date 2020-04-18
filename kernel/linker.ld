@@ -1,6 +1,6 @@
 OUTPUT_FORMAT(elf32-i386)
 ENTRY(__start)
-
+/*TODO: Physical memory addresses*/
 SECTIONS {
 
 . = 0xC0000000;

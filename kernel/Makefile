@@ -18,12 +18,10 @@ INCLUDEDIR?=$(PREFIX)/include
 CFLAGS:=$(CFLAGS) -ffreestanding -Wall -Wextra
 CPPFLAGS:=$(CPPFLAGS) -D__is_kernel -Iinclude/kernel
 LDFLAGS:=$(LDFLAGS) -Tlinker.ld
-LIBS:=$(LIBS) -nostdlib  -lgcc #-lk
+LIBS:=$(LIBS) -nostdlib  -lgcc -lk
 
 
-
-
-C_SOURCES := $(wildcard */*.c)
+C_SOURCES := $(wildcard */*.c)  #TODO: Expand all this
 ASM_SOURCES:= $(wildcard */*.asm)
 C_OBJS:= ${C_SOURCES:.c=.o}
 ASM_OBJS:= ${ASM_SOURCES:.asm=.o}
@@ -49,6 +47,7 @@ all: kernel.elf
 
 kernel.elf: $(KERNEL_OBJS) linker.ld
 	$(CC) -o $@ $(CFLAGS) $(LINK_LIST)
+	chmod -x $@
 
 .c.o:
 	$(CC) -c $< -o $@ $(CFLAGS) $(CPPFLAGS)  #Our C compiler should hopefully be i686-elf-gcc --sysroot=?? -isystem=??
@@ -57,8 +56,8 @@ kernel.elf: $(KERNEL_OBJS) linker.ld
 	nasm -felf32 $< -o $@ 
 
 clean:
-	rm -f kernel.elf
-	rm -f $(KERNEL_OBJS) *.o */*.o */*/*.o
+	rm -f kernel.elf kernel.bin
+	rm -f $(KERNEL_OBJS) 
 
 install: install-headers install-kernel
 
@@ -68,5 +67,6 @@ install-headers:
 
 install-kernel: kernel.elf
 	objcopy -O binary $^ kernel.bin
+	chmod -x kernel.bin
 	mkdir -p $(DESTDIR)$(BOOTDIR)
 	cp kernel.bin $(DESTDIR)$(BOOTDIR)

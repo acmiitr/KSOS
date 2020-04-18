@@ -150,10 +150,10 @@ jmp 0x08:KernelVirt
 ;cli
 ;hlt
 
-%include "boot/stage2/func16.asm"
-%include "boot/stage2/func32.asm"
-%include "boot/stage2/GDT.asm"
-%include "boot/stage2/pagingsetup.asm"
+%include "stage2/func16.asm"
+%include "stage2/func32.asm"
+%include "stage2/GDT.asm"
+%include "stage2/pagingsetup.asm"
 Message16: db 0xa,0xd,'Welcome to Stage2!!',0xa,0xd,'Press any key to continue...',0
 Welcome: db 'Everyone likes Flashiing Lights ;)',0
 Stars: db '***********************************************',0

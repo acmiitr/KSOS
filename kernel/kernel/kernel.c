@@ -1,5 +1,6 @@
 #include<stdint.h> 
 #include<string.h>
+#include<stdio.h>
 #include "dadio.h"
 #include "phymem.h"
 #include "virtmem.h"
@@ -39,6 +40,7 @@ void kmain(uint32_t mmapsize,uint32_t data_sect,uint32_t root_sect,uint32_t fat_
 	tss_kernel_init();
 
 	if(get_monitor_char() == 's') kshell();
+puts("What is this shit??");
 
 	map_page(USERSTACK - PAGE_SIZE,USERSTACK_PHY - PAGE_SIZE,true,true);
 	map_page((uint32_t)__user_begin,virtual_to_physical(__user_begin),true,true);

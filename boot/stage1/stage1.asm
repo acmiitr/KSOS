@@ -99,9 +99,9 @@ push word[DATA_SECT_NO] ;Data start
 jmp (Stage2Sector << 4)
 ;---------------------------------------------------------------------------------------
 ;Functions 
-%include "boot/stage1/disk_read.asm"
-%include "boot/stage1/print.asm"
-%include "boot/stage1/CHS.asm"
+%include "stage1/disk_read.asm"
+%include "stage1/print.asm"
+%include "stage1/CHS.asm"
 
 Findfile:  ;Returns cluster number in bx
 	mov si,.TargetMessage
