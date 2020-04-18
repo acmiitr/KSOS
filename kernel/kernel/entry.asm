@@ -2,11 +2,11 @@
 [bits 32]
 
 extern kmain
-global _start
+global __start
 
 section .text.entry
 
-_start:
+__start:
 	sub esp,4 ;For the ABI
 	jmp kmain
 ;We had a call followed by cli,hlt... The kernel takes it up from here

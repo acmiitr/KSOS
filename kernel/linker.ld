@@ -1,5 +1,5 @@
 OUTPUT_FORMAT(elf32-i386)
-ENTRY(kmain)
+ENTRY(__start)
 
 SECTIONS {
 

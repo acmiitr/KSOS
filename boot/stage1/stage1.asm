@@ -122,7 +122,7 @@ Findfile:  ;Returns cluster number in bx
 		je .Found
 		add di,0x20
 	loop .Loop
-	.NotFound 
+	.NotFound: 
 		mov si, .Error
 		call print_si_16
 		jmp $
@@ -197,5 +197,4 @@ dw 0xaa55
 ;---------------------------------------------------------------------------------------
 ;---------------------------------------------------------------------------------------
 ;Bootsector over
-
 
