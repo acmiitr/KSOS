@@ -39,5 +39,5 @@ make -j4 all-target-libgcc
 make -j4 install-gcc
 make -j4 install-target-libgcc
 
+export PATH="$HOME/opt/cross/bin:$PATH"
 echo "export PATH=\"\$HOME/opt/cross/bin:\$PATH\"" >> $HOME/.bashrc
-source ~/.bashrc
