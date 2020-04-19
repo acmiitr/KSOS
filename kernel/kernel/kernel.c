@@ -39,8 +39,8 @@ void kmain(uint32_t mmapsize,uint32_t data_sect,uint32_t root_sect,uint32_t fat_
 	interrupt_init();
 	tss_kernel_init();
 
-	if(get_monitor_char() == 's') kshell();
 puts("What is this shit??");
+	if(get_monitor_char() == 's') kshell();
 
 	map_page(USERSTACK - PAGE_SIZE,USERSTACK_PHY - PAGE_SIZE,true,true);
 	map_page((uint32_t)__user_begin,virtual_to_physical(__user_begin),true,true);

@@ -1,12 +1,12 @@
 #include <stdio.h>
 
-#ifdef __lib_k
+#ifdef __is_libk
 #include <kernel/dadio.h>
 #endif
 
 int puts(const char* string) {
-#ifdef __lib_k
-	monitor_puts(string);
+#ifdef __is_libk
+	monitor_puts((char*)string);
 	return 0;
 #else
 	return 0;

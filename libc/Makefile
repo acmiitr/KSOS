@@ -28,8 +28,7 @@ string/memmove.c \
 string/memset.c \
 string/strlen.c \
 
-LIBC_SCS:=$(wildcard */*.c)
-$(info LIBK_SRCS=$(LIBK_SRCS))
+LIBC_SRCS:=$(wildcard */*.c)
 
 FREEOBJS:=$(LIBK_SRCS:.c=.o)
 HOSTEDOBJS:=$(LIBC_SRCS:.c=.o)
@@ -38,15 +37,12 @@ OBJS=\
 $(FREEOBJS) \
 $(HOSTEDOBJS) \
 
-$(info FREEOBJS=$(FREEOBJS))
-$(info LIBK_OBJS=$(LIBK_OBJS))
 LIBK_OBJS=$(FREEOBJS:.o=.libk.o)
 
 #BINARIES=libc.a libk.a # Not ready for libc yet.
 BINARIES=libk.a
 
 .PHONY: all clean install install-headers install-libs
-.SUFFIXES: .o .libk.o .c .asm
 
 all: $(BINARIES)
 
@@ -57,10 +53,10 @@ libk.a: $(LIBK_OBJS)
 
 #TODO: Add stuff for assembler
 
-.c.o:
+%.o : %.c
 	$(CC)  -c $< -o $@  $(CFLAGS) $(CPPFLAGS)
 
-.c.libk.o:
+%.libk.o : %.c
 	$(CC)  -c $< -o $@  $(LIBK_CFLAGS) $(LIBK_CPPFLAGS)
 
 

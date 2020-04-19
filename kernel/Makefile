@@ -55,9 +55,6 @@ kernel.elf: $(KERNEL_OBJS) linker.ld
 .asm.o:
 	nasm -felf32 $< -o $@ 
 
-clean:
-	rm -f kernel.elf kernel.bin
-	rm -f $(KERNEL_OBJS) 
 
 install: install-headers install-kernel
 
@@ -70,3 +67,6 @@ install-kernel: kernel.elf
 	chmod -x kernel.bin
 	mkdir -p $(DESTDIR)$(BOOTDIR)
 	cp kernel.bin $(DESTDIR)$(BOOTDIR)
+clean:
+	rm -f kernel.elf kernel.bin
+	rm -f $(KERNEL_OBJS) *.o */*.o */*/*.o
