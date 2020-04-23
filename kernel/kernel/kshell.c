@@ -4,6 +4,7 @@
 #include"stdbool.h"
 #include"hardware.h"
 #include"hal.h"
+#include"string.h"
 
 #define MAX_COMMAND_SIZE 50
 #define MAX_TOKEN_SIZE 25 
@@ -16,8 +17,6 @@ static void extract_token(int token_no);  //Takes token number n from command an
 static void parse_command();
 static void flush_token_buffer();
 static void flush_command_buffer();
-static bool string_compare(char* str1, char* str2);
-static void string_copy(char* strd,char* strs);
 
 //Shell functions
 static void command_help();
@@ -108,14 +107,14 @@ void kshell()
 static void parse_command()
 {
 	extract_token(0);
-	if(string_compare(_tkn_buffer,"help")) {command_help();return;}
-	if(string_compare(_tkn_buffer,"fresh")){command_fresh();return;}
-	if(string_compare(_tkn_buffer,"timer")){command_timer();return;}
-	if(string_compare(_tkn_buffer,"picture")){command_picture();return;}
-	if(string_compare(_tkn_buffer,"ball")){command_ball();return;}
-	if(string_compare(_tkn_buffer,"quote")){command_quote();return;}
-	if(string_compare(_tkn_buffer,"name")){command_name();return;}
-
+	if(strcmp(_tkn_buffer,"help")) {command_help();return;}
+	if(strcmp(_tkn_buffer,"fresh")){command_fresh();return;}
+	if(strcmp(_tkn_buffer,"timer")){command_timer();return;}
+	if(strcmp(_tkn_buffer,"picture")){command_picture();return;}
+	if(strcmp(_tkn_buffer,"ball")){command_ball();return;}
+	if(strcmp(_tkn_buffer,"quote")){command_quote();return;}
+	if(strcmp(_tkn_buffer,"name")){command_name();return;}
+	
 	monitor_puts(" - Command not found: ");
 	monitor_puts(_tkn_buffer);
 }
@@ -175,23 +174,23 @@ static void command_fresh()
 	for(int i =0;i<2;i++)
 	{
 		extract_token(i+1);
-		if(string_compare(_tkn_buffer,"black")) color[i] = BLACK;
-		if(string_compare(_tkn_buffer,"blue")) color[i] = BLUE;
-		if(string_compare(_tkn_buffer,"green")) color[i] = GREEN;
-		if(string_compare(_tkn_buffer,"cyan")) color[i] = CYAN;
-		if(string_compare(_tkn_buffer,"red")) color[i] = RED;
-		if(string_compare(_tkn_buffer,"magenta")) color[i] = MAGENTA;
-		if(string_compare(_tkn_buffer,"brown")) color[i] = BROWN;
-		if(string_compare(_tkn_buffer,"light_grey")) color[i] = LIGHT_GREY;
-		if(string_compare(_tkn_buffer,"dark_grey")) color[i] = DARK_GREY;
-		if(string_compare(_tkn_buffer,"light_blue")) color[i] = LIGHT_BLUE;
-		if(string_compare(_tkn_buffer,"light_green")) color[i] = LIGHT_GREEN;
-		if(string_compare(_tkn_buffer,"light_cyan")) color[i] = LIGHT_CYAN;
-		if(string_compare(_tkn_buffer,"light_red")) color[i] = LIGHT_RED;
-		if(string_compare(_tkn_buffer,"light_magenta")) color[i] = LIGHT_MAGENTA;
-		if(string_compare(_tkn_buffer,"light_brown")) color[i] = LIGHT_BROWN;
-		if(string_compare(_tkn_buffer,"white")) color[i] = WHITE;
-		if(string_compare(_tkn_buffer,"help"))
+		if(strcmp(_tkn_buffer,"black")) color[i] = BLACK;
+		if(strcmp(_tkn_buffer,"blue")) color[i] = BLUE;
+		if(strcmp(_tkn_buffer,"green")) color[i] = GREEN;
+		if(strcmp(_tkn_buffer,"cyan")) color[i] = CYAN;
+		if(strcmp(_tkn_buffer,"red")) color[i] = RED;
+		if(strcmp(_tkn_buffer,"magenta")) color[i] = MAGENTA;
+		if(strcmp(_tkn_buffer,"brown")) color[i] = BROWN;
+		if(strcmp(_tkn_buffer,"light_grey")) color[i] = LIGHT_GREY;
+		if(strcmp(_tkn_buffer,"dark_grey")) color[i] = DARK_GREY;
+		if(strcmp(_tkn_buffer,"light_blue")) color[i] = LIGHT_BLUE;
+		if(strcmp(_tkn_buffer,"light_green")) color[i] = LIGHT_GREEN;
+		if(strcmp(_tkn_buffer,"light_cyan")) color[i] = LIGHT_CYAN;
+		if(strcmp(_tkn_buffer,"light_red")) color[i] = LIGHT_RED;
+		if(strcmp(_tkn_buffer,"light_magenta")) color[i] = LIGHT_MAGENTA;
+		if(strcmp(_tkn_buffer,"light_brown")) color[i] = LIGHT_BROWN;
+		if(strcmp(_tkn_buffer,"white")) color[i] = WHITE;
+		if(strcmp(_tkn_buffer,"help"))
 		{
 			monitor_puts("\tUsage: fresh c1 c2\ncolors:");
 			monitor_puts("  black");
@@ -231,10 +230,10 @@ static void command_fresh()
 static void command_timer()
 {
 	extract_token(1);
-	if(string_compare(_tkn_buffer,"fast")) set_timer(0xffff>>2);
-	if(string_compare(_tkn_buffer,"medium")) set_timer(0xffff>>1);
-	if(string_compare(_tkn_buffer,"slow")) set_timer(0xffff);
-	if(string_compare(_tkn_buffer,"help")) monitor_puts("\tUsage: timer fast/medium/slow");
+	if(strcmp(_tkn_buffer,"fast")) set_timer(0xffff>>2);
+	if(strcmp(_tkn_buffer,"medium")) set_timer(0xffff>>1);
+	if(strcmp(_tkn_buffer,"slow")) set_timer(0xffff);
+	if(strcmp(_tkn_buffer,"help")) monitor_puts("\tUsage: timer fast/medium/slow");
 }
 
 static void command_picture()
@@ -260,13 +259,13 @@ static void command_picture()
 static void command_name()
 {
 	extract_token(1);
-	if(string_compare(_tkn_buffer,"help"))
+	if(strcmp(_tkn_buffer,"help"))
 		{monitor_puts("\tUsage: name string"); return;}
-	if(string_compare(_tkn_buffer,"masih"))
-		string_copy(_tkn_buffer,"asshole");
+	if(strcmp(_tkn_buffer,"masih"))
+		strcpy(_tkn_buffer,"asshole");
 			
 	for(int i=0;i<MAX_NAME_SIZE;i++) _shell_name[i] = 0; //Flush
-	string_copy(_shell_name,_tkn_buffer);
+	strcpy(_shell_name,_tkn_buffer);
 }
 
 #define BALL 'o'
@@ -274,7 +273,7 @@ static void command_name()
 static void command_ball()
 {
 	extract_token(1);
-	if(string_compare(_tkn_buffer,"help"))
+	if(strcmp(_tkn_buffer,"help"))
 		{monitor_puts("\nPlay with balls. Kick out the other ball to win! (w/a/s/d) (i/j/k/l)"); return;}
 	clear();
 	set_cursor(25*80);
@@ -384,24 +383,3 @@ static void command_quote()
 			monitor_puts("\tTrust that good will happen");
 	}
 }
-static void string_copy(char* strd,char* strs)
-{
-	for(int i=0;strs[i];i++)
-	{
-		strd[i]=strs[i];
-	}
-}
-
-static bool string_compare(char* str1, char* str2)
-{
-	int i = 0;
-	while (str1[i])
-	{
-		if(str1[i] != str2[i]) return false;
-		i++;
-	}
-	if(str2[i]) return false;
-	return true;
-}
-
-
