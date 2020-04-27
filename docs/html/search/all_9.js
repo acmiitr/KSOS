@@ -10,5 +10,7 @@ var searchData=
   ['pmmngr_5finit',['pmmngr_init',['../d7/dc2/phymem_8c.html#a838cffb4967812c2a2ac1ffe5879ec42',1,'phymem.c']]],
   ['printhex',['printhex',['../d7/d11/dadio_8c.html#aef61864baeea47473a5de32e4e1ed7d4',1,'dadio.c']]],
   ['printint',['printint',['../d7/d11/dadio_8c.html#a5663d1e12dd66fc3621fe15b7d7725ba',1,'dadio.c']]],
-  ['putc',['putc',['../d7/d11/dadio_8c.html#a0a889ac2f45be624d78be476f121c114',1,'dadio.c']]]
+  ['putc',['putc',['../d7/d11/dadio_8c.html#a0a889ac2f45be624d78be476f121c114',1,'dadio.c']]],
+  ['putchar_2ec',['putchar.c',['../db/de0/putchar_8c.html',1,'']]],
+  ['puts_2ec',['puts.c',['../d4/d54/puts_8c.html',1,'']]]
 ];

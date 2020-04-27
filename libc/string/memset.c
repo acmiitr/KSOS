@@ -1,5 +1,5 @@
 /**  
- * @file memcmp.c
+ * @file memset.c
  * @brief Comapre data stored in memory 
  * @see 
  */

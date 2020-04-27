@@ -90,7 +90,7 @@ Definition at line 44 of file tss.\+c.
 56     \hyperlink{gdt_8c_a5075cc3f7d88b5d1ed8c84512a959b82}{gdt\_set\_descriptor} (5, base, base + \textcolor{keyword}{sizeof} (tss\_entry\_t),0xE9,0);  \textcolor{comment}{//\_kernel\_tss
        hardcoded}
 57 
-59     memset ((\textcolor{keywordtype}{void}*) &\_kernel\_tss, 0, \textcolor{keyword}{sizeof} (tss\_entry\_t));
+59     \hyperlink{memset_8c_adc296efabb90c20113d5420e4d162d14}{memset} ((\textcolor{keywordtype}{void}*) &\_kernel\_tss, 0, \textcolor{keyword}{sizeof} (tss\_entry\_t));
 60 
 61     \_kernel\_tss.ss0 = \hyperlink{tss_8c_a0f0e6aa17e708f29f1de07be4d6c53e8}{KERNEL\_SS};
 62     \_kernel\_tss.esp0 = \hyperlink{tss_8c_a7bdb3fffdcf2e754cf0d18cd9e208742}{KERNEL\_ESP};

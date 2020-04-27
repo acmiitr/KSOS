@@ -1,0 +1,53 @@
+\hypertarget{strlen_8c}{}\section{libc/string/strlen.c File Reference}
+\label{strlen_8c}\index{libc/string/strlen.\+c@{libc/string/strlen.\+c}}
+
+
+Compute length of a given string.  
+
+
+{\ttfamily \#include $<$string.\+h$>$}\newline
+Include dependency graph for strlen.\+c\+:
+% FIG 0
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+size\+\_\+t \hyperlink{strlen_8c_a008e171a518fe0e0352f31b245e03875}{strlen} (const char $\ast$str)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Compute length of a given string. 
+
+\begin{DoxySeeAlso}{See also}
+
+\end{DoxySeeAlso}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{strlen_8c_a008e171a518fe0e0352f31b245e03875}\label{strlen_8c_a008e171a518fe0e0352f31b245e03875}} 
+\index{strlen.\+c@{strlen.\+c}!strlen@{strlen}}
+\index{strlen@{strlen}!strlen.\+c@{strlen.\+c}}
+\subsubsection{\texorpdfstring{strlen()}{strlen()}}
+{\footnotesize\ttfamily size\+\_\+t strlen (\begin{DoxyParamCaption}\item[{const char $\ast$}]{str }\end{DoxyParamCaption})}
+
+A simple function to compute the length of a given string 
+\begin{DoxyParams}{Parameters}
+{\em str} & String starting address\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+size of string 
+\end{DoxyReturn}
+
+
+Definition at line 13 of file strlen.\+c.
+
+
+\begin{DoxyCode}
+13                                \{
+14     \textcolor{keywordtype}{size\_t} len = 0;
+15     \textcolor{keywordflow}{while} (str[len])
+16         len++;
+17     \textcolor{keywordflow}{return} len;
+18 \}
+\end{DoxyCode}

@@ -1,0 +1,62 @@
+\hypertarget{memcmp_8c}{}\section{libc/string/memcmp.c File Reference}
+\label{memcmp_8c}\index{libc/string/memcmp.\+c@{libc/string/memcmp.\+c}}
+
+
+Comapre data stored in memory.  
+
+
+{\ttfamily \#include $<$string.\+h$>$}\newline
+Include dependency graph for memcmp.\+c\+:
+% FIG 0
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{memcmp_8c_ad3087f1863013e06f8a3796cc618adc1}{memcmp} (const void $\ast$aptr, const void $\ast$bptr, size\+\_\+t size)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Comapre data stored in memory. 
+
+\begin{DoxySeeAlso}{See also}
+
+\end{DoxySeeAlso}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{memcmp_8c_ad3087f1863013e06f8a3796cc618adc1}\label{memcmp_8c_ad3087f1863013e06f8a3796cc618adc1}} 
+\index{memcmp.\+c@{memcmp.\+c}!memcmp@{memcmp}}
+\index{memcmp@{memcmp}!memcmp.\+c@{memcmp.\+c}}
+\subsubsection{\texorpdfstring{memcmp()}{memcmp()}}
+{\footnotesize\ttfamily int memcmp (\begin{DoxyParamCaption}\item[{const void $\ast$}]{aptr,  }\item[{const void $\ast$}]{bptr,  }\item[{size\+\_\+t}]{size }\end{DoxyParamCaption})}
+
+
+\begin{DoxyParams}{Parameters}
+{\em aptr} & Pointing to the first object to compare \\
+\hline
+{\em bptr} & Pointing to second object to comapre \\
+\hline
+{\em size} & Size to compare in memory \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+an integer determing which is greater 
+\end{DoxyReturn}
+
+
+Definition at line 14 of file memcmp.\+c.
+
+
+\begin{DoxyCode}
+14                                                             \{
+15     \textcolor{keyword}{const} \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char}* a = (\textcolor{keyword}{const} \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char}*) aptr;
+16     \textcolor{keyword}{const} \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char}* b = (\textcolor{keyword}{const} \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char}*) bptr;
+17     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = 0; i < size; i++) \{
+18         \textcolor{keywordflow}{if} (a[i] < b[i])
+19             \textcolor{keywordflow}{return} -1;
+20         \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (b[i] < a[i])
+21             \textcolor{keywordflow}{return} 1;
+22     \}
+23     \textcolor{keywordflow}{return} 0;
+24 \}
+\end{DoxyCode}

@@ -1,0 +1,58 @@
+\hypertarget{memcpy_8c}{}\section{libc/string/memcpy.c File Reference}
+\label{memcpy_8c}\index{libc/string/memcpy.\+c@{libc/string/memcpy.\+c}}
+
+
+C\+Opy data from one source to destination.  
+
+
+{\ttfamily \#include $<$string.\+h$>$}\newline
+Include dependency graph for memcpy.\+c\+:
+% FIG 0
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void $\ast$ \hyperlink{memcpy_8c_a113a42d20ee587a79f71464089007387}{memcpy} (void $\ast$restrict dstptr, const void $\ast$restrict srcptr, size\+\_\+t size)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+C\+Opy data from one source to destination. 
+
+\begin{DoxySeeAlso}{See also}
+
+\end{DoxySeeAlso}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{memcpy_8c_a113a42d20ee587a79f71464089007387}\label{memcpy_8c_a113a42d20ee587a79f71464089007387}} 
+\index{memcpy.\+c@{memcpy.\+c}!memcpy@{memcpy}}
+\index{memcpy@{memcpy}!memcpy.\+c@{memcpy.\+c}}
+\subsubsection{\texorpdfstring{memcpy()}{memcpy()}}
+{\footnotesize\ttfamily void$\ast$ memcpy (\begin{DoxyParamCaption}\item[{void $\ast$restrict}]{dstptr,  }\item[{const void $\ast$restrict}]{srcptr,  }\item[{size\+\_\+t}]{size }\end{DoxyParamCaption})}
+
+A simple function to copy data using memory address 
+\begin{DoxyParams}{Parameters}
+{\em dstptr} & Pointing to the destination adress \\
+\hline
+{\em srcptr} & Pointing to the source adress \\
+\hline
+{\em size} & Size to copy in memory\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A null pointer pointing to the destination 
+\end{DoxyReturn}
+
+
+Definition at line 15 of file memcpy.\+c.
+
+
+\begin{DoxyCode}
+15                                                                               \{
+16     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char}* dst = (\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char}*) dstptr;
+17     \textcolor{keyword}{const} \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char}* src = (\textcolor{keyword}{const} \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char}*) srcptr;
+18     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = 0; i < size; i++)
+19         dst[i] = src[i];
+20     \textcolor{keywordflow}{return} dstptr;
+21 \}
+\end{DoxyCode}
