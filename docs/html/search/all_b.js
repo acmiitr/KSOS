@@ -14,5 +14,7 @@ var searchData=
   ['status_5fdrq',['STATUS_DRQ',['../dc/dfd/ATA_8c.html#aa9ce50022e91e3f8e0a9189880feb931',1,'ATA.c']]],
   ['status_5ferr',['STATUS_ERR',['../dc/dfd/ATA_8c.html#a23205a6a97096d57a247794f5e250963',1,'ATA.c']]],
   ['status_5frdy',['STATUS_RDY',['../dc/dfd/ATA_8c.html#ac9932f5455af4739a099ad84e45391cf',1,'ATA.c']]],
+  ['strlen',['strlen',['../d3/d67/strlen_8c.html#a008e171a518fe0e0352f31b245e03875',1,'strlen.c']]],
+  ['strlen_2ec',['strlen.c',['../d3/d67/strlen_8c.html',1,'']]],
   ['system_5fcall_5fhandler',['system_call_handler',['../d2/d1f/inthandling_8c.html#a7eb7b58f57bdaff98141ab6e5778021c',1,'inthandling.c']]]
 ];

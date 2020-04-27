@@ -1,0 +1,57 @@
+\hypertarget{memset_8c}{}\section{libc/string/memset.c File Reference}
+\label{memset_8c}\index{libc/string/memset.\+c@{libc/string/memset.\+c}}
+
+
+Comapre data stored in memory.  
+
+
+{\ttfamily \#include $<$string.\+h$>$}\newline
+Include dependency graph for memset.\+c\+:
+% FIG 0
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void $\ast$ \hyperlink{memset_8c_adc296efabb90c20113d5420e4d162d14}{memset} (void $\ast$bufptr, int value, size\+\_\+t size)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Comapre data stored in memory. 
+
+\begin{DoxySeeAlso}{See also}
+
+\end{DoxySeeAlso}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{memset_8c_adc296efabb90c20113d5420e4d162d14}\label{memset_8c_adc296efabb90c20113d5420e4d162d14}} 
+\index{memset.\+c@{memset.\+c}!memset@{memset}}
+\index{memset@{memset}!memset.\+c@{memset.\+c}}
+\subsubsection{\texorpdfstring{memset()}{memset()}}
+{\footnotesize\ttfamily void$\ast$ memset (\begin{DoxyParamCaption}\item[{void $\ast$}]{bufptr,  }\item[{int}]{value,  }\item[{size\+\_\+t}]{size }\end{DoxyParamCaption})}
+
+A simple function to initialize data to a specific value 
+\begin{DoxyParams}{Parameters}
+{\em bufptr} & Pointing to the starting adress of contiguous memory \\
+\hline
+{\em value} & Default value to be assigned \\
+\hline
+{\em size} & Size in memory location\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A null pointer pointing to the original starting address 
+\end{DoxyReturn}
+
+
+Definition at line 16 of file memset.\+c.
+
+
+\begin{DoxyCode}
+16                                                    \{
+17     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char}* buf = (\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char}*) bufptr;
+18     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = 0; i < size; i++)
+19         buf[i] = (\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char}) value;
+20     \textcolor{keywordflow}{return} bufptr;
+21 \}
+\end{DoxyCode}

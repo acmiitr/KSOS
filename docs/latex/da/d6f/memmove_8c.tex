@@ -1,0 +1,63 @@
+\hypertarget{memmove_8c}{}\section{libc/string/memmove.c File Reference}
+\label{memmove_8c}\index{libc/string/memmove.\+c@{libc/string/memmove.\+c}}
+
+
+M\+Oving data stored in memory from one location to another.  
+
+
+{\ttfamily \#include $<$string.\+h$>$}\newline
+Include dependency graph for memmove.\+c\+:
+% FIG 0
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void $\ast$ \hyperlink{memmove_8c_ae972269902c41dcc0afca72fc22af95f}{memmove} (void $\ast$dstptr, const void $\ast$srcptr, size\+\_\+t size)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+M\+Oving data stored in memory from one location to another. 
+
+\begin{DoxySeeAlso}{See also}
+
+\end{DoxySeeAlso}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{memmove_8c_ae972269902c41dcc0afca72fc22af95f}\label{memmove_8c_ae972269902c41dcc0afca72fc22af95f}} 
+\index{memmove.\+c@{memmove.\+c}!memmove@{memmove}}
+\index{memmove@{memmove}!memmove.\+c@{memmove.\+c}}
+\subsubsection{\texorpdfstring{memmove()}{memmove()}}
+{\footnotesize\ttfamily void$\ast$ memmove (\begin{DoxyParamCaption}\item[{void $\ast$}]{dstptr,  }\item[{const void $\ast$}]{srcptr,  }\item[{size\+\_\+t}]{size }\end{DoxyParamCaption})}
+
+A simple function to move data using memory address 
+\begin{DoxyParams}{Parameters}
+{\em dstptr} & Pointing to the destination adress \\
+\hline
+{\em srcptr} & Pointing to the source adress \\
+\hline
+{\em size} & Size to move memory\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A null pointer pointing to the destination 
+\end{DoxyReturn}
+
+
+Definition at line 16 of file memmove.\+c.
+
+
+\begin{DoxyCode}
+16                                                              \{
+17     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char}* dst = (\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char}*) dstptr;
+18     \textcolor{keyword}{const} \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char}* src = (\textcolor{keyword}{const} \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char}*) srcptr;
+19     \textcolor{keywordflow}{if} (dst < src) \{
+20         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = 0; i < size; i++)
+21             dst[i] = src[i];
+22     \} \textcolor{keywordflow}{else} \{
+23         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = size; i != 0; i--)
+24             dst[i-1] = src[i-1];
+25     \}
+26     \textcolor{keywordflow}{return} dstptr;
+27 \}
+\end{DoxyCode}
