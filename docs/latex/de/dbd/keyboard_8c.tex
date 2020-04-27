@@ -1,0 +1,687 @@
+\hypertarget{keyboard_8c}{}\section{kernel/driver/keyboard.c File Reference}
+\label{keyboard_8c}\index{kernel/driver/keyboard.\+c@{kernel/driver/keyboard.\+c}}
+
+
+File used to handle the input output using the keyboard. Appropriate actions taken when keys are pressed on the keyboard.  
+
+
+{\ttfamily \#include $<$stdint.\+h$>$}\newline
+{\ttfamily \#include $<$stdbool.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}dadio.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}hal.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}hardware.\+h\char`\"{}}\newline
+Include dependency graph for keyboard.\+c\+:
+% FIG 0
+\subsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \hyperlink{keyboard_8c_a3a8455e781f79e7ba5f49d1ac064c7b5}{K\+E\+Y\+C\+O\+DE} \{ \newline
+{\bfseries K\+E\+Y\+\_\+\+S\+P\+A\+CE} = \textquotesingle{} \textquotesingle{}, 
+{\bfseries K\+E\+Y\+\_\+0} = \textquotesingle{}0\textquotesingle{}, 
+{\bfseries K\+E\+Y\+\_\+1} = \textquotesingle{}1\textquotesingle{}, 
+{\bfseries K\+E\+Y\+\_\+2} = \textquotesingle{}2\textquotesingle{}, 
+\newline
+{\bfseries K\+E\+Y\+\_\+3} = \textquotesingle{}3\textquotesingle{}, 
+{\bfseries K\+E\+Y\+\_\+4} = \textquotesingle{}4\textquotesingle{}, 
+{\bfseries K\+E\+Y\+\_\+5} = \textquotesingle{}5\textquotesingle{}, 
+{\bfseries K\+E\+Y\+\_\+6} = \textquotesingle{}6\textquotesingle{}, 
+\newline
+{\bfseries K\+E\+Y\+\_\+7} = \textquotesingle{}7\textquotesingle{}, 
+{\bfseries K\+E\+Y\+\_\+8} = \textquotesingle{}8\textquotesingle{}, 
+{\bfseries K\+E\+Y\+\_\+9} = \textquotesingle{}9\textquotesingle{}, 
+{\bfseries K\+E\+Y\+\_\+A} = \textquotesingle{}a\textquotesingle{}, 
+\newline
+{\bfseries K\+E\+Y\+\_\+B} = \textquotesingle{}b\textquotesingle{}, 
+{\bfseries K\+E\+Y\+\_\+C} = \textquotesingle{}c\textquotesingle{}, 
+{\bfseries K\+E\+Y\+\_\+D} = \textquotesingle{}d\textquotesingle{}, 
+{\bfseries K\+E\+Y\+\_\+E} = \textquotesingle{}e\textquotesingle{}, 
+\newline
+{\bfseries K\+E\+Y\+\_\+F} = \textquotesingle{}f\textquotesingle{}, 
+{\bfseries K\+E\+Y\+\_\+G} = \textquotesingle{}g\textquotesingle{}, 
+{\bfseries K\+E\+Y\+\_\+H} = \textquotesingle{}h\textquotesingle{}, 
+{\bfseries K\+E\+Y\+\_\+I} = \textquotesingle{}i\textquotesingle{}, 
+\newline
+{\bfseries K\+E\+Y\+\_\+J} = \textquotesingle{}j\textquotesingle{}, 
+{\bfseries K\+E\+Y\+\_\+K} = \textquotesingle{}k\textquotesingle{}, 
+{\bfseries K\+E\+Y\+\_\+L} = \textquotesingle{}l\textquotesingle{}, 
+{\bfseries K\+E\+Y\+\_\+M} = \textquotesingle{}m\textquotesingle{}, 
+\newline
+{\bfseries K\+E\+Y\+\_\+N} = \textquotesingle{}n\textquotesingle{}, 
+{\bfseries K\+E\+Y\+\_\+O} = \textquotesingle{}o\textquotesingle{}, 
+{\bfseries K\+E\+Y\+\_\+P} = \textquotesingle{}p\textquotesingle{}, 
+{\bfseries K\+E\+Y\+\_\+Q} = \textquotesingle{}q\textquotesingle{}, 
+\newline
+{\bfseries K\+E\+Y\+\_\+R} = \textquotesingle{}r\textquotesingle{}, 
+{\bfseries K\+E\+Y\+\_\+S} = \textquotesingle{}s\textquotesingle{}, 
+{\bfseries K\+E\+Y\+\_\+T} = \textquotesingle{}t\textquotesingle{}, 
+{\bfseries K\+E\+Y\+\_\+U} = \textquotesingle{}u\textquotesingle{}, 
+\newline
+{\bfseries K\+E\+Y\+\_\+V} = \textquotesingle{}v\textquotesingle{}, 
+{\bfseries K\+E\+Y\+\_\+W} = \textquotesingle{}w\textquotesingle{}, 
+{\bfseries K\+E\+Y\+\_\+X} = \textquotesingle{}x\textquotesingle{}, 
+{\bfseries K\+E\+Y\+\_\+Y} = \textquotesingle{}y\textquotesingle{}, 
+\newline
+{\bfseries K\+E\+Y\+\_\+Z} = \textquotesingle{}z\textquotesingle{}, 
+{\bfseries K\+E\+Y\+\_\+\+R\+E\+T\+U\+RN} = \textquotesingle{}\textbackslash{}n\textquotesingle{}, 
+{\bfseries K\+E\+Y\+\_\+\+E\+S\+C\+A\+PE} = 0x1001, 
+{\bfseries K\+E\+Y\+\_\+\+B\+A\+C\+K\+S\+P\+A\+CE} = \textquotesingle{}\textbackslash{}b\textquotesingle{}, 
+\newline
+{\bfseries K\+E\+Y\+\_\+\+UP} = 0x1100, 
+{\bfseries K\+E\+Y\+\_\+\+D\+O\+WN} = 0x1101, 
+{\bfseries K\+E\+Y\+\_\+\+L\+E\+FT} = 0x1102, 
+{\bfseries K\+E\+Y\+\_\+\+R\+I\+G\+HT} = 0x1103, 
+\newline
+{\bfseries K\+E\+Y\+\_\+\+F1} = 0x1201, 
+{\bfseries K\+E\+Y\+\_\+\+F2} = 0x1202, 
+{\bfseries K\+E\+Y\+\_\+\+F3} = 0x1203, 
+{\bfseries K\+E\+Y\+\_\+\+F4} = 0x1204, 
+\newline
+{\bfseries K\+E\+Y\+\_\+\+F5} = 0x1205, 
+{\bfseries K\+E\+Y\+\_\+\+F6} = 0x1206, 
+{\bfseries K\+E\+Y\+\_\+\+F7} = 0x1207, 
+{\bfseries K\+E\+Y\+\_\+\+F8} = 0x1208, 
+\newline
+{\bfseries K\+E\+Y\+\_\+\+F9} = 0x1209, 
+{\bfseries K\+E\+Y\+\_\+\+F10} = 0x120a, 
+{\bfseries K\+E\+Y\+\_\+\+F11} = 0x120b, 
+{\bfseries K\+E\+Y\+\_\+\+F12} = 0x120b, 
+\newline
+{\bfseries K\+E\+Y\+\_\+\+F13} = 0x120c, 
+{\bfseries K\+E\+Y\+\_\+\+F14} = 0x120d, 
+{\bfseries K\+E\+Y\+\_\+\+F15} = 0x120e, 
+{\bfseries K\+E\+Y\+\_\+\+D\+OT} = \textquotesingle{}.\textquotesingle{}, 
+\newline
+{\bfseries K\+E\+Y\+\_\+\+C\+O\+M\+MA} = \textquotesingle{},\textquotesingle{}, 
+{\bfseries K\+E\+Y\+\_\+\+C\+O\+L\+ON} = \textquotesingle{}\+:\textquotesingle{}, 
+{\bfseries K\+E\+Y\+\_\+\+S\+E\+M\+I\+C\+O\+L\+ON} = \textquotesingle{};\textquotesingle{}, 
+{\bfseries K\+E\+Y\+\_\+\+S\+L\+A\+SH} = \textquotesingle{}/\textquotesingle{}, 
+\newline
+{\bfseries K\+E\+Y\+\_\+\+B\+A\+C\+K\+S\+L\+A\+SH} = \textquotesingle{}\textbackslash{}\textbackslash{}\textquotesingle{}, 
+{\bfseries K\+E\+Y\+\_\+\+P\+L\+US} = \textquotesingle{}+\textquotesingle{}, 
+{\bfseries K\+E\+Y\+\_\+\+M\+I\+N\+US} = \textquotesingle{}-\/\textquotesingle{}, 
+{\bfseries K\+E\+Y\+\_\+\+A\+S\+T\+E\+R\+I\+SK} = \textquotesingle{}$\ast$\textquotesingle{}, 
+\newline
+{\bfseries K\+E\+Y\+\_\+\+E\+X\+C\+L\+A\+M\+A\+T\+I\+ON} = \textquotesingle{}!\textquotesingle{}, 
+{\bfseries K\+E\+Y\+\_\+\+Q\+U\+E\+S\+T\+I\+ON} = \textquotesingle{}?\textquotesingle{}, 
+{\bfseries K\+E\+Y\+\_\+\+Q\+U\+O\+T\+E\+D\+O\+U\+B\+LE} = \textquotesingle{}\textbackslash{}"\textquotesingle{}, 
+{\bfseries K\+E\+Y\+\_\+\+Q\+U\+O\+TE} = \textquotesingle{}\textbackslash{}\textquotesingle{}\textquotesingle{}, 
+\newline
+{\bfseries K\+E\+Y\+\_\+\+E\+Q\+U\+AL} = \textquotesingle{}=\textquotesingle{}, 
+{\bfseries K\+E\+Y\+\_\+\+H\+A\+SH} = \textquotesingle{}\#\textquotesingle{}, 
+{\bfseries K\+E\+Y\+\_\+\+P\+E\+R\+C\+E\+NT} = \textquotesingle{}\textquotesingle{}, 
+{\bfseries K\+E\+Y\+\_\+\+A\+M\+P\+E\+R\+S\+A\+ND} = \textquotesingle{}\&\textquotesingle{}, 
+\newline
+{\bfseries K\+E\+Y\+\_\+\+U\+N\+D\+E\+R\+S\+C\+O\+RE} = \textquotesingle{}\+\_\+\textquotesingle{}, 
+{\bfseries K\+E\+Y\+\_\+\+L\+E\+F\+T\+P\+A\+R\+E\+N\+T\+H\+E\+S\+IS} = \textquotesingle{}(\textquotesingle{}, 
+{\bfseries K\+E\+Y\+\_\+\+R\+I\+G\+H\+T\+P\+A\+R\+E\+N\+T\+H\+E\+S\+IS} = \textquotesingle{})\textquotesingle{}, 
+{\bfseries K\+E\+Y\+\_\+\+L\+E\+F\+T\+B\+R\+A\+C\+K\+ET} = \textquotesingle{}\mbox{[}\textquotesingle{}, 
+\newline
+{\bfseries K\+E\+Y\+\_\+\+R\+I\+G\+H\+T\+B\+R\+A\+C\+K\+ET} = \textquotesingle{}\mbox{]}\textquotesingle{}, 
+{\bfseries K\+E\+Y\+\_\+\+L\+E\+F\+T\+C\+U\+RL} = \textquotesingle{}\{\textquotesingle{}, 
+{\bfseries K\+E\+Y\+\_\+\+R\+I\+G\+H\+T\+C\+U\+RL} = \textquotesingle{}\}\textquotesingle{}, 
+{\bfseries K\+E\+Y\+\_\+\+D\+O\+L\+L\+AR} = \textquotesingle{}\$\textquotesingle{}, 
+\newline
+{\bfseries K\+E\+Y\+\_\+\+E\+U\+RO} = \textquotesingle{}\$\textquotesingle{}, 
+{\bfseries K\+E\+Y\+\_\+\+L\+E\+SS} = \textquotesingle{}$<$\textquotesingle{}, 
+{\bfseries K\+E\+Y\+\_\+\+G\+R\+E\+A\+T\+ER} = \textquotesingle{}$>$\textquotesingle{}, 
+{\bfseries K\+E\+Y\+\_\+\+B\+AR} = \textquotesingle{}$\vert$\textquotesingle{}, 
+\newline
+{\bfseries K\+E\+Y\+\_\+\+G\+R\+A\+VE} = \textquotesingle{}`\textquotesingle{}, 
+{\bfseries K\+E\+Y\+\_\+\+T\+I\+L\+DE} = \textquotesingle{}$\sim$\textquotesingle{}, 
+{\bfseries K\+E\+Y\+\_\+\+AT} = \textquotesingle{}@\textquotesingle{}, 
+{\bfseries K\+E\+Y\+\_\+\+C\+A\+R\+R\+ET} = \textquotesingle{}$^\wedge$\textquotesingle{}, 
+\newline
+{\bfseries K\+E\+Y\+\_\+\+K\+P\+\_\+0} = \textquotesingle{}0\textquotesingle{}, 
+{\bfseries K\+E\+Y\+\_\+\+K\+P\+\_\+1} = \textquotesingle{}1\textquotesingle{}, 
+{\bfseries K\+E\+Y\+\_\+\+K\+P\+\_\+2} = \textquotesingle{}2\textquotesingle{}, 
+{\bfseries K\+E\+Y\+\_\+\+K\+P\+\_\+3} = \textquotesingle{}3\textquotesingle{}, 
+\newline
+{\bfseries K\+E\+Y\+\_\+\+K\+P\+\_\+4} = \textquotesingle{}4\textquotesingle{}, 
+{\bfseries K\+E\+Y\+\_\+\+K\+P\+\_\+5} = \textquotesingle{}5\textquotesingle{}, 
+{\bfseries K\+E\+Y\+\_\+\+K\+P\+\_\+6} = \textquotesingle{}6\textquotesingle{}, 
+{\bfseries K\+E\+Y\+\_\+\+K\+P\+\_\+7} = \textquotesingle{}7\textquotesingle{}, 
+\newline
+{\bfseries K\+E\+Y\+\_\+\+K\+P\+\_\+8} = \textquotesingle{}8\textquotesingle{}, 
+{\bfseries K\+E\+Y\+\_\+\+K\+P\+\_\+9} = \textquotesingle{}9\textquotesingle{}, 
+{\bfseries K\+E\+Y\+\_\+\+K\+P\+\_\+\+P\+L\+US} = \textquotesingle{}+\textquotesingle{}, 
+{\bfseries K\+E\+Y\+\_\+\+K\+P\+\_\+\+M\+I\+N\+US} = \textquotesingle{}-\/\textquotesingle{}, 
+\newline
+{\bfseries K\+E\+Y\+\_\+\+K\+P\+\_\+\+D\+E\+C\+I\+M\+AL} = \textquotesingle{}.\textquotesingle{}, 
+{\bfseries K\+E\+Y\+\_\+\+K\+P\+\_\+\+D\+I\+V\+I\+DE} = \textquotesingle{}/\textquotesingle{}, 
+{\bfseries K\+E\+Y\+\_\+\+K\+P\+\_\+\+A\+S\+T\+E\+R\+I\+SK} = \textquotesingle{}$\ast$\textquotesingle{}, 
+{\bfseries K\+E\+Y\+\_\+\+K\+P\+\_\+\+N\+U\+M\+L\+O\+CK} = 0x300f, 
+\newline
+{\bfseries K\+E\+Y\+\_\+\+K\+P\+\_\+\+E\+N\+T\+ER} = 0x3010, 
+{\bfseries K\+E\+Y\+\_\+\+T\+AB} = 0x4000, 
+{\bfseries K\+E\+Y\+\_\+\+C\+A\+P\+S\+L\+O\+CK} = 0x4001, 
+{\bfseries K\+E\+Y\+\_\+\+L\+S\+H\+I\+FT} = 0x4002, 
+\newline
+{\bfseries K\+E\+Y\+\_\+\+L\+C\+T\+RL} = 0x4003, 
+{\bfseries K\+E\+Y\+\_\+\+L\+A\+LT} = 0x4004, 
+{\bfseries K\+E\+Y\+\_\+\+L\+W\+IN} = 0x4005, 
+{\bfseries K\+E\+Y\+\_\+\+R\+S\+H\+I\+FT} = 0x4006, 
+\newline
+{\bfseries K\+E\+Y\+\_\+\+R\+C\+T\+RL} = 0x4007, 
+{\bfseries K\+E\+Y\+\_\+\+R\+A\+LT} = 0x4008, 
+{\bfseries K\+E\+Y\+\_\+\+R\+W\+IN} = 0x4009, 
+{\bfseries K\+E\+Y\+\_\+\+I\+N\+S\+E\+RT} = 0x400a, 
+\newline
+{\bfseries K\+E\+Y\+\_\+\+D\+E\+L\+E\+TE} = 0x400b, 
+{\bfseries K\+E\+Y\+\_\+\+H\+O\+ME} = 0x400c, 
+{\bfseries K\+E\+Y\+\_\+\+E\+ND} = 0x400d, 
+{\bfseries K\+E\+Y\+\_\+\+P\+A\+G\+E\+UP} = 0x400e, 
+\newline
+{\bfseries K\+E\+Y\+\_\+\+P\+A\+G\+E\+D\+O\+WN} = 0x400f, 
+{\bfseries K\+E\+Y\+\_\+\+S\+C\+R\+O\+L\+L\+L\+O\+CK} = 0x4010, 
+{\bfseries K\+E\+Y\+\_\+\+P\+A\+U\+SE} = 0x4011, 
+{\bfseries K\+E\+Y\+\_\+\+U\+N\+K\+N\+O\+WN}
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \hyperlink{keyboard_8c_a020d37694a09662853dc7ab08caf949a}{is\+\_\+output\+\_\+full} ()
+\begin{DoxyCompactList}\small\item\em Checks if the Port 0x60 is Full. \end{DoxyCompactList}\item 
+bool \hyperlink{keyboard_8c_af17526394c84520ee58a6f34e93752e1}{is\+\_\+input\+\_\+empty} ()
+\begin{DoxyCompactList}\small\item\em Cheks if input is empty so that we can write to it. \end{DoxyCompactList}\item 
+bool \hyperlink{keyboard_8c_a557b06d66e1db4d76b4d490203299d54}{is\+\_\+alphabet} (char c)
+\begin{DoxyCompactList}\small\item\em Checks whether a character is an alphabet. \end{DoxyCompactList}\item 
+bool \hyperlink{keyboard_8c_aad35047bca15f85fda0a71e695a07f95}{is\+\_\+on\+\_\+keypad} (uint8\+\_\+t scan\+\_\+code)
+\begin{DoxyCompactList}\small\item\em A function which is used to get the latest scan code entered in the keyboard $\ast$. \end{DoxyCompactList}\item 
+void \hyperlink{keyboard_8c_a2f4098fc71cbd39422c1001d66970bf5}{keyboard\+\_\+handler} ()
+\begin{DoxyCompactList}\small\item\em Keyboard handler handles the keys pressed on the keyboard and takes appropriate action ... \end{DoxyCompactList}\item 
+char \hyperlink{keyboard_8c_aa8d15a589b7dc3d75d0c93d2728f6f8c}{get\+\_\+latest\+\_\+char} ()
+\begin{DoxyCompactList}\small\item\em A function which is used to get the latest character to be printed. \end{DoxyCompactList}\item 
+uint8\+\_\+t \hyperlink{keyboard_8c_a4fb42c70ae53a4bd71d59d1a436c8455}{get\+\_\+latest\+\_\+scan\+\_\+code} ()
+\begin{DoxyCompactList}\small\item\em A function which is used to get the latest scan code entered in the keyboard $\ast$. \end{DoxyCompactList}\item 
+bool \hyperlink{keyboard_8c_ada790016b5b54d93a47205515046dd39}{kbc\+\_\+init} ()
+\item 
+\mbox{\Hypertarget{keyboard_8c_a94b8a2c10d967c71c1b8344a19e0094e}\label{keyboard_8c_a94b8a2c10d967c71c1b8344a19e0094e}} 
+void \hyperlink{keyboard_8c_a94b8a2c10d967c71c1b8344a19e0094e}{wait\+\_\+for\+\_\+keyboard} ()
+\begin{DoxyCompactList}\small\item\em Waits for an keyboard interrupt. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+bool \hyperlink{keyboard_8c_ab7a22404f734ebb7fd37f5d1e0ad86c9}{\+\_\+is\+\_\+keyboard\+\_\+interrupt}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+File used to handle the input output using the keyboard. Appropriate actions taken when keys are pressed on the keyboard. 
+
+\begin{DoxySeeAlso}{See also}
+
+\end{DoxySeeAlso}
+
+
+\subsection{Enumeration Type Documentation}
+\mbox{\Hypertarget{keyboard_8c_a3a8455e781f79e7ba5f49d1ac064c7b5}\label{keyboard_8c_a3a8455e781f79e7ba5f49d1ac064c7b5}} 
+\index{keyboard.\+c@{keyboard.\+c}!K\+E\+Y\+C\+O\+DE@{K\+E\+Y\+C\+O\+DE}}
+\index{K\+E\+Y\+C\+O\+DE@{K\+E\+Y\+C\+O\+DE}!keyboard.\+c@{keyboard.\+c}}
+\subsubsection{\texorpdfstring{K\+E\+Y\+C\+O\+DE}{KEYCODE}}
+{\footnotesize\ttfamily enum \hyperlink{keyboard_8c_a3a8455e781f79e7ba5f49d1ac064c7b5}{K\+E\+Y\+C\+O\+DE}}
+
+These are helpful enums, i.\+e. names of keys -\/ courtesy brokenthorn 
+
+Definition at line 15 of file keyboard.\+c.
+
+
+\begin{DoxyCode}
+15              \{
+16 
+17 \textcolor{comment}{// Alphanumeric keys ////////////////}
+18 
+19     KEY\_SPACE             = \textcolor{charliteral}{' '},
+20     KEY\_0                 = \textcolor{charliteral}{'0'},
+21     KEY\_1                 = \textcolor{charliteral}{'1'},
+22     KEY\_2                 = \textcolor{charliteral}{'2'},
+23     KEY\_3                 = \textcolor{charliteral}{'3'},
+24     KEY\_4                 = \textcolor{charliteral}{'4'},
+25     KEY\_5                 = \textcolor{charliteral}{'5'},
+26     KEY\_6                 = \textcolor{charliteral}{'6'},
+27     KEY\_7                 = \textcolor{charliteral}{'7'},
+28     KEY\_8                 = \textcolor{charliteral}{'8'},
+29     KEY\_9                 = \textcolor{charliteral}{'9'},
+30 
+31     KEY\_A                 = \textcolor{charliteral}{'a'},
+32     KEY\_B                 = \textcolor{charliteral}{'b'},
+33     KEY\_C                 = \textcolor{charliteral}{'c'},
+34     KEY\_D                 = \textcolor{charliteral}{'d'},
+35     KEY\_E                 = \textcolor{charliteral}{'e'},
+36     KEY\_F                 = \textcolor{charliteral}{'f'},
+37     KEY\_G                 = \textcolor{charliteral}{'g'},
+38     KEY\_H                 = \textcolor{charliteral}{'h'},
+39     KEY\_I                 = \textcolor{charliteral}{'i'},
+40     KEY\_J                 = \textcolor{charliteral}{'j'},
+41     KEY\_K                 = \textcolor{charliteral}{'k'},
+42     KEY\_L                 = \textcolor{charliteral}{'l'},
+43     KEY\_M                 = \textcolor{charliteral}{'m'},
+44     KEY\_N                 = \textcolor{charliteral}{'n'},
+45     KEY\_O                 = \textcolor{charliteral}{'o'},
+46     KEY\_P                 = \textcolor{charliteral}{'p'},
+47     KEY\_Q                 = \textcolor{charliteral}{'q'},
+48     KEY\_R                 = \textcolor{charliteral}{'r'},
+49     KEY\_S                 = \textcolor{charliteral}{'s'},
+50     KEY\_T                 = \textcolor{charliteral}{'t'},
+51     KEY\_U                 = \textcolor{charliteral}{'u'},
+52     KEY\_V                 = \textcolor{charliteral}{'v'},
+53     KEY\_W                 = \textcolor{charliteral}{'w'},
+54     KEY\_X                 = \textcolor{charliteral}{'x'},
+55     KEY\_Y                 = \textcolor{charliteral}{'y'},
+56     KEY\_Z                 = \textcolor{charliteral}{'z'},
+57 
+58     KEY\_RETURN            = \textcolor{charliteral}{'\(\backslash\)n'},
+59     KEY\_ESCAPE            = 0x1001,
+60     KEY\_BACKSPACE         = \textcolor{charliteral}{'\(\backslash\)b'},
+61 
+62 \textcolor{comment}{// Arrow keys ////////////////////////}
+63 
+64     KEY\_UP                = 0x1100,
+65     KEY\_DOWN              = 0x1101,
+66     KEY\_LEFT              = 0x1102,
+67     KEY\_RIGHT             = 0x1103,
+68 
+69 \textcolor{comment}{// Function keys /////////////////////}
+70 
+71     KEY\_F1                = 0x1201,
+72     KEY\_F2                = 0x1202,
+73     KEY\_F3                = 0x1203,
+74     KEY\_F4                = 0x1204,
+75     KEY\_F5                = 0x1205,
+76     KEY\_F6                = 0x1206,
+77     KEY\_F7                = 0x1207,
+78     KEY\_F8                = 0x1208,
+79     KEY\_F9                = 0x1209,
+80     KEY\_F10               = 0x120a,
+81     KEY\_F11               = 0x120b,
+82     KEY\_F12               = 0x120b,
+83     KEY\_F13               = 0x120c,
+84     KEY\_F14               = 0x120d,
+85     KEY\_F15               = 0x120e,
+86 
+87     KEY\_DOT               = \textcolor{charliteral}{'.'},
+88     KEY\_COMMA             = \textcolor{charliteral}{','},
+89     KEY\_COLON             = \textcolor{charliteral}{':'},
+90     KEY\_SEMICOLON         = \textcolor{charliteral}{';'},
+91     KEY\_SLASH             = \textcolor{charliteral}{'/'},
+92     KEY\_BACKSLASH         = \textcolor{charliteral}{'\(\backslash\)\(\backslash\)'},
+93     KEY\_PLUS              = \textcolor{charliteral}{'+'},
+94     KEY\_MINUS             = \textcolor{charliteral}{'-'},
+95     KEY\_ASTERISK          = \textcolor{charliteral}{'*'},
+96     KEY\_EXCLAMATION       = \textcolor{charliteral}{'!'},
+97     KEY\_QUESTION          = \textcolor{charliteral}{'?'},
+98     KEY\_QUOTEDOUBLE       = \textcolor{charliteral}{'\(\backslash\)"'},
+99     KEY\_QUOTE             = \textcolor{charliteral}{'\(\backslash\)''},
+100     KEY\_EQUAL             = \textcolor{charliteral}{'='},
+101     KEY\_HASH              = \textcolor{charliteral}{'#'},
+102     KEY\_PERCENT           = \textcolor{charliteral}{'%'},
+103     KEY\_AMPERSAND         = \textcolor{charliteral}{'&'},
+104     KEY\_UNDERSCORE        = \textcolor{charliteral}{'\_'},
+105     KEY\_LEFTPARENTHESIS   = \textcolor{charliteral}{'('},
+106     KEY\_RIGHTPARENTHESIS  = \textcolor{charliteral}{')'},
+107     KEY\_LEFTBRACKET       = \textcolor{charliteral}{'['},
+108     KEY\_RIGHTBRACKET      = \textcolor{charliteral}{']'},
+109     KEY\_LEFTCURL          = \textcolor{charliteral}{'\{'},
+110     KEY\_RIGHTCURL         = \textcolor{charliteral}{'\}'},
+111     KEY\_DOLLAR            = \textcolor{charliteral}{'$'},
+112 \textcolor{comment}{//  KEY\_POUND             = '£',}
+113     KEY\_EURO              = \textcolor{charliteral}{'$'},
+114     KEY\_LESS              = \textcolor{charliteral}{'<'},
+115     KEY\_GREATER           = \textcolor{charliteral}{'>'},
+116     KEY\_BAR               = \textcolor{charliteral}{'|'},
+117     KEY\_GRAVE             = \textcolor{charliteral}{'`'},
+118     KEY\_TILDE             = \textcolor{charliteral}{'~'},
+119     KEY\_AT                = \textcolor{charliteral}{'@'},
+120     KEY\_CARRET            = \textcolor{charliteral}{'^'},
+121 
+122 \textcolor{comment}{// Numeric keypad //////////////////////}
+123 
+124     KEY\_KP\_0              = \textcolor{charliteral}{'0'},
+125     KEY\_KP\_1              = \textcolor{charliteral}{'1'},
+126     KEY\_KP\_2              = \textcolor{charliteral}{'2'},
+127     KEY\_KP\_3              = \textcolor{charliteral}{'3'},
+128     KEY\_KP\_4              = \textcolor{charliteral}{'4'},
+129     KEY\_KP\_5              = \textcolor{charliteral}{'5'},
+130     KEY\_KP\_6              = \textcolor{charliteral}{'6'},
+131     KEY\_KP\_7              = \textcolor{charliteral}{'7'},
+132     KEY\_KP\_8              = \textcolor{charliteral}{'8'},
+133     KEY\_KP\_9              = \textcolor{charliteral}{'9'},
+134     KEY\_KP\_PLUS           = \textcolor{charliteral}{'+'},
+135     KEY\_KP\_MINUS          = \textcolor{charliteral}{'-'},
+136     KEY\_KP\_DECIMAL        = \textcolor{charliteral}{'.'},
+137     KEY\_KP\_DIVIDE         = \textcolor{charliteral}{'/'},
+138     KEY\_KP\_ASTERISK       = \textcolor{charliteral}{'*'},
+139     KEY\_KP\_NUMLOCK        = 0x300f,
+140     KEY\_KP\_ENTER          = 0x3010,
+141 
+142     KEY\_TAB               = 0x4000,
+143     KEY\_CAPSLOCK          = 0x4001,
+144 
+145 \textcolor{comment}{// Modify keys ////////////////////////////}
+146 
+147     KEY\_LSHIFT            = 0x4002,
+148     KEY\_LCTRL             = 0x4003,
+149     KEY\_LALT              = 0x4004,
+150     KEY\_LWIN              = 0x4005,
+151     KEY\_RSHIFT            = 0x4006,
+152     KEY\_RCTRL             = 0x4007,
+153     KEY\_RALT              = 0x4008,
+154     KEY\_RWIN              = 0x4009,
+155 
+156     KEY\_INSERT            = 0x400a,
+157     KEY\_DELETE            = 0x400b,
+158     KEY\_HOME              = 0x400c,
+159     KEY\_END               = 0x400d,
+160     KEY\_PAGEUP            = 0x400e,
+161     KEY\_PAGEDOWN          = 0x400f,
+162     KEY\_SCROLLLOCK        = 0x4010,
+163     KEY\_PAUSE             = 0x4011,
+164 
+165     KEY\_UNKNOWN
+166 \};
+\end{DoxyCode}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{keyboard_8c_aa8d15a589b7dc3d75d0c93d2728f6f8c}\label{keyboard_8c_aa8d15a589b7dc3d75d0c93d2728f6f8c}} 
+\index{keyboard.\+c@{keyboard.\+c}!get\+\_\+latest\+\_\+char@{get\+\_\+latest\+\_\+char}}
+\index{get\+\_\+latest\+\_\+char@{get\+\_\+latest\+\_\+char}!keyboard.\+c@{keyboard.\+c}}
+\subsubsection{\texorpdfstring{get\+\_\+latest\+\_\+char()}{get\_latest\_char()}}
+{\footnotesize\ttfamily char get\+\_\+latest\+\_\+char (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+A function which is used to get the latest character to be printed. 
+
+\begin{DoxyReturn}{Returns}
+Returns the latest character to be printed on the screen 
+\end{DoxyReturn}
+
+
+Definition at line 398 of file keyboard.\+c.
+
+
+\begin{DoxyCode}
+398                       \{
+399     \textcolor{keywordflow}{return} \_latest\_char;
+400 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{keyboard_8c_a4fb42c70ae53a4bd71d59d1a436c8455}\label{keyboard_8c_a4fb42c70ae53a4bd71d59d1a436c8455}} 
+\index{keyboard.\+c@{keyboard.\+c}!get\+\_\+latest\+\_\+scan\+\_\+code@{get\+\_\+latest\+\_\+scan\+\_\+code}}
+\index{get\+\_\+latest\+\_\+scan\+\_\+code@{get\+\_\+latest\+\_\+scan\+\_\+code}!keyboard.\+c@{keyboard.\+c}}
+\subsubsection{\texorpdfstring{get\+\_\+latest\+\_\+scan\+\_\+code()}{get\_latest\_scan\_code()}}
+{\footnotesize\ttfamily uint8\+\_\+t get\+\_\+latest\+\_\+scan\+\_\+code (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+A function which is used to get the latest scan code entered in the keyboard $\ast$. 
+
+\begin{DoxyReturn}{Returns}
+Returns the latest scan code 
+\end{DoxyReturn}
+
+
+Definition at line 406 of file keyboard.\+c.
+
+
+\begin{DoxyCode}
+406                               \{
+407     \textcolor{keywordflow}{return} \_latest\_scan\_code;
+408 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{keyboard_8c_a557b06d66e1db4d76b4d490203299d54}\label{keyboard_8c_a557b06d66e1db4d76b4d490203299d54}} 
+\index{keyboard.\+c@{keyboard.\+c}!is\+\_\+alphabet@{is\+\_\+alphabet}}
+\index{is\+\_\+alphabet@{is\+\_\+alphabet}!keyboard.\+c@{keyboard.\+c}}
+\subsubsection{\texorpdfstring{is\+\_\+alphabet()}{is\_alphabet()}}
+{\footnotesize\ttfamily bool is\+\_\+alphabet (\begin{DoxyParamCaption}\item[{char}]{c }\end{DoxyParamCaption})}
+
+
+
+Checks whether a character is an alphabet. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em c} & A character to be checked for alphabet\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Returns a whether given char is an alphabet or no 
+\end{DoxyReturn}
+
+
+Definition at line 386 of file keyboard.\+c.
+
+
+\begin{DoxyCode}
+387 \{
+388     \textcolor{keywordflow}{if}(c >= \textcolor{charliteral}{'a'} && c<=\textcolor{charliteral}{'z'}) 
+389         \textcolor{keywordflow}{return} \textcolor{keyword}{true};
+390     \textcolor{keywordflow}{else}
+391         \textcolor{keywordflow}{return} \textcolor{keyword}{false};
+392 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{keyboard_8c_af17526394c84520ee58a6f34e93752e1}\label{keyboard_8c_af17526394c84520ee58a6f34e93752e1}} 
+\index{keyboard.\+c@{keyboard.\+c}!is\+\_\+input\+\_\+empty@{is\+\_\+input\+\_\+empty}}
+\index{is\+\_\+input\+\_\+empty@{is\+\_\+input\+\_\+empty}!keyboard.\+c@{keyboard.\+c}}
+\subsubsection{\texorpdfstring{is\+\_\+input\+\_\+empty()}{is\_input\_empty()}}
+{\footnotesize\ttfamily bool is\+\_\+input\+\_\+empty (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Cheks if input is empty so that we can write to it. 
+
+\begin{DoxyReturn}{Returns}
+Return whether input port is empty or not 
+\end{DoxyReturn}
+
+
+Definition at line 451 of file keyboard.\+c.
+
+
+\begin{DoxyCode}
+452 \{
+453     \textcolor{keywordflow}{return} (!(read\_port(0x64)&2));
+454 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{keyboard_8c_aad35047bca15f85fda0a71e695a07f95}\label{keyboard_8c_aad35047bca15f85fda0a71e695a07f95}} 
+\index{keyboard.\+c@{keyboard.\+c}!is\+\_\+on\+\_\+keypad@{is\+\_\+on\+\_\+keypad}}
+\index{is\+\_\+on\+\_\+keypad@{is\+\_\+on\+\_\+keypad}!keyboard.\+c@{keyboard.\+c}}
+\subsubsection{\texorpdfstring{is\+\_\+on\+\_\+keypad()}{is\_on\_keypad()}}
+{\footnotesize\ttfamily bool is\+\_\+on\+\_\+keypad (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{scan\+\_\+code }\end{DoxyParamCaption})}
+
+
+
+A function which is used to get the latest scan code entered in the keyboard $\ast$. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em scan\+\_\+code} & Checks if the scan code is from numpad \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Returns the latest scan code 
+\end{DoxyReturn}
+
+
+Definition at line 460 of file keyboard.\+c.
+
+
+\begin{DoxyCode}
+461 \{
+462     \textcolor{keywordflow}{if}(scan\_code>=0x47&&scan\_code<=0x52&&scan\_code!=0x4e)
+463         \textcolor{keywordflow}{return} \textcolor{keyword}{true};
+464     \textcolor{keywordflow}{return} \textcolor{keyword}{false};
+465 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{keyboard_8c_a020d37694a09662853dc7ab08caf949a}\label{keyboard_8c_a020d37694a09662853dc7ab08caf949a}} 
+\index{keyboard.\+c@{keyboard.\+c}!is\+\_\+output\+\_\+full@{is\+\_\+output\+\_\+full}}
+\index{is\+\_\+output\+\_\+full@{is\+\_\+output\+\_\+full}!keyboard.\+c@{keyboard.\+c}}
+\subsubsection{\texorpdfstring{is\+\_\+output\+\_\+full()}{is\_output\_full()}}
+{\footnotesize\ttfamily bool is\+\_\+output\+\_\+full (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Checks if the Port 0x60 is Full. 
+
+\begin{DoxyReturn}{Returns}
+Return whether output is full or not 
+\end{DoxyReturn}
+
+
+Definition at line 442 of file keyboard.\+c.
+
+
+\begin{DoxyCode}
+443 \{
+444     \textcolor{keywordflow}{return} (read\_port(0x64)&1);
+445 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{keyboard_8c_ada790016b5b54d93a47205515046dd39}\label{keyboard_8c_ada790016b5b54d93a47205515046dd39}} 
+\index{keyboard.\+c@{keyboard.\+c}!kbc\+\_\+init@{kbc\+\_\+init}}
+\index{kbc\+\_\+init@{kbc\+\_\+init}!keyboard.\+c@{keyboard.\+c}}
+\subsubsection{\texorpdfstring{kbc\+\_\+init()}{kbc\_init()}}
+{\footnotesize\ttfamily bool kbc\+\_\+init (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+
+
+Definition at line 414 of file keyboard.\+c.
+
+
+\begin{DoxyCode}
+415 \{
+416     read\_port(0x60); \textcolor{comment}{//Flushing the output buffer}
+417     \textcolor{keywordflow}{return} \textcolor{keyword}{true};
+418 
+419 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{keyboard_8c_a2f4098fc71cbd39422c1001d66970bf5}\label{keyboard_8c_a2f4098fc71cbd39422c1001d66970bf5}} 
+\index{keyboard.\+c@{keyboard.\+c}!keyboard\+\_\+handler@{keyboard\+\_\+handler}}
+\index{keyboard\+\_\+handler@{keyboard\+\_\+handler}!keyboard.\+c@{keyboard.\+c}}
+\subsubsection{\texorpdfstring{keyboard\+\_\+handler()}{keyboard\_handler()}}
+{\footnotesize\ttfamily void keyboard\+\_\+handler (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Keyboard handler handles the keys pressed on the keyboard and takes appropriate action ... 
+
+\begin{DoxyReturn}{Returns}
+Nothing to return 
+\end{DoxyReturn}
+
+
+Definition at line 285 of file keyboard.\+c.
+
+
+\begin{DoxyCode}
+286 \{
+287     \hyperlink{PIC_8c_aa6fb7395de34075ae303b15decf40c39}{send\_EOI\_master}(); \textcolor{comment}{//Tell the keyboard to send interrupts again}
+288     uint8\_t scan\_code = read\_port(0x60);
+289     \textcolor{keywordtype}{char} temp\_char = (char)(\_scancode\_std[scan\_code]);
+290     \hyperlink{keyboard_8c_ab7a22404f734ebb7fd37f5d1e0ad86c9}{\_is\_keyboard\_interrupt} = \textcolor{keyword}{true}; \textcolor{comment}{//It is the responsibility of the user to make
+       this zero after access}
+291     \_latest\_scan\_code = scan\_code;
+292     \textcolor{keywordflow}{if}(scan\_code <0x57)
+293     \{
+294         \textcolor{keywordflow}{if}(scan\_code == 0x2a || scan\_code == 0x36)
+295             is\_shift\_pressed = \textcolor{keyword}{true};
+296         \textcolor{keywordflow}{else} \textcolor{keywordflow}{if}(scan\_code == 0x3a)
+297             caps\_toggle = !caps\_toggle;
+298         \textcolor{keywordflow}{else} \textcolor{keywordflow}{if}(scan\_code == 0x45)
+299             num\_lock\_toggle=!num\_lock\_toggle;
+300         \textcolor{keywordflow}{else} \textcolor{keywordflow}{if}((is\_shift\_pressed ^ caps\_toggle) && \hyperlink{keyboard_8c_a557b06d66e1db4d76b4d490203299d54}{is\_alphabet}(temp\_char))
+301             \_latest\_char = (temp\_char-0x20);
+302         \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (is\_shift\_pressed && !\hyperlink{keyboard_8c_a557b06d66e1db4d76b4d490203299d54}{is\_alphabet}(temp\_char))
+303         \{
+304             \textcolor{keywordflow}{switch}(temp\_char)
+305             \{   
+306                 \textcolor{keywordflow}{case} \textcolor{charliteral}{'1'}: \_latest\_char = \textcolor{charliteral}{'!'};
+307                       \textcolor{keywordflow}{break};
+308                 \textcolor{keywordflow}{case} \textcolor{charliteral}{'2'}: \_latest\_char = \textcolor{charliteral}{'@'};
+309                       \textcolor{keywordflow}{break};
+310                 \textcolor{keywordflow}{case} \textcolor{charliteral}{'3'}: \_latest\_char = \textcolor{charliteral}{'#'};
+311                       \textcolor{keywordflow}{break};
+312                 \textcolor{keywordflow}{case} \textcolor{charliteral}{'4'}: \_latest\_char = \textcolor{charliteral}{'$'};
+313                       \textcolor{keywordflow}{break};
+314                 \textcolor{keywordflow}{case} \textcolor{charliteral}{'5'}: \_latest\_char = \textcolor{charliteral}{'%'};
+315                       \textcolor{keywordflow}{break};
+316                 \textcolor{keywordflow}{case} \textcolor{charliteral}{'6'}: \_latest\_char = \textcolor{charliteral}{'^'};
+317                       \textcolor{keywordflow}{break};
+318                 \textcolor{keywordflow}{case} \textcolor{charliteral}{'7'}: \_latest\_char = \textcolor{charliteral}{'&'};
+319                       \textcolor{keywordflow}{break};
+320                 \textcolor{keywordflow}{case} \textcolor{charliteral}{'8'}: \_latest\_char = \textcolor{charliteral}{'*'};
+321                       \textcolor{keywordflow}{break};
+322                 \textcolor{keywordflow}{case} \textcolor{charliteral}{'9'}: \_latest\_char = \textcolor{charliteral}{'('};
+323                       \textcolor{keywordflow}{break};
+324                 \textcolor{keywordflow}{case} \textcolor{charliteral}{'0'}: \_latest\_char = \textcolor{charliteral}{')'};
+325                       \textcolor{keywordflow}{break};
+326                 \textcolor{keywordflow}{case} \textcolor{charliteral}{'-'}: \_latest\_char = \textcolor{charliteral}{'\_'};
+327                       \textcolor{keywordflow}{break};
+328                 \textcolor{keywordflow}{case} \textcolor{charliteral}{'='}: \_latest\_char = \textcolor{charliteral}{'+'};
+329                       \textcolor{keywordflow}{break};
+330                 \textcolor{keywordflow}{case} \textcolor{charliteral}{'['}: \_latest\_char = \textcolor{charliteral}{'\{'};
+331                       \textcolor{keywordflow}{break};
+332                 \textcolor{keywordflow}{case} \textcolor{charliteral}{']'}: \_latest\_char = \textcolor{charliteral}{'\}'};
+333                       \textcolor{keywordflow}{break};
+334                 \textcolor{keywordflow}{case} \textcolor{charliteral}{'\(\backslash\)\(\backslash\)'}: \_latest\_char = \textcolor{charliteral}{'|'};
+335                        \textcolor{keywordflow}{break};
+336                 \textcolor{keywordflow}{case} \textcolor{charliteral}{';'}: \_latest\_char = \textcolor{charliteral}{':'};
+337                       \textcolor{keywordflow}{break};
+338                 \textcolor{keywordflow}{case} \textcolor{charliteral}{'\(\backslash\)''}: \_latest\_char = \textcolor{charliteral}{'\(\backslash\)"'};
+339                        \textcolor{keywordflow}{break};
+340                 \textcolor{keywordflow}{case} \textcolor{charliteral}{','}: \_latest\_char = \textcolor{charliteral}{'<'};
+341                       \textcolor{keywordflow}{break};
+342                 \textcolor{keywordflow}{case} \textcolor{charliteral}{'.'}: \_latest\_char = \textcolor{charliteral}{'>'};
+343                       \textcolor{keywordflow}{break};
+344                     \textcolor{keywordflow}{case} \textcolor{charliteral}{'/'}: \_latest\_char = \textcolor{charliteral}{'?'};
+345                       \textcolor{keywordflow}{break};
+346                 \textcolor{keywordflow}{case} \textcolor{charliteral}{'`'}: \_latest\_char = \textcolor{charliteral}{'~'};
+347                       \textcolor{keywordflow}{break};    
+348             \}
+349         \}
+350         \textcolor{keywordflow}{else} \textcolor{keywordflow}{if}(\hyperlink{keyboard_8c_aad35047bca15f85fda0a71e695a07f95}{is\_on\_keypad}(scan\_code))
+351         \{
+352             \textcolor{keywordflow}{if}(num\_lock\_toggle)
+353             \_latest\_char=temp\_char;
+354             \textcolor{keywordflow}{else}
+355             \_latest\_char=0;
+356         \}   
+357         \textcolor{keywordflow}{else} \textcolor{comment}{//if(!is\_shift\_pressed && scan\_code != 0x3a)}
+358             \_latest\_char = (temp\_char);
+359     \}
+360     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (scan\_code == 0xe0)
+361     \{
+362         
+363         uint8\_t scan\_code\_2 = read\_port(0x60);
+364         \_latest\_scan\_code = scan\_code\_2;
+365         \textcolor{keywordflow}{if} (scan\_code\_2 == 0x4b)
+366             \_latest\_char = 17;
+367         \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (scan\_code\_2 == 0x4d)
+368             \_latest\_char = 18;
+369         \textcolor{keywordflow}{else}
+370             \_latest\_char = 0;
+371         \textcolor{keywordflow}{return};
+372     \}   
+373     \textcolor{keywordflow}{else}
+374     \{
+375         \textcolor{keywordflow}{if}(scan\_code == 0xaa || scan\_code == 0xb6)
+376             is\_shift\_pressed = \textcolor{keyword}{false};
+377         \_latest\_char = 0;
+378     \}
+379 \}
+\end{DoxyCode}
+
+
+\subsection{Variable Documentation}
+\mbox{\Hypertarget{keyboard_8c_ab7a22404f734ebb7fd37f5d1e0ad86c9}\label{keyboard_8c_ab7a22404f734ebb7fd37f5d1e0ad86c9}} 
+\index{keyboard.\+c@{keyboard.\+c}!\+\_\+is\+\_\+keyboard\+\_\+interrupt@{\+\_\+is\+\_\+keyboard\+\_\+interrupt}}
+\index{\+\_\+is\+\_\+keyboard\+\_\+interrupt@{\+\_\+is\+\_\+keyboard\+\_\+interrupt}!keyboard.\+c@{keyboard.\+c}}
+\subsubsection{\texorpdfstring{\+\_\+is\+\_\+keyboard\+\_\+interrupt}{\_is\_keyboard\_interrupt}}
+{\footnotesize\ttfamily bool \+\_\+is\+\_\+keyboard\+\_\+interrupt}
+
+checks if there was a keyboard interrupt raised 
+
+Definition at line 266 of file keyboard.\+c.
+

@@ -1,3 +1,4 @@
+;;file x86
 [bits 32] 
 [global set_cursor]
 [global get_cursor]

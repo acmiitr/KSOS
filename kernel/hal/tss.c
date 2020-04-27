@@ -1,10 +1,16 @@
+/**  
+ * @file tss.c
+ * @brief ...
+ * @see 
+ */
 #include<stdint.h>
 #include<string.h>
 #include"hal.h"
 
-#define KERNEL_ESP 0xFFC00000
-#define KERNEL_SS 0x10
+#define KERNEL_ESP 0xFFC00000	/**< Description here */
+#define KERNEL_SS 0x10	/**< Description here */
 
+/** Description here */
 typedef struct  __attribute__((packed)) tss_entry {
 	uint32_t prevTss;
 	uint32_t esp0;
@@ -39,7 +45,10 @@ __attribute__((aligned(4096))) static tss_entry_t _kernel_tss;
 
 
 extern void gdt_set_descriptor(uint16_t i, uint32_t base, uint32_t limit, uint8_t access, uint8_t grand);
-
+/** @brief ...
+ * 
+ * @return  
+ * */
 void tss_kernel_init()
 {
 	//! install _kernel_tss descriptor

@@ -1,0 +1,183 @@
+\hypertarget{kshell_8c}{}\section{kernel/kernel/kshell.c File Reference}
+\label{kshell_8c}\index{kernel/kernel/kshell.\+c@{kernel/kernel/kshell.\+c}}
+
+
+This is a simple kernel level shell that we\textquotesingle{}re gonna be writing, for the most basic UI. This is meant to be used at level 0.  
+
+
+{\ttfamily \#include \char`\"{}dadio.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}stdbool.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}hardware.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}hal.\+h\char`\"{}}\newline
+Include dependency graph for kshell.\+c\+:
+% FIG 0
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{kshell_8c_ab95c4556ea9e5b815392d36c3d7b2ec0}{M\+A\+X\+\_\+\+C\+O\+M\+M\+A\+N\+D\+\_\+\+S\+I\+ZE}~50
+\item 
+\#define \hyperlink{kshell_8c_a060a34fe8229a960f4250e93b346144d}{M\+A\+X\+\_\+\+T\+O\+K\+E\+N\+\_\+\+S\+I\+ZE}~25
+\item 
+\#define \hyperlink{kshell_8c_abdc276a3da6aba2279ae3e4a69731d9f}{M\+A\+X\+\_\+\+N\+A\+M\+E\+\_\+\+S\+I\+ZE}~20
+\item 
+\mbox{\Hypertarget{kshell_8c_a56509f77cfe531ba3c43f75ad9fde5f0}\label{kshell_8c_a56509f77cfe531ba3c43f75ad9fde5f0}} 
+\#define {\bfseries B\+A\+LL}~\textquotesingle{}o\textquotesingle{}
+\item 
+\mbox{\Hypertarget{kshell_8c_a94c3dc9846edbbb70f678768633a4796}\label{kshell_8c_a94c3dc9846edbbb70f678768633a4796}} 
+\#define {\bfseries S\+T\+AR}~\textquotesingle{}$\ast$\textquotesingle{}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{kshell_8c_acefb8a889e6728d61ab75f55ad33991c}{kshell} ()
+\begin{DoxyCompactList}\small\item\em ...The main shell function \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+char \hyperlink{kshell_8c_a16ae0e4e8728a8b760ca5b3c77036fb0}{\+\_\+\+\_\+\+V\+G\+A\+\_\+text\+\_\+memory} \mbox{[}$\,$\mbox{]}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This is a simple kernel level shell that we\textquotesingle{}re gonna be writing, for the most basic UI. This is meant to be used at level 0. 
+
+\begin{DoxySeeAlso}{See also}
+
+\end{DoxySeeAlso}
+
+
+\subsection{Macro Definition Documentation}
+\mbox{\Hypertarget{kshell_8c_ab95c4556ea9e5b815392d36c3d7b2ec0}\label{kshell_8c_ab95c4556ea9e5b815392d36c3d7b2ec0}} 
+\index{kshell.\+c@{kshell.\+c}!M\+A\+X\+\_\+\+C\+O\+M\+M\+A\+N\+D\+\_\+\+S\+I\+ZE@{M\+A\+X\+\_\+\+C\+O\+M\+M\+A\+N\+D\+\_\+\+S\+I\+ZE}}
+\index{M\+A\+X\+\_\+\+C\+O\+M\+M\+A\+N\+D\+\_\+\+S\+I\+ZE@{M\+A\+X\+\_\+\+C\+O\+M\+M\+A\+N\+D\+\_\+\+S\+I\+ZE}!kshell.\+c@{kshell.\+c}}
+\subsubsection{\texorpdfstring{M\+A\+X\+\_\+\+C\+O\+M\+M\+A\+N\+D\+\_\+\+S\+I\+ZE}{MAX\_COMMAND\_SIZE}}
+{\footnotesize\ttfamily \#define M\+A\+X\+\_\+\+C\+O\+M\+M\+A\+N\+D\+\_\+\+S\+I\+ZE~50}
+
+Description here 
+
+Definition at line 12 of file kshell.\+c.
+
+\mbox{\Hypertarget{kshell_8c_abdc276a3da6aba2279ae3e4a69731d9f}\label{kshell_8c_abdc276a3da6aba2279ae3e4a69731d9f}} 
+\index{kshell.\+c@{kshell.\+c}!M\+A\+X\+\_\+\+N\+A\+M\+E\+\_\+\+S\+I\+ZE@{M\+A\+X\+\_\+\+N\+A\+M\+E\+\_\+\+S\+I\+ZE}}
+\index{M\+A\+X\+\_\+\+N\+A\+M\+E\+\_\+\+S\+I\+ZE@{M\+A\+X\+\_\+\+N\+A\+M\+E\+\_\+\+S\+I\+ZE}!kshell.\+c@{kshell.\+c}}
+\subsubsection{\texorpdfstring{M\+A\+X\+\_\+\+N\+A\+M\+E\+\_\+\+S\+I\+ZE}{MAX\_NAME\_SIZE}}
+{\footnotesize\ttfamily \#define M\+A\+X\+\_\+\+N\+A\+M\+E\+\_\+\+S\+I\+ZE~20}
+
+Description here 
+
+Definition at line 14 of file kshell.\+c.
+
+\mbox{\Hypertarget{kshell_8c_a060a34fe8229a960f4250e93b346144d}\label{kshell_8c_a060a34fe8229a960f4250e93b346144d}} 
+\index{kshell.\+c@{kshell.\+c}!M\+A\+X\+\_\+\+T\+O\+K\+E\+N\+\_\+\+S\+I\+ZE@{M\+A\+X\+\_\+\+T\+O\+K\+E\+N\+\_\+\+S\+I\+ZE}}
+\index{M\+A\+X\+\_\+\+T\+O\+K\+E\+N\+\_\+\+S\+I\+ZE@{M\+A\+X\+\_\+\+T\+O\+K\+E\+N\+\_\+\+S\+I\+ZE}!kshell.\+c@{kshell.\+c}}
+\subsubsection{\texorpdfstring{M\+A\+X\+\_\+\+T\+O\+K\+E\+N\+\_\+\+S\+I\+ZE}{MAX\_TOKEN\_SIZE}}
+{\footnotesize\ttfamily \#define M\+A\+X\+\_\+\+T\+O\+K\+E\+N\+\_\+\+S\+I\+ZE~25}
+
+Description here 
+
+Definition at line 13 of file kshell.\+c.
+
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{kshell_8c_acefb8a889e6728d61ab75f55ad33991c}\label{kshell_8c_acefb8a889e6728d61ab75f55ad33991c}} 
+\index{kshell.\+c@{kshell.\+c}!kshell@{kshell}}
+\index{kshell@{kshell}!kshell.\+c@{kshell.\+c}}
+\subsubsection{\texorpdfstring{kshell()}{kshell()}}
+{\footnotesize\ttfamily void kshell (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+...The main shell function 
+
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+
+
+Definition at line 45 of file kshell.\+c.
+
+
+\begin{DoxyCode}
+46 \{
+47     command\_fresh();
+48     \textcolor{comment}{//This loop gets the commands from us}
+49     \textcolor{keywordflow}{while}(1)
+50     \{
+51         \hyperlink{dadio_8c_a54b3166c4a042f01e94e6cba1b5f186a}{monitor\_puts}(\textcolor{stringliteral}{"\(\backslash\)n"}); \hyperlink{dadio_8c_a54b3166c4a042f01e94e6cba1b5f186a}{monitor\_puts}(\_shell\_name); 
+      \hyperlink{dadio_8c_a54b3166c4a042f01e94e6cba1b5f186a}{monitor\_puts}(\textcolor{stringliteral}{" >"});
+52         flush\_command\_buffer();
+53         \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} i=0;i<\hyperlink{kshell_8c_ab95c4556ea9e5b815392d36c3d7b2ec0}{MAX\_COMMAND\_SIZE};i++)
+54         \{
+55             \textcolor{keywordtype}{char} input = \hyperlink{dadio_8c_a145a5ba7f7c1451e7753deb88f34e1cb}{get\_monitor\_char}();
+56             \textcolor{keywordflow}{if} (input == 17)
+57             \{   
+58                 \textcolor{comment}{//uint8\_t scanned=get\_latest\_scan\_code();}
+59                 \textcolor{keywordflow}{if}(i!=0)
+60                 \{   uint32\_t pointer = get\_cursor();
+61                     i-=2;
+62                     pointer--;
+63                     set\_cursor(pointer);
+64                 \}
+65                 \textcolor{keywordflow}{else} i--;
+66                 \textcolor{keywordflow}{continue};
+67             \}
+68             \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (input == 18)
+69             \{
+70                 \textcolor{keywordflow}{if}(i==0&&\_cmd\_buffer[i]==0)
+71                     \{i--;\textcolor{keywordflow}{continue};\} 
+72                 uint32\_t pointer = get\_cursor();
+73                 \textcolor{keywordflow}{if}(\_cmd\_buffer[i]!=0)
+74                     \{pointer++;\}
+75                 \textcolor{keywordflow}{else}
+76                     i--;
+77                 set\_cursor(pointer);
+78                 \textcolor{keywordflow}{continue};               
+79             \}
+80             \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (input == \textcolor{charliteral}{'\(\backslash\)b'})
+81                 \{
+82                     \textcolor{keywordflow}{if} (i > 0)
+83                     \{
+84                         \hyperlink{dadio_8c_a0a889ac2f45be624d78be476f121c114}{putc}(\textcolor{charliteral}{'\(\backslash\)b'});
+85                         \textcolor{keywordflow}{if}(\_cmd\_buffer[i]!=0)
+86                         \{
+87                             i--;
+88                             \textcolor{keywordtype}{int} k=i;uint32\_t pointer=get\_cursor();
+89                             \textcolor{keywordflow}{while}(\_cmd\_buffer[k]!=0)
+90                             \{
+91                                 \_cmd\_buffer[k]=\_cmd\_buffer[k+1];
+92                                 \hyperlink{dadio_8c_a0a889ac2f45be624d78be476f121c114}{putc}(\_cmd\_buffer[k]);
+93                                 k++;
+94                             \}
+95                             set\_cursor(pointer);
+96                         \}
+97                         \textcolor{keywordflow}{else}
+98                         \{
+99                         i--;
+100                         \_cmd\_buffer[i] = 0;\}
+101                     \}
+102                     i--;
+103                     \textcolor{keywordflow}{continue};
+104                 \}
+105             \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (input == \textcolor{charliteral}{'\(\backslash\)n'})
+106             \{
+107                 parse\_command();
+108                 \textcolor{keywordflow}{break};
+109             \}
+110             \textcolor{keywordflow}{else}
+111             \_cmd\_buffer[i] = input;
+112             \hyperlink{dadio_8c_a0a889ac2f45be624d78be476f121c114}{putc}(input);
+113         \}
+114     \}
+115 \}
+\end{DoxyCode}
+
+
+\subsection{Variable Documentation}
+\mbox{\Hypertarget{kshell_8c_a16ae0e4e8728a8b760ca5b3c77036fb0}\label{kshell_8c_a16ae0e4e8728a8b760ca5b3c77036fb0}} 
+\index{kshell.\+c@{kshell.\+c}!\+\_\+\+\_\+\+V\+G\+A\+\_\+text\+\_\+memory@{\+\_\+\+\_\+\+V\+G\+A\+\_\+text\+\_\+memory}}
+\index{\+\_\+\+\_\+\+V\+G\+A\+\_\+text\+\_\+memory@{\+\_\+\+\_\+\+V\+G\+A\+\_\+text\+\_\+memory}!kshell.\+c@{kshell.\+c}}
+\subsubsection{\texorpdfstring{\+\_\+\+\_\+\+V\+G\+A\+\_\+text\+\_\+memory}{\_\_VGA\_text\_memory}}
+{\footnotesize\ttfamily char \+\_\+\+\_\+\+V\+G\+A\+\_\+text\+\_\+memory\mbox{[}$\,$\mbox{]}}
+
+Description here 

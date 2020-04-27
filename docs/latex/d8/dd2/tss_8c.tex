@@ -1,0 +1,149 @@
+\hypertarget{tss_8c}{}\section{kernel/hal/tss.c File Reference}
+\label{tss_8c}\index{kernel/hal/tss.\+c@{kernel/hal/tss.\+c}}
+
+
+...  
+
+
+{\ttfamily \#include $<$stdint.\+h$>$}\newline
+{\ttfamily \#include $<$string.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}hal.\+h\char`\"{}}\newline
+Include dependency graph for tss.\+c\+:
+% FIG 0
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{tss_8c_a7bdb3fffdcf2e754cf0d18cd9e208742}{K\+E\+R\+N\+E\+L\+\_\+\+E\+SP}~0x\+F\+F\+C00000
+\item 
+\#define \hyperlink{tss_8c_a0f0e6aa17e708f29f1de07be4d6c53e8}{K\+E\+R\+N\+E\+L\+\_\+\+SS}~0x10
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{tss_8c_ab898071398b359603a35c202e9c65f3b}{\+\_\+\+\_\+attribute\+\_\+\+\_\+} ((packed))
+\item 
+\hyperlink{tss_8c_ae5bd43ddfa01d13ff845185ef27200b7}{\+\_\+\+\_\+attribute\+\_\+\+\_\+} ((aligned(4096)))
+\begin{DoxyCompactList}\small\item\em ... \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{tss_8c_adbfea96374ec88ad79b1e54b31638949}\label{tss_8c_adbfea96374ec88ad79b1e54b31638949}} 
+{\bfseries tss\+\_\+entry\+\_\+t}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+... 
+
+\begin{DoxySeeAlso}{See also}
+
+\end{DoxySeeAlso}
+
+
+\subsection{Macro Definition Documentation}
+\mbox{\Hypertarget{tss_8c_a7bdb3fffdcf2e754cf0d18cd9e208742}\label{tss_8c_a7bdb3fffdcf2e754cf0d18cd9e208742}} 
+\index{tss.\+c@{tss.\+c}!K\+E\+R\+N\+E\+L\+\_\+\+E\+SP@{K\+E\+R\+N\+E\+L\+\_\+\+E\+SP}}
+\index{K\+E\+R\+N\+E\+L\+\_\+\+E\+SP@{K\+E\+R\+N\+E\+L\+\_\+\+E\+SP}!tss.\+c@{tss.\+c}}
+\subsubsection{\texorpdfstring{K\+E\+R\+N\+E\+L\+\_\+\+E\+SP}{KERNEL\_ESP}}
+{\footnotesize\ttfamily \#define K\+E\+R\+N\+E\+L\+\_\+\+E\+SP~0x\+F\+F\+C00000}
+
+Description here 
+
+Definition at line 10 of file tss.\+c.
+
+\mbox{\Hypertarget{tss_8c_a0f0e6aa17e708f29f1de07be4d6c53e8}\label{tss_8c_a0f0e6aa17e708f29f1de07be4d6c53e8}} 
+\index{tss.\+c@{tss.\+c}!K\+E\+R\+N\+E\+L\+\_\+\+SS@{K\+E\+R\+N\+E\+L\+\_\+\+SS}}
+\index{K\+E\+R\+N\+E\+L\+\_\+\+SS@{K\+E\+R\+N\+E\+L\+\_\+\+SS}!tss.\+c@{tss.\+c}}
+\subsubsection{\texorpdfstring{K\+E\+R\+N\+E\+L\+\_\+\+SS}{KERNEL\_SS}}
+{\footnotesize\ttfamily \#define K\+E\+R\+N\+E\+L\+\_\+\+SS~0x10}
+
+Description here 
+
+Definition at line 11 of file tss.\+c.
+
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{tss_8c_ae5bd43ddfa01d13ff845185ef27200b7}\label{tss_8c_ae5bd43ddfa01d13ff845185ef27200b7}} 
+\index{tss.\+c@{tss.\+c}!\+\_\+\+\_\+attribute\+\_\+\+\_\+@{\+\_\+\+\_\+attribute\+\_\+\+\_\+}}
+\index{\+\_\+\+\_\+attribute\+\_\+\+\_\+@{\+\_\+\+\_\+attribute\+\_\+\+\_\+}!tss.\+c@{tss.\+c}}
+\subsubsection{\texorpdfstring{\+\_\+\+\_\+attribute\+\_\+\+\_\+()}{\_\_attribute\_\_()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \+\_\+\+\_\+attribute\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{(aligned(4096))}]{ }\end{DoxyParamCaption})}
+
+
+
+... 
+
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+install \+\_\+kernel\+\_\+tss descriptor
+
+initialize \+\_\+kernel\+\_\+tss 
+
+Definition at line 44 of file tss.\+c.
+
+
+\begin{DoxyCode}
+53 \{
+55     uint32\_t base = (uint32\_t) &\_kernel\_tss;
+56     \hyperlink{gdt_8c_a5075cc3f7d88b5d1ed8c84512a959b82}{gdt\_set\_descriptor} (5, base, base + \textcolor{keyword}{sizeof} (tss\_entry\_t),0xE9,0);  \textcolor{comment}{//\_kernel\_tss
+       hardcoded}
+57 
+59     memset ((\textcolor{keywordtype}{void}*) &\_kernel\_tss, 0, \textcolor{keyword}{sizeof} (tss\_entry\_t));
+60 
+61     \_kernel\_tss.ss0 = \hyperlink{tss_8c_a0f0e6aa17e708f29f1de07be4d6c53e8}{KERNEL\_SS};
+62     \_kernel\_tss.esp0 = \hyperlink{tss_8c_a7bdb3fffdcf2e754cf0d18cd9e208742}{KERNEL\_ESP};
+63 
+64     \_kernel\_tss.cs=0x08;
+65     \_kernel\_tss.ss = 0x10;
+66     \_kernel\_tss.es = 0x10;
+67     \_kernel\_tss.ds = 0x10;
+68     \_kernel\_tss.fs = 0x10;
+69     \_kernel\_tss.gs = 0x10;
+70 
+71     install\_tss(5*8);
+72 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{tss_8c_ab898071398b359603a35c202e9c65f3b}\label{tss_8c_ab898071398b359603a35c202e9c65f3b}} 
+\index{tss.\+c@{tss.\+c}!\+\_\+\+\_\+attribute\+\_\+\+\_\+@{\+\_\+\+\_\+attribute\+\_\+\+\_\+}}
+\index{\+\_\+\+\_\+attribute\+\_\+\+\_\+@{\+\_\+\+\_\+attribute\+\_\+\+\_\+}!tss.\+c@{tss.\+c}}
+\subsubsection{\texorpdfstring{\+\_\+\+\_\+attribute\+\_\+\+\_\+()}{\_\_attribute\_\_()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily struct \+\_\+\+\_\+attribute\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{(packed)}]{ }\end{DoxyParamCaption})}
+
+Description here 
+
+Definition at line 14 of file tss.\+c.
+
+
+\begin{DoxyCode}
+14                                                   \{
+15     uint32\_t prevTss;
+16     uint32\_t esp0;
+17     uint32\_t ss0;
+18     uint32\_t esp1;
+19     uint32\_t ss1;
+20     uint32\_t esp2;
+21     uint32\_t ss2;
+22     uint32\_t cr3;
+23     uint32\_t eip;
+24     uint32\_t eflags;
+25     uint32\_t eax;
+26     uint32\_t ecx;
+27     uint32\_t edx;
+28     uint32\_t ebx;
+29     uint32\_t esp;
+30     uint32\_t ebp;
+31     uint32\_t esi;
+32     uint32\_t edi;
+33     uint32\_t es;
+34     uint32\_t cs;
+35     uint32\_t ss;
+36     uint32\_t ds;
+37     uint32\_t fs;
+38     uint32\_t gs;
+39     uint32\_t ldt;
+40     uint16\_t trap;
+41     uint16\_t iomap;
+42 \}tss\_entry\_t;
+\end{DoxyCode}

@@ -1,16 +1,20 @@
-//This is a simple kernel level shell that we're gonna be writing, for the most basic UI.
-//This is meant to be used at level 0
+/**  
+ * @file kshell.c
+ *  @brief This is a simple kernel level shell that we're gonna be writing, for the most basic UI.
+ *	This is meant to be used at level 0
+ *  @see 
+ */
 #include"dadio.h"
 #include"stdbool.h"
 #include"hardware.h"
 #include"hal.h"
 
-#define MAX_COMMAND_SIZE 50
-#define MAX_TOKEN_SIZE 25 
-#define MAX_NAME_SIZE 20 
+#define MAX_COMMAND_SIZE 50		/**< Description here */
+#define MAX_TOKEN_SIZE 25 		/**< Description here */
+#define MAX_NAME_SIZE 20 		/**< Description here */
 
 //External variables
-extern char __VGA_text_memory[];
+extern char __VGA_text_memory[];	/**< Description here */
 //Helper functions
 static void extract_token(int token_no);  //Takes token number n from command and puts it into buffer
 static void parse_command();
@@ -33,6 +37,11 @@ static char _cmd_buffer[MAX_COMMAND_SIZE];
 static char _tkn_buffer[MAX_TOKEN_SIZE];
 static char _shell_name[MAX_NAME_SIZE] = "shell";
 
+
+/** @brief ...The main shell function
+ *
+ * @return  
+ * */
 void kshell()
 {
 	command_fresh();
@@ -105,6 +114,10 @@ void kshell()
 	}
 }
 
+/** @brief ...
+ *
+ * @return  
+ * */
 static void parse_command()
 {
 	extract_token(0);
@@ -120,6 +133,10 @@ static void parse_command()
 	monitor_puts(_tkn_buffer);
 }
 
+/** @brief Gets the Nth token from the shell
+ * 
+ * @return  
+ * */
 static void extract_token(int token_no)  //Takes token number n from command and puts it into buffer
 {
 	flush_token_buffer();
@@ -139,7 +156,10 @@ static void extract_token(int token_no)  //Takes token number n from command and
 	}
 
 }
-
+/** @brief Flushes the command buffer 
+ *
+ * @return  
+ * */
 static void flush_command_buffer()
 {
 	for(int i=0;i<MAX_COMMAND_SIZE;i++)
@@ -148,6 +168,10 @@ static void flush_command_buffer()
 		_cmd_buffer[i] = 0;
 	}
 }
+/** @brief Flushes the token buffer 
+ *
+ * @return  
+ * */
 static void flush_token_buffer()
 {
 	for(int i=0;i<MAX_TOKEN_SIZE;i++)
@@ -156,7 +180,10 @@ static void flush_token_buffer()
 		_tkn_buffer[i] = 0;
 	}
 }
-
+/** @brief 
+ *
+ * @return  
+ * */
 static void command_help()
 {
 	monitor_puts("\nList of commands (use `command` help for usage):");
@@ -168,6 +195,10 @@ static void command_help()
 	monitor_puts(" name\n");
 }
 
+/** @brief Displays a new fresh shell screen
+ *
+ * @return  
+ * */
 static void command_fresh()
 {
 	static int color[2] = {LIGHT_BLUE,BLACK};
@@ -228,6 +259,10 @@ static void command_fresh()
 	set_bg_color(color[1]);
 }
 
+/** @brief A function to change the syaytem timer speed
+ *
+ * @return  
+ * */
 static void command_timer()
 {
 	extract_token(1);
@@ -236,7 +271,10 @@ static void command_timer()
 	if(string_compare(_tkn_buffer,"slow")) set_timer(0xffff);
 	if(string_compare(_tkn_buffer,"help")) monitor_puts("\tUsage: timer fast/medium/slow");
 }
-
+/** @brief Prints picture of PIKACHU :)
+ *
+ * @return  
+ * */
 static void command_picture()
 {
 	monitor_puts("\nx;;;.',,,,,,,,;,;ckO000000000OxddddxxxkkkkkkkkOOOOOOO00OOOO00OOOkx");
@@ -256,7 +294,10 @@ static void command_picture()
 	monitor_puts("\nd,,;::cccccccccccc:;oOOO0000OOOO00OOOOOOOOOOOOOOOOOOOOOOOOOOOOx;;;");
 	monitor_puts("\noo'',,,;;:::::::;,,,;dkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkx:,,");
 }
-
+/** @brief A basicc command for help
+ *
+ * @return  
+ * */
 static void command_name()
 {
 	extract_token(1);
@@ -271,6 +312,11 @@ static void command_name()
 
 #define BALL 'o'
 #define STAR '*'
+
+/** @brief A function which handles the small ball game in the shell
+ *
+ * @return  
+ * */
 static void command_ball()
 {
 	extract_token(1);
@@ -365,7 +411,10 @@ static void command_ball()
 	}
 	command_fresh();
 }
-
+/** @brief Command to print quotes
+ *
+ * @return  
+ * */
 static void command_quote()
 {
 	int sel = get_tick_count() % 5;
@@ -384,6 +433,11 @@ static void command_quote()
 			monitor_puts("\tTrust that good will happen");
 	}
 }
+/** @brief copying data of one string into another
+ *	@param strd Destination pointer
+	@param strs Sourche string pointer
+ * @return  
+ * */
 static void string_copy(char* strd,char* strs)
 {
 	for(int i=0;strs[i];i++)
@@ -391,7 +445,11 @@ static void string_copy(char* strd,char* strs)
 		strd[i]=strs[i];
 	}
 }
-
+/** @brief comparing data of one string with another
+ *	@param str1 First string
+	@param str2 Second string
+ * @return  Whether the strings are qual or not
+ * */
 static bool string_compare(char* str1, char* str2)
 {
 	int i = 0;

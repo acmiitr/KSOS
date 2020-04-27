@@ -1,7 +1,12 @@
+/**  
+ * @file gdt.c
+ * @brief ...
+ * @see 
+ */
 #include <stdint.h>
 #include "hal.h"
 
-#define GDT_DESCRIPTOR_COUNT 6 
+#define GDT_DESCRIPTOR_COUNT 6/**< Description here */ 
 
 #define I86_GDT_DESC_ACCESS		0x0001		//00000001
 #define I86_GDT_DESC_READWRITE		0x0002		//00000010
@@ -16,12 +21,13 @@
 #define I86_GDT_GRAND_4K		0x80		//10000000
 
 //Custom Variable types
+/** Description here */
 typedef struct __attribute__ ((__packed__)) gdtr
 {
 	uint16_t	limit;
 	uint32_t	base;
 }gdtr_t;
-
+/** Description here */
 typedef struct __attribute__((__packed__)) gdt_descriptor
 {
 	uint16_t	limit;
@@ -35,9 +41,16 @@ typedef struct __attribute__((__packed__)) gdt_descriptor
 //Global variables
 static gdt_descriptor_t _gdt[GDT_DESCRIPTOR_COUNT];
 static gdtr_t _gdtr;
-
+/** @brief ...
+ * @param i ..
+ * @param base ...
+ * @param limit ...
+ * @param access ...
+ * @param grand ..
+ * @return  
+ * */
 void gdt_set_descriptor(uint16_t i, uint32_t base, uint32_t limit, uint8_t access, uint8_t grand)
-{
+{ 	
 	if (i > GDT_DESCRIPTOR_COUNT)
 		return;
 
@@ -64,8 +77,10 @@ gdt_descriptor* i86_gdt_get_descriptor (int i) {
 	return &_gdt[i];
 }
 */
-
-
+/** @brief ...
+ * 
+ * @return  
+ * */
 void gdt_init() 
 {
 

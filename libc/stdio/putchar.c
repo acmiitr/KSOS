@@ -1,3 +1,8 @@
+/**  
+ * @file putchar.c
+ * @brief This is a file which is used to put a character on the screen 
+ * @see 
+ */
 #include <stdio.h>
 
 #if defined(__is_libk)

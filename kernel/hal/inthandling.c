@@ -1,12 +1,17 @@
+/**  
+ * @file inthandling.c
+ * @brief ...
+ * @see 
+ */
 #include<stdint.h>
 #include"dadio.h"
 #include"hal.h"
 #include"inthandling.h"
 #include"hardware.h"
 
-#define MAX_INTERRUPTS 256
-#define IDT_DESC_TRAP 0x01	//00000001
-#define IDT_DESC_BIT16 0x06	//00000110
+#define MAX_INTERRUPTS 256	/**< Description here */
+#define IDT_DESC_TRAP 0x01	//00000001	/**< Description here */
+#define IDT_DESC_BIT16 0x06	//00000110	/**< Description here */
 #define IDT_DESC_BIT32 0x0E	//00001110
 #define IDT_DESC_RING1 0x40	//01000000
 #define IDT_DESC_RING2 0x20	//00100000
@@ -19,11 +24,13 @@
 typedef uint32_t reg32_t;
 typedef uint32_t seg16_t;
 
+/** Description here */
 typedef struct __attribute__ ((__packed__)) idtr {
 	uint16_t		limit;
 	uint32_t		base;
 }idtr_t;
 
+/** Description here */
 typedef struct __attribute__ ((__packed__)) idt_descriptor {
 uint16_t		baseLo;
 uint16_t		sel;
@@ -32,6 +39,7 @@ uint8_t			flags;
 uint16_t		baseHi;
 }idt_descriptor_t;
 
+/** Description here */
 typedef struct itrpt_reg_state {
 	seg16_t gs;
 	seg16_t fs;
@@ -71,6 +79,10 @@ void isr41(); void isr42(); void isr43(); void isr44(); void isr45(); void isr46
 void isr128(); //int 0x80
 
 //Function implementations
+/** @brief ...
+ * 
+ * @return  
+ * */
 void interrupt_init()
 {
 	_idtr.base = (uint32_t)_idt;
@@ -127,7 +139,10 @@ void interrupt_init()
 	enable_interrupts();
 }
 
-
+/** @brief ...
+ * 
+ * @return  
+ * */
 void install_ir(uint32_t index,uint16_t flags, uint16_t sel, uint32_t* handler_address)
 {
 	if (index >=MAX_INTERRUPTS) return;
@@ -138,7 +153,10 @@ void install_ir(uint32_t index,uint16_t flags, uint16_t sel, uint32_t* handler_a
 	_idt[index].flags = flags;
 	_idt[index].sel = sel;
 }
-
+/** @brief ...
+ * 
+ * @return  
+ * */
 void general_interrupt_handler(itrpt_reg_state_t input)
 {
 	switch (input.vector_number)
@@ -168,13 +186,19 @@ void general_interrupt_handler(itrpt_reg_state_t input)
 			for(;;);
 	}
 }
-
+/** @brief ...
+ * 
+ * @return  
+ * */
 void default_handler()
 {
 	monitor_puts("This is the default handler - This is a really messed up interrupt");
 	for(;;);
 }
-
+/** @brief ...
+ * 
+ * @return  
+ * */
 void system_call_handler(itrpt_reg_state_t* inp_ptr)  //Kernel-level
 {
 

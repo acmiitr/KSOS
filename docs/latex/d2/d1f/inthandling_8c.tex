@@ -1,0 +1,489 @@
+\hypertarget{inthandling_8c}{}\section{kernel/hal/inthandling.c File Reference}
+\label{inthandling_8c}\index{kernel/hal/inthandling.\+c@{kernel/hal/inthandling.\+c}}
+
+
+...  
+
+
+{\ttfamily \#include $<$stdint.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}dadio.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}hal.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}inthandling.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}hardware.\+h\char`\"{}}\newline
+Include dependency graph for inthandling.\+c\+:
+% FIG 0
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structitrpt__reg__state}{itrpt\+\_\+reg\+\_\+state}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{inthandling_8c_a9affc80dd8947cc1dcb1ae52801923c8}{M\+A\+X\+\_\+\+I\+N\+T\+E\+R\+R\+U\+P\+TS}~256
+\item 
+\mbox{\Hypertarget{inthandling_8c_ae365a5b802b81ad2a9d292fbc4acba54}\label{inthandling_8c_ae365a5b802b81ad2a9d292fbc4acba54}} 
+\#define {\bfseries I\+D\+T\+\_\+\+D\+E\+S\+C\+\_\+\+T\+R\+AP}~0x01
+\item 
+\mbox{\Hypertarget{inthandling_8c_a76dac2f61fdef82a5b2805add8ad273a}\label{inthandling_8c_a76dac2f61fdef82a5b2805add8ad273a}} 
+\#define {\bfseries I\+D\+T\+\_\+\+D\+E\+S\+C\+\_\+\+B\+I\+T16}~0x06
+\item 
+\mbox{\Hypertarget{inthandling_8c_a249943a9f4cb3a8c2c41f45d11b26d59}\label{inthandling_8c_a249943a9f4cb3a8c2c41f45d11b26d59}} 
+\#define {\bfseries I\+D\+T\+\_\+\+D\+E\+S\+C\+\_\+\+B\+I\+T32}~0x0E
+\item 
+\mbox{\Hypertarget{inthandling_8c_aa80d1a49853d93639a27fe099b733a2f}\label{inthandling_8c_aa80d1a49853d93639a27fe099b733a2f}} 
+\#define {\bfseries I\+D\+T\+\_\+\+D\+E\+S\+C\+\_\+\+R\+I\+N\+G1}~0x40
+\item 
+\mbox{\Hypertarget{inthandling_8c_ac21b4bdd3a7221e3e76019439d484a2c}\label{inthandling_8c_ac21b4bdd3a7221e3e76019439d484a2c}} 
+\#define {\bfseries I\+D\+T\+\_\+\+D\+E\+S\+C\+\_\+\+R\+I\+N\+G2}~0x20
+\item 
+\mbox{\Hypertarget{inthandling_8c_adb0ddaf7761f5ddeab64e6aa0f3758ed}\label{inthandling_8c_adb0ddaf7761f5ddeab64e6aa0f3758ed}} 
+\#define {\bfseries I\+D\+T\+\_\+\+D\+E\+S\+C\+\_\+\+R\+I\+N\+G3}~0x60
+\item 
+\mbox{\Hypertarget{inthandling_8c_a8ce92b997fdee4e1582037d283f1560b}\label{inthandling_8c_a8ce92b997fdee4e1582037d283f1560b}} 
+\#define {\bfseries I\+D\+T\+\_\+\+D\+E\+S\+C\+\_\+\+P\+R\+E\+S\+E\+NT}~0x80
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{inthandling_8c_a874494116233d47b7f457b3710c96acb}\label{inthandling_8c_a874494116233d47b7f457b3710c96acb}} 
+typedef uint32\+\_\+t {\bfseries reg32\+\_\+t}
+\item 
+\mbox{\Hypertarget{inthandling_8c_affa63f16da1fccf8a7dce8d515d7a05d}\label{inthandling_8c_affa63f16da1fccf8a7dce8d515d7a05d}} 
+typedef uint32\+\_\+t {\bfseries seg16\+\_\+t}
+\item 
+typedef struct \hyperlink{structitrpt__reg__state}{itrpt\+\_\+reg\+\_\+state} \hyperlink{inthandling_8c_a7681bb302c707bbdfd4ecdde27d40f8a}{itrpt\+\_\+reg\+\_\+state\+\_\+t}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{inthandling_8c_ad09246453a4dabd919c7541484046a87}{\+\_\+\+\_\+attribute\+\_\+\+\_\+} ((\+\_\+\+\_\+packed\+\_\+\+\_\+))
+\item 
+void \hyperlink{inthandling_8c_a7487a17af66318d029ecab1d93fb2e1b}{default\+\_\+handler} ()
+\begin{DoxyCompactList}\small\item\em ... \end{DoxyCompactList}\item 
+void \hyperlink{inthandling_8c_a7eb7b58f57bdaff98141ab6e5778021c}{system\+\_\+call\+\_\+handler} (\hyperlink{inthandling_8c_a7681bb302c707bbdfd4ecdde27d40f8a}{itrpt\+\_\+reg\+\_\+state\+\_\+t} $\ast$inp\+\_\+ptr)
+\begin{DoxyCompactList}\small\item\em ... \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{inthandling_8c_af88eb8e98d943aa0461c01de3cb53493}\label{inthandling_8c_af88eb8e98d943aa0461c01de3cb53493}} 
+void {\bfseries isr0} ()
+\item 
+\mbox{\Hypertarget{inthandling_8c_aeab0ed9ae661801c25f7dc9089c19f72}\label{inthandling_8c_aeab0ed9ae661801c25f7dc9089c19f72}} 
+void {\bfseries isr1} ()
+\item 
+\mbox{\Hypertarget{inthandling_8c_a99e457875cca040c3f7c77b61e960b53}\label{inthandling_8c_a99e457875cca040c3f7c77b61e960b53}} 
+void {\bfseries isr2} ()
+\item 
+\mbox{\Hypertarget{inthandling_8c_a0ef268d2c16a7b318356451a05fd507b}\label{inthandling_8c_a0ef268d2c16a7b318356451a05fd507b}} 
+void {\bfseries isr3} ()
+\item 
+\mbox{\Hypertarget{inthandling_8c_a09af768d636144aaeaddd76c92a0a2f5}\label{inthandling_8c_a09af768d636144aaeaddd76c92a0a2f5}} 
+void {\bfseries isr4} ()
+\item 
+\mbox{\Hypertarget{inthandling_8c_aa91d821a4bcafb44933d92945727b0df}\label{inthandling_8c_aa91d821a4bcafb44933d92945727b0df}} 
+void {\bfseries isr5} ()
+\item 
+\mbox{\Hypertarget{inthandling_8c_a9fadb95f34937b1ded02c4171b4920ba}\label{inthandling_8c_a9fadb95f34937b1ded02c4171b4920ba}} 
+void {\bfseries isr6} ()
+\item 
+\mbox{\Hypertarget{inthandling_8c_a7eb6ec30db7077fb1c9c9d926a0fc407}\label{inthandling_8c_a7eb6ec30db7077fb1c9c9d926a0fc407}} 
+void {\bfseries isr7} ()
+\item 
+\mbox{\Hypertarget{inthandling_8c_a86bc69345a3bb409665dbadb77a9d393}\label{inthandling_8c_a86bc69345a3bb409665dbadb77a9d393}} 
+void {\bfseries isr8} ()
+\item 
+\mbox{\Hypertarget{inthandling_8c_aacb7c8490cbd623a3a2bf933ffedd131}\label{inthandling_8c_aacb7c8490cbd623a3a2bf933ffedd131}} 
+void {\bfseries isr9} ()
+\item 
+\mbox{\Hypertarget{inthandling_8c_a3c8cb1341cf756883a2e7dc317d5272d}\label{inthandling_8c_a3c8cb1341cf756883a2e7dc317d5272d}} 
+void {\bfseries isr10} ()
+\item 
+\mbox{\Hypertarget{inthandling_8c_a0d8145cf6ee1ef7834f459ba777d323c}\label{inthandling_8c_a0d8145cf6ee1ef7834f459ba777d323c}} 
+void {\bfseries isr11} ()
+\item 
+\mbox{\Hypertarget{inthandling_8c_a00f00421039cb85f9dd9375995c784bd}\label{inthandling_8c_a00f00421039cb85f9dd9375995c784bd}} 
+void {\bfseries isr12} ()
+\item 
+\mbox{\Hypertarget{inthandling_8c_af985dcf66872ee696e5f30d819ac16a1}\label{inthandling_8c_af985dcf66872ee696e5f30d819ac16a1}} 
+void {\bfseries isr13} ()
+\item 
+\mbox{\Hypertarget{inthandling_8c_a8b63eaa37c03743718870964a3429ba8}\label{inthandling_8c_a8b63eaa37c03743718870964a3429ba8}} 
+void {\bfseries isr14} ()
+\item 
+\mbox{\Hypertarget{inthandling_8c_a9160f355325318a990c106ad5c3b8954}\label{inthandling_8c_a9160f355325318a990c106ad5c3b8954}} 
+void {\bfseries isr15} ()
+\item 
+\mbox{\Hypertarget{inthandling_8c_add0980c10028b377643da169e52e5be7}\label{inthandling_8c_add0980c10028b377643da169e52e5be7}} 
+void {\bfseries isr16} ()
+\item 
+\mbox{\Hypertarget{inthandling_8c_ac7d1e81e585bc7c56b46280006402f9e}\label{inthandling_8c_ac7d1e81e585bc7c56b46280006402f9e}} 
+void {\bfseries isr17} ()
+\item 
+\mbox{\Hypertarget{inthandling_8c_ae685c5ca5ed9c9c5e7d297ad8d14de49}\label{inthandling_8c_ae685c5ca5ed9c9c5e7d297ad8d14de49}} 
+void {\bfseries isr18} ()
+\item 
+\mbox{\Hypertarget{inthandling_8c_ad16b5f77287df551e63d3f0c67f8f75d}\label{inthandling_8c_ad16b5f77287df551e63d3f0c67f8f75d}} 
+void {\bfseries isr19} ()
+\item 
+\mbox{\Hypertarget{inthandling_8c_a552d2aedae97d97083d3f9caf6ad59a5}\label{inthandling_8c_a552d2aedae97d97083d3f9caf6ad59a5}} 
+void {\bfseries isr20} ()
+\item 
+\mbox{\Hypertarget{inthandling_8c_af106b9a26e06abf17eebb6f7ae54f905}\label{inthandling_8c_af106b9a26e06abf17eebb6f7ae54f905}} 
+void {\bfseries isr21} ()
+\item 
+\mbox{\Hypertarget{inthandling_8c_aa4b6f47f27ac3b31fc426f5c2a1a669c}\label{inthandling_8c_aa4b6f47f27ac3b31fc426f5c2a1a669c}} 
+void {\bfseries isr22} ()
+\item 
+\mbox{\Hypertarget{inthandling_8c_a277e9cc418a637ae584c1ff6525eb2e1}\label{inthandling_8c_a277e9cc418a637ae584c1ff6525eb2e1}} 
+void {\bfseries isr23} ()
+\item 
+\mbox{\Hypertarget{inthandling_8c_a2ea113ad8536ca8311ab00d077ece7f1}\label{inthandling_8c_a2ea113ad8536ca8311ab00d077ece7f1}} 
+void {\bfseries isr24} ()
+\item 
+\mbox{\Hypertarget{inthandling_8c_a73e919f327e846f72b99de088ae9b822}\label{inthandling_8c_a73e919f327e846f72b99de088ae9b822}} 
+void {\bfseries isr25} ()
+\item 
+\mbox{\Hypertarget{inthandling_8c_a24c118fd7e75c96d19da1bbaf87731e4}\label{inthandling_8c_a24c118fd7e75c96d19da1bbaf87731e4}} 
+void {\bfseries isr26} ()
+\item 
+\mbox{\Hypertarget{inthandling_8c_ad97e98084cbcdc21bf03ba314dc243e0}\label{inthandling_8c_ad97e98084cbcdc21bf03ba314dc243e0}} 
+void {\bfseries isr27} ()
+\item 
+\mbox{\Hypertarget{inthandling_8c_ab2a5fe4d3cf67be0c67db612aa757c5f}\label{inthandling_8c_ab2a5fe4d3cf67be0c67db612aa757c5f}} 
+void {\bfseries isr28} ()
+\item 
+\mbox{\Hypertarget{inthandling_8c_a8cce4d55d6a199607cd3a9e2a33241b2}\label{inthandling_8c_a8cce4d55d6a199607cd3a9e2a33241b2}} 
+void {\bfseries isr29} ()
+\item 
+\mbox{\Hypertarget{inthandling_8c_af868664393aedd51c04e3ddd48b8f84f}\label{inthandling_8c_af868664393aedd51c04e3ddd48b8f84f}} 
+void {\bfseries isr30} ()
+\item 
+\mbox{\Hypertarget{inthandling_8c_af4ae10cea59f9bb2f79c13b8036d81f1}\label{inthandling_8c_af4ae10cea59f9bb2f79c13b8036d81f1}} 
+void {\bfseries isr31} ()
+\item 
+\mbox{\Hypertarget{inthandling_8c_a8eb785d6bbda394a250c49dfa8fab00b}\label{inthandling_8c_a8eb785d6bbda394a250c49dfa8fab00b}} 
+void {\bfseries isr32} ()
+\item 
+\mbox{\Hypertarget{inthandling_8c_a21f7d304ed1a2251165542b493dee9a2}\label{inthandling_8c_a21f7d304ed1a2251165542b493dee9a2}} 
+void {\bfseries isr33} ()
+\item 
+\mbox{\Hypertarget{inthandling_8c_a7cfa599d239e63047a44c62877175cbf}\label{inthandling_8c_a7cfa599d239e63047a44c62877175cbf}} 
+void {\bfseries isr34} ()
+\item 
+\mbox{\Hypertarget{inthandling_8c_ad2f4c871f5381ebfeaa2a2f8af1aed61}\label{inthandling_8c_ad2f4c871f5381ebfeaa2a2f8af1aed61}} 
+void {\bfseries isr35} ()
+\item 
+\mbox{\Hypertarget{inthandling_8c_a1bb712d4ccccb24cda231817620c3661}\label{inthandling_8c_a1bb712d4ccccb24cda231817620c3661}} 
+void {\bfseries isr36} ()
+\item 
+\mbox{\Hypertarget{inthandling_8c_a3fc83a957a4d871719c869b548f1de71}\label{inthandling_8c_a3fc83a957a4d871719c869b548f1de71}} 
+void {\bfseries isr37} ()
+\item 
+\mbox{\Hypertarget{inthandling_8c_adb0460191436d577924530009c7bc6a0}\label{inthandling_8c_adb0460191436d577924530009c7bc6a0}} 
+void {\bfseries isr38} ()
+\item 
+\mbox{\Hypertarget{inthandling_8c_af263b0cf187b9db2e92b3c34b4eb8bad}\label{inthandling_8c_af263b0cf187b9db2e92b3c34b4eb8bad}} 
+void {\bfseries isr39} ()
+\item 
+\mbox{\Hypertarget{inthandling_8c_a0e89ca2ed800d0addb8a381eec627701}\label{inthandling_8c_a0e89ca2ed800d0addb8a381eec627701}} 
+void {\bfseries isr40} ()
+\item 
+\mbox{\Hypertarget{inthandling_8c_af53b9e4adb4b19ab0ea0160501f8ffd8}\label{inthandling_8c_af53b9e4adb4b19ab0ea0160501f8ffd8}} 
+void {\bfseries isr41} ()
+\item 
+\mbox{\Hypertarget{inthandling_8c_aab13bbe1d1467a2845f77c906333ba12}\label{inthandling_8c_aab13bbe1d1467a2845f77c906333ba12}} 
+void {\bfseries isr42} ()
+\item 
+\mbox{\Hypertarget{inthandling_8c_a9e4b8d4743f568573b7ea3b75fe76583}\label{inthandling_8c_a9e4b8d4743f568573b7ea3b75fe76583}} 
+void {\bfseries isr43} ()
+\item 
+\mbox{\Hypertarget{inthandling_8c_af594546ff71d7094ffe85d68e752bf42}\label{inthandling_8c_af594546ff71d7094ffe85d68e752bf42}} 
+void {\bfseries isr44} ()
+\item 
+\mbox{\Hypertarget{inthandling_8c_a36a09aefac3255cb33d9db137c59d940}\label{inthandling_8c_a36a09aefac3255cb33d9db137c59d940}} 
+void {\bfseries isr45} ()
+\item 
+\mbox{\Hypertarget{inthandling_8c_a34327a17155443d07113ee7cf1f136f4}\label{inthandling_8c_a34327a17155443d07113ee7cf1f136f4}} 
+void {\bfseries isr46} ()
+\item 
+\mbox{\Hypertarget{inthandling_8c_a49550949aaf658848fa625402cff53a5}\label{inthandling_8c_a49550949aaf658848fa625402cff53a5}} 
+void {\bfseries isr47} ()
+\item 
+\mbox{\Hypertarget{inthandling_8c_ac8e47236a975b7604022cbbd04492763}\label{inthandling_8c_ac8e47236a975b7604022cbbd04492763}} 
+void {\bfseries isr128} ()
+\item 
+void \hyperlink{inthandling_8c_a1c62fca549a4981d6684d4a5c72874b9}{interrupt\+\_\+init} ()
+\begin{DoxyCompactList}\small\item\em ... \end{DoxyCompactList}\item 
+void \hyperlink{inthandling_8c_a1cbdeefaa578ba5be9870c1dce9f4a49}{install\+\_\+ir} (uint32\+\_\+t index, uint16\+\_\+t flags, uint16\+\_\+t sel, uint32\+\_\+t $\ast$handler\+\_\+address)
+\begin{DoxyCompactList}\small\item\em ... \end{DoxyCompactList}\item 
+void \hyperlink{inthandling_8c_a53622fa3d2d671d3b821f44b8b42f276}{general\+\_\+interrupt\+\_\+handler} (\hyperlink{inthandling_8c_a7681bb302c707bbdfd4ecdde27d40f8a}{itrpt\+\_\+reg\+\_\+state\+\_\+t} input)
+\begin{DoxyCompactList}\small\item\em ... \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{inthandling_8c_aa0319a31be4cf32b6e14debd6a4b170e}\label{inthandling_8c_aa0319a31be4cf32b6e14debd6a4b170e}} 
+{\bfseries idtr\+\_\+t}
+\item 
+\mbox{\Hypertarget{inthandling_8c_a1d6d42686da1434b98ca75f63ec42c63}\label{inthandling_8c_a1d6d42686da1434b98ca75f63ec42c63}} 
+{\bfseries idt\+\_\+descriptor\+\_\+t}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+... 
+
+\begin{DoxySeeAlso}{See also}
+
+\end{DoxySeeAlso}
+
+
+\subsection{Macro Definition Documentation}
+\mbox{\Hypertarget{inthandling_8c_a9affc80dd8947cc1dcb1ae52801923c8}\label{inthandling_8c_a9affc80dd8947cc1dcb1ae52801923c8}} 
+\index{inthandling.\+c@{inthandling.\+c}!M\+A\+X\+\_\+\+I\+N\+T\+E\+R\+R\+U\+P\+TS@{M\+A\+X\+\_\+\+I\+N\+T\+E\+R\+R\+U\+P\+TS}}
+\index{M\+A\+X\+\_\+\+I\+N\+T\+E\+R\+R\+U\+P\+TS@{M\+A\+X\+\_\+\+I\+N\+T\+E\+R\+R\+U\+P\+TS}!inthandling.\+c@{inthandling.\+c}}
+\subsubsection{\texorpdfstring{M\+A\+X\+\_\+\+I\+N\+T\+E\+R\+R\+U\+P\+TS}{MAX\_INTERRUPTS}}
+{\footnotesize\ttfamily \#define M\+A\+X\+\_\+\+I\+N\+T\+E\+R\+R\+U\+P\+TS~256}
+
+Description here 
+
+Definition at line 12 of file inthandling.\+c.
+
+
+
+\subsection{Typedef Documentation}
+\mbox{\Hypertarget{inthandling_8c_a7681bb302c707bbdfd4ecdde27d40f8a}\label{inthandling_8c_a7681bb302c707bbdfd4ecdde27d40f8a}} 
+\index{inthandling.\+c@{inthandling.\+c}!itrpt\+\_\+reg\+\_\+state\+\_\+t@{itrpt\+\_\+reg\+\_\+state\+\_\+t}}
+\index{itrpt\+\_\+reg\+\_\+state\+\_\+t@{itrpt\+\_\+reg\+\_\+state\+\_\+t}!inthandling.\+c@{inthandling.\+c}}
+\subsubsection{\texorpdfstring{itrpt\+\_\+reg\+\_\+state\+\_\+t}{itrpt\_reg\_state\_t}}
+{\footnotesize\ttfamily typedef struct \hyperlink{structitrpt__reg__state}{itrpt\+\_\+reg\+\_\+state} \hyperlink{inthandling_8c_a7681bb302c707bbdfd4ecdde27d40f8a}{itrpt\+\_\+reg\+\_\+state\+\_\+t}}
+
+Description here 
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{inthandling_8c_ad09246453a4dabd919c7541484046a87}\label{inthandling_8c_ad09246453a4dabd919c7541484046a87}} 
+\index{inthandling.\+c@{inthandling.\+c}!\+\_\+\+\_\+attribute\+\_\+\+\_\+@{\+\_\+\+\_\+attribute\+\_\+\+\_\+}}
+\index{\+\_\+\+\_\+attribute\+\_\+\+\_\+@{\+\_\+\+\_\+attribute\+\_\+\+\_\+}!inthandling.\+c@{inthandling.\+c}}
+\subsubsection{\texorpdfstring{\+\_\+\+\_\+attribute\+\_\+\+\_\+()}{\_\_attribute\_\_()}}
+{\footnotesize\ttfamily struct \+\_\+\+\_\+attribute\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{(\+\_\+\+\_\+packed\+\_\+\+\_\+)}]{ }\end{DoxyParamCaption})}
+
+Description here 
+
+Definition at line 28 of file inthandling.\+c.
+
+
+\begin{DoxyCode}
+28                                                  \{
+29     uint16\_t        limit;
+30     uint32\_t        base;
+31 \}idtr\_t;
+\end{DoxyCode}
+\mbox{\Hypertarget{inthandling_8c_a7487a17af66318d029ecab1d93fb2e1b}\label{inthandling_8c_a7487a17af66318d029ecab1d93fb2e1b}} 
+\index{inthandling.\+c@{inthandling.\+c}!default\+\_\+handler@{default\+\_\+handler}}
+\index{default\+\_\+handler@{default\+\_\+handler}!inthandling.\+c@{inthandling.\+c}}
+\subsubsection{\texorpdfstring{default\+\_\+handler()}{default\_handler()}}
+{\footnotesize\ttfamily void default\+\_\+handler (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+... 
+
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+
+
+Definition at line 193 of file inthandling.\+c.
+
+
+\begin{DoxyCode}
+194 \{
+195     \hyperlink{dadio_8c_a54b3166c4a042f01e94e6cba1b5f186a}{monitor\_puts}(\textcolor{stringliteral}{"This is the default handler - This is a really messed up interrupt"});
+196     \textcolor{keywordflow}{for}(;;);
+197 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{inthandling_8c_a53622fa3d2d671d3b821f44b8b42f276}\label{inthandling_8c_a53622fa3d2d671d3b821f44b8b42f276}} 
+\index{inthandling.\+c@{inthandling.\+c}!general\+\_\+interrupt\+\_\+handler@{general\+\_\+interrupt\+\_\+handler}}
+\index{general\+\_\+interrupt\+\_\+handler@{general\+\_\+interrupt\+\_\+handler}!inthandling.\+c@{inthandling.\+c}}
+\subsubsection{\texorpdfstring{general\+\_\+interrupt\+\_\+handler()}{general\_interrupt\_handler()}}
+{\footnotesize\ttfamily void general\+\_\+interrupt\+\_\+handler (\begin{DoxyParamCaption}\item[{\hyperlink{inthandling_8c_a7681bb302c707bbdfd4ecdde27d40f8a}{itrpt\+\_\+reg\+\_\+state\+\_\+t}}]{input }\end{DoxyParamCaption})}
+
+
+
+... 
+
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+
+
+Definition at line 160 of file inthandling.\+c.
+
+
+\begin{DoxyCode}
+161 \{
+162     \textcolor{keywordflow}{switch} (input.vector\_number)
+163     \{
+164         \textcolor{keywordflow}{case} 32:
+165             \hyperlink{timer_8c_a9e63ea32abae3f871fcbe66fd99003b2}{timer\_handler}();
+166             \textcolor{keywordflow}{break};
+167         \textcolor{keywordflow}{case} 33:
+168             \hyperlink{keyboard_8c_a2f4098fc71cbd39422c1001d66970bf5}{keyboard\_handler}();
+169             \textcolor{keywordflow}{break};
+170 
+171 
+172         \textcolor{keywordflow}{case} 46:
+173         \textcolor{keywordflow}{case} 47:
+174             \hyperlink{PIC_8c_aa6fb7395de34075ae303b15decf40c39}{send\_EOI\_master}();
+175             \hyperlink{PIC_8c_a059c9beb90dd59c51f10ee39c9e54961}{send\_EOI\_slave}();
+176             \textcolor{keywordflow}{break};
+177 
+178         \textcolor{keywordflow}{case} 0x80:
+179             \hyperlink{inthandling_8c_a7eb7b58f57bdaff98141ab6e5778021c}{system\_call\_handler}(&input);
+180             \textcolor{keywordflow}{break};
+181         \textcolor{keywordflow}{default}:
+182             \hyperlink{dadio_8c_a54b3166c4a042f01e94e6cba1b5f186a}{monitor\_puts}(\textcolor{stringliteral}{"\(\backslash\)nException number:"}); \hyperlink{dadio_8c_aef61864baeea47473a5de32e4e1ed7d4}{printhex}(input.vector\_number);
+183             \hyperlink{dadio_8c_a54b3166c4a042f01e94e6cba1b5f186a}{monitor\_puts}(\textcolor{stringliteral}{"\(\backslash\)nError code:"}); \hyperlink{dadio_8c_aef61864baeea47473a5de32e4e1ed7d4}{printhex}(input.error\_code);
+184             \hyperlink{dadio_8c_a54b3166c4a042f01e94e6cba1b5f186a}{monitor\_puts}(\textcolor{stringliteral}{"\(\backslash\)nProgram counter:"}); \hyperlink{dadio_8c_aef61864baeea47473a5de32e4e1ed7d4}{printhex}(input.cs);
+      \hyperlink{dadio_8c_a0a889ac2f45be624d78be476f121c114}{putc}(\textcolor{charliteral}{':'});\hyperlink{dadio_8c_aef61864baeea47473a5de32e4e1ed7d4}{printhex}(input.eip);
+185             \hyperlink{dadio_8c_a54b3166c4a042f01e94e6cba1b5f186a}{monitor\_puts}(\textcolor{stringliteral}{"\(\backslash\)nHandling support not present yet :("});
+186             \textcolor{keywordflow}{for}(;;);
+187     \}
+188 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{inthandling_8c_a1cbdeefaa578ba5be9870c1dce9f4a49}\label{inthandling_8c_a1cbdeefaa578ba5be9870c1dce9f4a49}} 
+\index{inthandling.\+c@{inthandling.\+c}!install\+\_\+ir@{install\+\_\+ir}}
+\index{install\+\_\+ir@{install\+\_\+ir}!inthandling.\+c@{inthandling.\+c}}
+\subsubsection{\texorpdfstring{install\+\_\+ir()}{install\_ir()}}
+{\footnotesize\ttfamily void install\+\_\+ir (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{index,  }\item[{uint16\+\_\+t}]{flags,  }\item[{uint16\+\_\+t}]{sel,  }\item[{uint32\+\_\+t $\ast$}]{handler\+\_\+address }\end{DoxyParamCaption})}
+
+
+
+... 
+
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+
+
+Definition at line 146 of file inthandling.\+c.
+
+
+\begin{DoxyCode}
+147 \{
+148     \textcolor{keywordflow}{if} (index >=\hyperlink{inthandling_8c_a9affc80dd8947cc1dcb1ae52801923c8}{MAX\_INTERRUPTS}) \textcolor{keywordflow}{return};
+149 
+150     \_idt[index].baseLo = (uint32\_t)handler\_address & 0xffff;
+151     \_idt[index].baseHi = ((uint32\_t)handler\_address >> 16) & 0xffff;
+152     \_idt[index].reserved = 0;
+153     \_idt[index].flags = flags;
+154     \_idt[index].sel = sel;
+155 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{inthandling_8c_a1c62fca549a4981d6684d4a5c72874b9}\label{inthandling_8c_a1c62fca549a4981d6684d4a5c72874b9}} 
+\index{inthandling.\+c@{inthandling.\+c}!interrupt\+\_\+init@{interrupt\+\_\+init}}
+\index{interrupt\+\_\+init@{interrupt\+\_\+init}!inthandling.\+c@{inthandling.\+c}}
+\subsubsection{\texorpdfstring{interrupt\+\_\+init()}{interrupt\_init()}}
+{\footnotesize\ttfamily void interrupt\+\_\+init (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+... 
+
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+
+
+Definition at line 86 of file inthandling.\+c.
+
+
+\begin{DoxyCode}
+87 \{
+88     \_idtr.base = (uint32\_t)\_idt;
+89     \_idtr.limit = (\textcolor{keyword}{sizeof} (idt\_descriptor\_t) * \hyperlink{inthandling_8c_a9affc80dd8947cc1dcb1ae52801923c8}{MAX\_INTERRUPTS}) -1 ;
+90     
+91     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i=0;i<\hyperlink{inthandling_8c_a9affc80dd8947cc1dcb1ae52801923c8}{MAX\_INTERRUPTS};i++) \textcolor{comment}{//TODO: Memset this}
+92     \{
+93         \_idt[i].baseLo = 0;
+94         \_idt[i].sel = 0;
+95         \_idt[i].reserved = 0;
+96         \_idt[i].flags = 0;
+97         \_idt[i].baseHi = 0;
+98     \}
+99 
+100     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i=0;i<\hyperlink{inthandling_8c_a9affc80dd8947cc1dcb1ae52801923c8}{MAX\_INTERRUPTS};i++)
+101         \hyperlink{inthandling_8c_a1cbdeefaa578ba5be9870c1dce9f4a49}{install\_ir}(i,IDT\_DESC\_BIT32 | IDT\_DESC\_PRESENT, 0x08, (uint32\_t*) 
+      \hyperlink{inthandling_8c_a7487a17af66318d029ecab1d93fb2e1b}{default\_handler});
+102 
+103     \textcolor{comment}{//Exceptions - Need to distinguish between error and no error codes}
+104 
+105     \hyperlink{inthandling_8c_a1cbdeefaa578ba5be9870c1dce9f4a49}{install\_ir}(0,IDT\_DESC\_BIT32|IDT\_DESC\_PRESENT,0x08,(uint32\_t*)isr0);
+106     \hyperlink{inthandling_8c_a1cbdeefaa578ba5be9870c1dce9f4a49}{install\_ir}(1,IDT\_DESC\_BIT32|IDT\_DESC\_PRESENT,0x08,(uint32\_t*)isr1);
+107     \hyperlink{inthandling_8c_a1cbdeefaa578ba5be9870c1dce9f4a49}{install\_ir}(2,IDT\_DESC\_BIT32|IDT\_DESC\_PRESENT,0x08,(uint32\_t*)isr2);
+108     \hyperlink{inthandling_8c_a1cbdeefaa578ba5be9870c1dce9f4a49}{install\_ir}(3,IDT\_DESC\_BIT32|IDT\_DESC\_PRESENT,0x08,(uint32\_t*)isr3);
+109     \hyperlink{inthandling_8c_a1cbdeefaa578ba5be9870c1dce9f4a49}{install\_ir}(4,IDT\_DESC\_BIT32|IDT\_DESC\_PRESENT,0x08,(uint32\_t*)isr4);
+110     \hyperlink{inthandling_8c_a1cbdeefaa578ba5be9870c1dce9f4a49}{install\_ir}(5,IDT\_DESC\_BIT32|IDT\_DESC\_PRESENT,0x08,(uint32\_t*)isr5);
+111     \hyperlink{inthandling_8c_a1cbdeefaa578ba5be9870c1dce9f4a49}{install\_ir}(6,IDT\_DESC\_BIT32|IDT\_DESC\_PRESENT,0x08,(uint32\_t*)isr6);
+112     \hyperlink{inthandling_8c_a1cbdeefaa578ba5be9870c1dce9f4a49}{install\_ir}(7,IDT\_DESC\_BIT32|IDT\_DESC\_PRESENT,0x08,(uint32\_t*)isr7);
+113     \hyperlink{inthandling_8c_a1cbdeefaa578ba5be9870c1dce9f4a49}{install\_ir}(8,IDT\_DESC\_BIT32|IDT\_DESC\_PRESENT,0x08,(uint32\_t*)isr8);
+114     \hyperlink{inthandling_8c_a1cbdeefaa578ba5be9870c1dce9f4a49}{install\_ir}(10,IDT\_DESC\_BIT32|IDT\_DESC\_PRESENT,0x08,(uint32\_t*)isr10);
+115     \hyperlink{inthandling_8c_a1cbdeefaa578ba5be9870c1dce9f4a49}{install\_ir}(11,IDT\_DESC\_BIT32|IDT\_DESC\_PRESENT,0x08,(uint32\_t*)isr11);
+116     \hyperlink{inthandling_8c_a1cbdeefaa578ba5be9870c1dce9f4a49}{install\_ir}(12,IDT\_DESC\_BIT32|IDT\_DESC\_PRESENT,0x08,(uint32\_t*)isr12);
+117     \hyperlink{inthandling_8c_a1cbdeefaa578ba5be9870c1dce9f4a49}{install\_ir}(13,IDT\_DESC\_BIT32|IDT\_DESC\_PRESENT,0x08,(uint32\_t*)isr13);
+118     \hyperlink{inthandling_8c_a1cbdeefaa578ba5be9870c1dce9f4a49}{install\_ir}(14,IDT\_DESC\_BIT32|IDT\_DESC\_PRESENT,0x08,(uint32\_t*)isr14);
+119     \hyperlink{inthandling_8c_a1cbdeefaa578ba5be9870c1dce9f4a49}{install\_ir}(16,IDT\_DESC\_BIT32|IDT\_DESC\_PRESENT,0x08,(uint32\_t*)isr16);
+120     
+121     \hyperlink{inthandling_8c_a1cbdeefaa578ba5be9870c1dce9f4a49}{install\_ir}(32,IDT\_DESC\_BIT32|IDT\_DESC\_PRESENT,0x08,(uint32\_t*)isr32);
+122     \hyperlink{inthandling_8c_a1cbdeefaa578ba5be9870c1dce9f4a49}{install\_ir}(33,IDT\_DESC\_BIT32|IDT\_DESC\_PRESENT,0x08,(uint32\_t*)isr33);
+123     \hyperlink{inthandling_8c_a1cbdeefaa578ba5be9870c1dce9f4a49}{install\_ir}(34,IDT\_DESC\_BIT32|IDT\_DESC\_PRESENT,0x08,(uint32\_t*)isr34);
+124     \hyperlink{inthandling_8c_a1cbdeefaa578ba5be9870c1dce9f4a49}{install\_ir}(35,IDT\_DESC\_BIT32|IDT\_DESC\_PRESENT,0x08,(uint32\_t*)isr35);
+125     \hyperlink{inthandling_8c_a1cbdeefaa578ba5be9870c1dce9f4a49}{install\_ir}(36,IDT\_DESC\_BIT32|IDT\_DESC\_PRESENT,0x08,(uint32\_t*)isr36);
+126     \hyperlink{inthandling_8c_a1cbdeefaa578ba5be9870c1dce9f4a49}{install\_ir}(37,IDT\_DESC\_BIT32|IDT\_DESC\_PRESENT,0x08,(uint32\_t*)isr37);
+127 
+128     \hyperlink{inthandling_8c_a1cbdeefaa578ba5be9870c1dce9f4a49}{install\_ir}(46,IDT\_DESC\_BIT32|IDT\_DESC\_PRESENT,0x08,(uint32\_t*)isr46);
+129     \hyperlink{inthandling_8c_a1cbdeefaa578ba5be9870c1dce9f4a49}{install\_ir}(47,IDT\_DESC\_BIT32|IDT\_DESC\_PRESENT,0x08,(uint32\_t*)isr47);
+130     
+131 \textcolor{comment}{//User mode interrupts}
+132     \hyperlink{inthandling_8c_a1cbdeefaa578ba5be9870c1dce9f4a49}{install\_ir}(0x80,IDT\_DESC\_BIT32|IDT\_DESC\_PRESENT|IDT\_DESC\_RING3|IDT\_DESC\_TRAP,0x08,(uint32\_t*)
+      isr128); \textcolor{comment}{//This is syscall}
+133 
+134 
+135     \hyperlink{PIC_8c_ab5ebdc1b31b3357377b0257473641ced}{pic\_init}();
+136     \hyperlink{keyboard_8c_ada790016b5b54d93a47205515046dd39}{kbc\_init}();
+137     \hyperlink{timer_8c_a3cbe137ca6d2fe48c3f645babc335815}{set\_timer}(0xFFFF);
+138     install\_idt((uint32\_t)&\_idtr);
+139     enable\_interrupts();
+140 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{inthandling_8c_a7eb7b58f57bdaff98141ab6e5778021c}\label{inthandling_8c_a7eb7b58f57bdaff98141ab6e5778021c}} 
+\index{inthandling.\+c@{inthandling.\+c}!system\+\_\+call\+\_\+handler@{system\+\_\+call\+\_\+handler}}
+\index{system\+\_\+call\+\_\+handler@{system\+\_\+call\+\_\+handler}!inthandling.\+c@{inthandling.\+c}}
+\subsubsection{\texorpdfstring{system\+\_\+call\+\_\+handler()}{system\_call\_handler()}}
+{\footnotesize\ttfamily void system\+\_\+call\+\_\+handler (\begin{DoxyParamCaption}\item[{\hyperlink{inthandling_8c_a7681bb302c707bbdfd4ecdde27d40f8a}{itrpt\+\_\+reg\+\_\+state\+\_\+t} $\ast$}]{inp\+\_\+ptr }\end{DoxyParamCaption})}
+
+
+
+... 
+
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+
+
+Definition at line 202 of file inthandling.\+c.
+
+
+\begin{DoxyCode}
+203 \{
+204 
+205     \textcolor{keywordflow}{switch}(inp\_ptr->eax)
+206     \{
+207         \textcolor{keywordflow}{case} 0:
+208             \hyperlink{dadio_8c_a54b3166c4a042f01e94e6cba1b5f186a}{monitor\_puts}((\textcolor{keywordtype}{char}*)inp\_ptr->esi);
+209             \textcolor{keywordflow}{break};
+210 
+211         \textcolor{keywordflow}{default}:
+212             \hyperlink{dadio_8c_a54b3166c4a042f01e94e6cba1b5f186a}{monitor\_puts}(\textcolor{stringliteral}{"Welcome to the syscall interface\(\backslash\)nSyscall\_number:"});
+213             \hyperlink{dadio_8c_aef61864baeea47473a5de32e4e1ed7d4}{printhex}(inp\_ptr->eax);
+214     \}
+215 
+216 \}
+\end{DoxyCode}

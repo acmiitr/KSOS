@@ -1,3 +1,8 @@
+/**  
+ * @file phymem.c
+ * @brief ...
+ * @see 
+ */
 // Standard includes:
 #include<stdint.h> 
 #include<stdbool.h>
@@ -5,18 +10,18 @@
 #include"dadio.h"
 
 // Constant definitions:
-#define PMMAP 0x1000
-#define KERNEL_P 0x100000
-#define BLOCK_SIZE 4096
-#define SECTOR_SIZE 512
-#define SECTORS_PER_BLOCK 8
-#define BLOCK_SIZE_B 12
-#define SECTOR_SIZE_B 9
-#define SECTORS_PER_BLOCK_B 3
+#define PMMAP 0x1000				/**< Description here */
+#define KERNEL_P 0x100000			/**< Description here */
+#define BLOCK_SIZE 4096				/**< Description here */
+#define SECTOR_SIZE 512				/**< Description here */
+#define SECTORS_PER_BLOCK 8			/**< Description here */
+#define BLOCK_SIZE_B 12				/**< Description here */
+#define SECTOR_SIZE_B 9				/**< Description here */
+#define SECTORS_PER_BLOCK_B 3		/**< Description here */
 
 
 //THIS IS DEFINITELY SOME JUGAAD CHANGE THIS LATER
-#define KERNEL_MAPPED_SIZE 0x400000
+#define KERNEL_MAPPED_SIZE 0x400000	/**< Description here */
 
 // External variables:
 extern uint32_t __begin[], __end[];  //Why arrays? This is a pretty cool concept to distinguish pointers
@@ -34,6 +39,7 @@ static uint8_t extract_bit(uint32_t hexinp,uint8_t bitnumber);
 //static uint32_t _mapentrycount;
 static uint32_t physical_memory_bitmap[0x8000];   //Why 8000? This is a hardcoded value (4GB needs this much)
 
+/** Description here */
 typedef struct mmap_entry
 {
     uint32_t  startLo;
@@ -46,7 +52,10 @@ typedef struct mmap_entry
 
 
 // Function implementations:
-
+/** @brief ...
+ * @param mapentrycount
+ * @return  
+ * */
 void  pmmngr_init(uint32_t mapentrycount)   //kernel size in 512 byte sectors - I'm not taking high into consideration because 32 bit
 { 
 	//_mapentrycount = mapentrycount;
@@ -77,7 +86,10 @@ void  pmmngr_init(uint32_t mapentrycount)   //kernel size in 512 byte sectors - 
 //	uint32_t kernel_end = (uint32_t)__end;
 	pmmngr_toggle_range (KERNEL_P,KERNEL_P + KERNEL_MAPPED_SIZE);
 }
-
+/** @brief ...
+ * 
+ * @return  
+ * */
 uint32_t pmmngr_allocate_block()
 {
 	uint32_t address;
@@ -92,6 +104,11 @@ uint32_t pmmngr_allocate_block()
 		}
 	return 0;
 }
+
+/** @brief ...
+ * @param address 
+ * @return  
+ * */
 bool pmmngr_free_block(uint32_t address)
 {
 	if((uint32_t)address % BLOCK_SIZE != 0) return 0;
@@ -128,7 +145,17 @@ bool pmmngr_free_block(uint32_t address)
 //	return 0;
 
 }
+
+
+/** @brief ...
+ * 
+ * @return  
+ * */
 // Helper function implementations:
+/** @brief ...
+ * @param hexinp
+ * @return  
+ * */
 static uint8_t get_lowest_bit(uint32_t hexinp)
 {
 	for(int i=0;i<32;i++)
@@ -139,15 +166,27 @@ static uint8_t get_lowest_bit(uint32_t hexinp)
 	}
 	return 0xff;
 }
+/** @brief ...
+ * @param hexinp
+ * @param bitnumber
+ * @return  
+ * */
 static inline uint8_t extract_bit(uint32_t hexinp,uint8_t bitnumber)  //bitnumber < 32
 {
 	return (hexinp >> bitnumber) & 1;
 }
+/** @brief ...
+ * @param address
+ * @return  
+ * */
 static inline uint32_t block_number(uint32_t address)
 {
 	return address >> BLOCK_SIZE_B;
 }
-
+/** @brief ...
+ * @param block_number
+ * @return  
+ * */
 static inline void pmmngr_toggle_block(uint32_t block_number)   //This must not be exposed to the programmer!!!
 {
 	physical_memory_bitmap[block_number >> 5] ^= (1ul << (block_number & 31));
@@ -157,6 +196,11 @@ static inline void pmmngr_toggle_block(uint32_t block_number)   //This must not 
 //	*byte ^= (1<<bit);
 }
 /** start and end are addresses**/
+/** @brief ...
+ * @param start
+ * @param end
+ * @return  
+ * */
 static void pmmngr_toggle_range(uint32_t start,uint32_t end)    //Optimize the crap out of this later
 {
 	if (start % BLOCK_SIZE != 0){start -= (start%BLOCK_SIZE_B);}
