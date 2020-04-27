@@ -1,15 +1,20 @@
+/**  
+ * @file virtualmem.c
+ * @brief ...
+ * @see 
+ */
 /* Don't do a permanent identity map dude
  * Our strategy will be recursive identity map
  * You need this or else you're dead
  */
 
-#define BLOCK_SIZE 4096
-#define PAGE_TABLE 0xFFC00000
-#define PAGE_DIRECTORY 0xFFFFF000
-#define STACK 0xFFC00000
-#define STACK_PHY 0x90000
-#define VGA_TEXT 0xB8000
-#define PAGE_SIZE (1<<12)
+#define BLOCK_SIZE 4096				/**< Description here */
+#define PAGE_TABLE 0xFFC00000		/**< Description here */
+#define PAGE_DIRECTORY 0xFFFFF000	/**< Description here */
+#define STACK 0xFFC00000			/**< Description here */
+#define STACK_PHY 0x90000			/**< Description here */
+#define VGA_TEXT 0xB8000			/**< Description here */
+#define PAGE_SIZE (1<<12)			/**< Description here */
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -20,8 +25,9 @@
 
 static uint32_t* _page_directory = (uint32_t*)0x9C000;  //This is the initial virtual address of the page directory
 
-//Source: BrokenThorn 
-//A page table entry is just a 32 bit integer in our case :)
+
+/** Source: BrokenThorn 
+A page table entry is just a 32 bit integer in our case :) */
 enum PAGE_PTE_FLAGS {
 	PTE_PRESENT		=	1,
 	PTE_WRITABLE		=	2,
@@ -35,7 +41,7 @@ enum PAGE_PTE_FLAGS {
 	PTE_LV4_GLOBAL		=	0x200,
    	PTE_FRAME		=	0xFFFFF000 
 };
-
+/**< Description here */
 enum PAGE_PDE_FLAGS {
  
 	PDE_PRESENT		=	1,
@@ -60,6 +66,10 @@ extern uint32_t __end[];
 extern char  __VGA_text_memory[];  //This is the virtual address of the VGA memory
 
 //Implementations
+/** @brief ...
+ *
+ * @return  
+ * */
 void vmmngr_init() 
 {
 	set_recursive_map();
@@ -75,14 +85,23 @@ void vmmngr_init()
 	}
 	//Need to set all the page frames that are in use by the kernel
 }
-
+/** @brief ...
+ * 
+ * @return  
+ * */
 void remove_identity_map()  //This would remove the 4M identity map
 {
 	//This requires a stack_reset, and gdt reset so far.
 	_page_directory[0] = 0;
 	flush_tlb();  //Clean that boi
 }
-
+/** @brief ...
+ * @param virtual_address
+ * @param physical_address
+ * @param isUser
+ * @param isWritable
+ * @return  
+ * */
 bool map_page(uint32_t virtual_address,uint32_t physical_address,bool isUser,bool isWritable)   //TODO: Need to deal with freed frames  && Make this cleaner!!
 {
 	virtual_address -= (virtual_address%BLOCK_SIZE) ? virtual_address%BLOCK_SIZE : 0;
@@ -117,6 +136,10 @@ bool map_page(uint32_t virtual_address,uint32_t physical_address,bool isUser,boo
 	flush_tlb_entry(virtual_address);
 	return true;
 }
+/** @brief ...
+ * 
+ * @return  
+ * */
 static void set_recursive_map()   //Sets the virtual address of the page directory to 0xFFFFF000 -- Some kind of dual reference XD
 {
 	uint32_t phy_dir = get_pdbr();
@@ -127,6 +150,11 @@ static void set_recursive_map()   //Sets the virtual address of the page directo
 	_page_directory = (uint32_t*)PAGE_DIRECTORY; //Page directory is the last address
 	flush_tlb();
 }
+/** @brief ...
+ * @param virt
+ * 
+ * @return  
+ * */
 uint32_t virtual_to_physical (uint32_t* virt)
 {
 	uint32_t virtual_address = (uint32_t)virt;
@@ -140,7 +168,11 @@ uint32_t virtual_to_physical (uint32_t* virt)
 	if (!(page_table[pt_index] & PTE_PRESENT)) return 0;
 	return ((page_table[pt_index] & PTE_FRAME) | (virtual_address & ~PTE_FRAME));
 }
-
+/** @brief ...
+ * @param table_entry
+ * 
+ * @return  
+ * */
 static bool alloc_page(uint32_t* table_entry)   //Given a page table/directory entry, 'fill' it automatically
 {
 	uint32_t physical_address = pmmngr_allocate_block();

@@ -1,0 +1,143 @@
+\hypertarget{ATA_8c}{}\section{kernel/driver/\+A\+TA.c File Reference}
+\label{ATA_8c}\index{kernel/driver/\+A\+T\+A.\+c@{kernel/driver/\+A\+T\+A.\+c}}
+
+
+Reading sectors from the hard disk.  
+
+
+{\ttfamily \#include $<$stdint.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}dadio.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}hal.\+h\char`\"{}}\newline
+Include dependency graph for A\+T\+A.\+c\+:
+% FIG 0
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{ATA_8c_a854644d72a7647e55dc5e579fb213d24}{S\+T\+A\+T\+U\+S\+\_\+\+B\+SY}~0x80
+\item 
+\#define \hyperlink{ATA_8c_ac9932f5455af4739a099ad84e45391cf}{S\+T\+A\+T\+U\+S\+\_\+\+R\+DY}~0x40
+\item 
+\#define \hyperlink{ATA_8c_aa9ce50022e91e3f8e0a9189880feb931}{S\+T\+A\+T\+U\+S\+\_\+\+D\+RQ}~0x08
+\item 
+\#define \hyperlink{ATA_8c_a87b7afa999b1c88c6e29ac5779f49b07}{S\+T\+A\+T\+U\+S\+\_\+\+DF}~0x20
+\item 
+\#define \hyperlink{ATA_8c_a23205a6a97096d57a247794f5e250963}{S\+T\+A\+T\+U\+S\+\_\+\+E\+RR}~0x01
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{ATA_8c_ad8f5a8469acab477d85309cf08ccae8c}{read\+\_\+sectors\+\_\+\+A\+T\+A\+\_\+\+P\+IO} (uint32\+\_\+t target\+\_\+address, uint32\+\_\+t L\+BA, uint8\+\_\+t sector\+\_\+count)
+\begin{DoxyCompactList}\small\item\em A function to read data from the harddisk in sectors. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Reading sectors from the hard disk. 
+
+\begin{DoxySeeAlso}{See also}
+
+\end{DoxySeeAlso}
+
+
+\subsection{Macro Definition Documentation}
+\mbox{\Hypertarget{ATA_8c_a854644d72a7647e55dc5e579fb213d24}\label{ATA_8c_a854644d72a7647e55dc5e579fb213d24}} 
+\index{A\+T\+A.\+c@{A\+T\+A.\+c}!S\+T\+A\+T\+U\+S\+\_\+\+B\+SY@{S\+T\+A\+T\+U\+S\+\_\+\+B\+SY}}
+\index{S\+T\+A\+T\+U\+S\+\_\+\+B\+SY@{S\+T\+A\+T\+U\+S\+\_\+\+B\+SY}!A\+T\+A.\+c@{A\+T\+A.\+c}}
+\subsubsection{\texorpdfstring{S\+T\+A\+T\+U\+S\+\_\+\+B\+SY}{STATUS\_BSY}}
+{\footnotesize\ttfamily \#define S\+T\+A\+T\+U\+S\+\_\+\+B\+SY~0x80}
+
+B\+SY\+: a 1 means that the controller is busy executing a command. No register should be accessed (except the digital output register) while this bit is set. R\+DY\+: a 1 means that the controller is ready to accept a command, and the drive is spinning at correct speed.. W\+FT\+: a 1 means that the controller detected a write fault. S\+KC\+: a 1 means that the read/write head is in position (seek completed). D\+RQ\+: a 1 means that the controller is expecting data (for a write) or is sending data (for a read). Don\textquotesingle{}t access the data register while this bit is 0. C\+OR\+: a 1 indicates that the controller had to correct data, by using the E\+CC bytes (error correction code\+: extra bytes at the end of the sector that allows to verify its integrity and, sometimes, to correct errors). I\+DX\+: a 1 indicates the the controller retected the index mark (which is not a hole on hard-\/drives). E\+RR\+: a 1 indicates that an error occured. An error code has been placed in the error register.\+Add the description here 
+
+Definition at line 21 of file A\+T\+A.\+c.
+
+\mbox{\Hypertarget{ATA_8c_a87b7afa999b1c88c6e29ac5779f49b07}\label{ATA_8c_a87b7afa999b1c88c6e29ac5779f49b07}} 
+\index{A\+T\+A.\+c@{A\+T\+A.\+c}!S\+T\+A\+T\+U\+S\+\_\+\+DF@{S\+T\+A\+T\+U\+S\+\_\+\+DF}}
+\index{S\+T\+A\+T\+U\+S\+\_\+\+DF@{S\+T\+A\+T\+U\+S\+\_\+\+DF}!A\+T\+A.\+c@{A\+T\+A.\+c}}
+\subsubsection{\texorpdfstring{S\+T\+A\+T\+U\+S\+\_\+\+DF}{STATUS\_DF}}
+{\footnotesize\ttfamily \#define S\+T\+A\+T\+U\+S\+\_\+\+DF~0x20}
+
+Add the description here 
+
+Definition at line 24 of file A\+T\+A.\+c.
+
+\mbox{\Hypertarget{ATA_8c_aa9ce50022e91e3f8e0a9189880feb931}\label{ATA_8c_aa9ce50022e91e3f8e0a9189880feb931}} 
+\index{A\+T\+A.\+c@{A\+T\+A.\+c}!S\+T\+A\+T\+U\+S\+\_\+\+D\+RQ@{S\+T\+A\+T\+U\+S\+\_\+\+D\+RQ}}
+\index{S\+T\+A\+T\+U\+S\+\_\+\+D\+RQ@{S\+T\+A\+T\+U\+S\+\_\+\+D\+RQ}!A\+T\+A.\+c@{A\+T\+A.\+c}}
+\subsubsection{\texorpdfstring{S\+T\+A\+T\+U\+S\+\_\+\+D\+RQ}{STATUS\_DRQ}}
+{\footnotesize\ttfamily \#define S\+T\+A\+T\+U\+S\+\_\+\+D\+RQ~0x08}
+
+Add the description here 
+
+Definition at line 23 of file A\+T\+A.\+c.
+
+\mbox{\Hypertarget{ATA_8c_a23205a6a97096d57a247794f5e250963}\label{ATA_8c_a23205a6a97096d57a247794f5e250963}} 
+\index{A\+T\+A.\+c@{A\+T\+A.\+c}!S\+T\+A\+T\+U\+S\+\_\+\+E\+RR@{S\+T\+A\+T\+U\+S\+\_\+\+E\+RR}}
+\index{S\+T\+A\+T\+U\+S\+\_\+\+E\+RR@{S\+T\+A\+T\+U\+S\+\_\+\+E\+RR}!A\+T\+A.\+c@{A\+T\+A.\+c}}
+\subsubsection{\texorpdfstring{S\+T\+A\+T\+U\+S\+\_\+\+E\+RR}{STATUS\_ERR}}
+{\footnotesize\ttfamily \#define S\+T\+A\+T\+U\+S\+\_\+\+E\+RR~0x01}
+
+Add the description here 
+
+Definition at line 25 of file A\+T\+A.\+c.
+
+\mbox{\Hypertarget{ATA_8c_ac9932f5455af4739a099ad84e45391cf}\label{ATA_8c_ac9932f5455af4739a099ad84e45391cf}} 
+\index{A\+T\+A.\+c@{A\+T\+A.\+c}!S\+T\+A\+T\+U\+S\+\_\+\+R\+DY@{S\+T\+A\+T\+U\+S\+\_\+\+R\+DY}}
+\index{S\+T\+A\+T\+U\+S\+\_\+\+R\+DY@{S\+T\+A\+T\+U\+S\+\_\+\+R\+DY}!A\+T\+A.\+c@{A\+T\+A.\+c}}
+\subsubsection{\texorpdfstring{S\+T\+A\+T\+U\+S\+\_\+\+R\+DY}{STATUS\_RDY}}
+{\footnotesize\ttfamily \#define S\+T\+A\+T\+U\+S\+\_\+\+R\+DY~0x40}
+
+Add the description here 
+
+Definition at line 22 of file A\+T\+A.\+c.
+
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{ATA_8c_ad8f5a8469acab477d85309cf08ccae8c}\label{ATA_8c_ad8f5a8469acab477d85309cf08ccae8c}} 
+\index{A\+T\+A.\+c@{A\+T\+A.\+c}!read\+\_\+sectors\+\_\+\+A\+T\+A\+\_\+\+P\+IO@{read\+\_\+sectors\+\_\+\+A\+T\+A\+\_\+\+P\+IO}}
+\index{read\+\_\+sectors\+\_\+\+A\+T\+A\+\_\+\+P\+IO@{read\+\_\+sectors\+\_\+\+A\+T\+A\+\_\+\+P\+IO}!A\+T\+A.\+c@{A\+T\+A.\+c}}
+\subsubsection{\texorpdfstring{read\+\_\+sectors\+\_\+\+A\+T\+A\+\_\+\+P\+I\+O()}{read\_sectors\_ATA\_PIO()}}
+{\footnotesize\ttfamily void read\+\_\+sectors\+\_\+\+A\+T\+A\+\_\+\+P\+IO (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{target\+\_\+address,  }\item[{uint32\+\_\+t}]{L\+BA,  }\item[{uint8\+\_\+t}]{sector\+\_\+count }\end{DoxyParamCaption})}
+
+
+
+A function to read data from the harddisk in sectors. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em target\+\_\+address} & The address where the read data is stored in memory \\
+\hline
+{\em L\+BA} & Starting Block number from where the is to be read in the hard disk \\
+\hline
+{\em sector\+\_\+count} & Number of sectors to be read \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+
+
+Definition at line 37 of file A\+T\+A.\+c.
+
+
+\begin{DoxyCode}
+38 \{
+39     ATA\_wait\_BSY();
+40     write\_port(0x1F6,0xE0 | ((LBA >>24) & 0xF));
+41     write\_port(0x1F2,sector\_count);
+42     write\_port(0x1F3, (uint8\_t) LBA);
+43     write\_port(0x1F4, (uint8\_t)(LBA >> 8));
+44     write\_port(0x1F5, (uint8\_t)(LBA >> 16)); 
+45     write\_port(0x1F7,0x20); \textcolor{comment}{//Send the read command}
+46 
+47     uint16\_t* target = (uint16\_t*) target\_address;
+48 
+49     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} j =0;j<sector\_count;j++)
+50     \{
+51         ATA\_wait\_BSY();
+52         ATA\_wait\_DRQ();
+53         \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} i=0;i<256;i++)
+54             target[i] = read\_port\_word(0x1F0);
+55         target+=256;
+56     \}
+57 \}
+\end{DoxyCode}

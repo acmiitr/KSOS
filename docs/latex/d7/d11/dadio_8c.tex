@@ -1,0 +1,411 @@
+\hypertarget{dadio_8c}{}\section{kernel/driver/dadio.c File Reference}
+\label{dadio_8c}\index{kernel/driver/dadio.\+c@{kernel/driver/dadio.\+c}}
+
+
+File containing functions that help display on V\+GA display.  
+
+
+{\ttfamily \#include $<$stdint.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}dadio.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}hardware.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}hal.\+h\char`\"{}}\newline
+Include dependency graph for dadio.\+c\+:
+% FIG 0
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{dadio_8c_ac6f18a9e1d00b4637522b1b469a92021}{R\+OW}~80
+\item 
+\#define \hyperlink{dadio_8c_ab00f2b8e8bad4307cf0775a5520cf663}{C\+OL}~25
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{dadio_8c_ac8bb3912a3ce86b15842e79d0b421204}{clear} ()
+\begin{DoxyCompactList}\small\item\em A function to clear the output display. \end{DoxyCompactList}\item 
+void \hyperlink{dadio_8c_a54b3166c4a042f01e94e6cba1b5f186a}{monitor\+\_\+puts} (char $\ast$Message)
+\begin{DoxyCompactList}\small\item\em A function that prints a given string on the V\+GA Display. \end{DoxyCompactList}\item 
+void \hyperlink{dadio_8c_aef61864baeea47473a5de32e4e1ed7d4}{printhex} (uint32\+\_\+t input)
+\begin{DoxyCompactList}\small\item\em A function to print hexadecimal numbers. \end{DoxyCompactList}\item 
+void \hyperlink{dadio_8c_a5663d1e12dd66fc3621fe15b7d7725ba}{printint} (uint32\+\_\+t input)
+\begin{DoxyCompactList}\small\item\em A function to print integer datatype. \end{DoxyCompactList}\item 
+void \hyperlink{dadio_8c_a0a889ac2f45be624d78be476f121c114}{putc} (char x)
+\begin{DoxyCompactList}\small\item\em A function to print a character on the screen. \end{DoxyCompactList}\item 
+void \hyperlink{dadio_8c_a7477497db66e82b498fc2489b522eb9a}{set\+\_\+fg\+\_\+color} (enum vga\+\_\+color c)
+\begin{DoxyCompactList}\small\item\em A function to set the foreground color to specified value. \end{DoxyCompactList}\item 
+void \hyperlink{dadio_8c_a04a2fdb6da97c8906db7ae133a79cdbc}{set\+\_\+bg\+\_\+color} (enum vga\+\_\+color c)
+\begin{DoxyCompactList}\small\item\em A function to set the background color to specified value. \end{DoxyCompactList}\item 
+char \hyperlink{dadio_8c_a145a5ba7f7c1451e7753deb88f34e1cb}{get\+\_\+monitor\+\_\+char} ()
+\begin{DoxyCompactList}\small\item\em A function that returns the current monitor character printed. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+char \hyperlink{dadio_8c_a16ae0e4e8728a8b760ca5b3c77036fb0}{\+\_\+\+\_\+\+V\+G\+A\+\_\+text\+\_\+memory} \mbox{[}$\,$\mbox{]}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+File containing functions that help display on V\+GA display. 
+
+\begin{DoxySeeAlso}{See also}
+
+\end{DoxySeeAlso}
+
+
+\subsection{Macro Definition Documentation}
+\mbox{\Hypertarget{dadio_8c_ab00f2b8e8bad4307cf0775a5520cf663}\label{dadio_8c_ab00f2b8e8bad4307cf0775a5520cf663}} 
+\index{dadio.\+c@{dadio.\+c}!C\+OL@{C\+OL}}
+\index{C\+OL@{C\+OL}!dadio.\+c@{dadio.\+c}}
+\subsubsection{\texorpdfstring{C\+OL}{COL}}
+{\footnotesize\ttfamily \#define C\+OL~25}
+
+Number of Columns on the screen 
+
+Definition at line 14 of file dadio.\+c.
+
+\mbox{\Hypertarget{dadio_8c_ac6f18a9e1d00b4637522b1b469a92021}\label{dadio_8c_ac6f18a9e1d00b4637522b1b469a92021}} 
+\index{dadio.\+c@{dadio.\+c}!R\+OW@{R\+OW}}
+\index{R\+OW@{R\+OW}!dadio.\+c@{dadio.\+c}}
+\subsubsection{\texorpdfstring{R\+OW}{ROW}}
+{\footnotesize\ttfamily \#define R\+OW~80}
+
+Number of Rows on the screen 
+
+Definition at line 13 of file dadio.\+c.
+
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{dadio_8c_ac8bb3912a3ce86b15842e79d0b421204}\label{dadio_8c_ac8bb3912a3ce86b15842e79d0b421204}} 
+\index{dadio.\+c@{dadio.\+c}!clear@{clear}}
+\index{clear@{clear}!dadio.\+c@{dadio.\+c}}
+\subsubsection{\texorpdfstring{clear()}{clear()}}
+{\footnotesize\ttfamily void clear (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+A function to clear the output display. 
+
+\begin{DoxyReturn}{Returns}
+Should not return 
+\end{DoxyReturn}
+
+
+Definition at line 21 of file dadio.\+c.
+
+
+\begin{DoxyCode}
+22 \{
+23     \textcolor{keywordtype}{char}* cursor=(\textcolor{keywordtype}{char}*)\hyperlink{dadio_8c_a16ae0e4e8728a8b760ca5b3c77036fb0}{\_\_VGA\_text\_memory};
+24     *cursor=\textcolor{charliteral}{' '};
+25     cursor++;*cursor=current\_color;cursor++;
+26     \textcolor{keywordflow}{while}((uint32\_t)(cursor-\hyperlink{dadio_8c_a16ae0e4e8728a8b760ca5b3c77036fb0}{\_\_VGA\_text\_memory})<2*\hyperlink{dadio_8c_ac6f18a9e1d00b4637522b1b469a92021}{ROW}*\hyperlink{dadio_8c_ab00f2b8e8bad4307cf0775a5520cf663}{COL})
+27         \{
+28             *cursor=\textcolor{charliteral}{' '};cursor++;
+29             *cursor=current\_color;cursor++;
+30         \}
+31     set\_cursor(0);
+32 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{dadio_8c_a145a5ba7f7c1451e7753deb88f34e1cb}\label{dadio_8c_a145a5ba7f7c1451e7753deb88f34e1cb}} 
+\index{dadio.\+c@{dadio.\+c}!get\+\_\+monitor\+\_\+char@{get\+\_\+monitor\+\_\+char}}
+\index{get\+\_\+monitor\+\_\+char@{get\+\_\+monitor\+\_\+char}!dadio.\+c@{dadio.\+c}}
+\subsubsection{\texorpdfstring{get\+\_\+monitor\+\_\+char()}{get\_monitor\_char()}}
+{\footnotesize\ttfamily char get\+\_\+monitor\+\_\+char (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+A function that returns the current monitor character printed. 
+
+\begin{DoxyReturn}{Returns}
+Current monitor character 
+\end{DoxyReturn}
+
+
+Definition at line 174 of file dadio.\+c.
+
+
+\begin{DoxyCode}
+175 \{
+176     \textcolor{keywordflow}{while} (1)
+177     \{
+178         \hyperlink{keyboard_8c_a94b8a2c10d967c71c1b8344a19e0094e}{wait\_for\_keyboard}();
+179         \textcolor{keywordtype}{char} x = \hyperlink{keyboard_8c_aa8d15a589b7dc3d75d0c93d2728f6f8c}{get\_latest\_char}();
+180         uint8\_t scanned=\hyperlink{keyboard_8c_a4fb42c70ae53a4bd71d59d1a436c8455}{get\_latest\_scan\_code}();
+181         \textcolor{keywordflow}{if}(scanned==0x4b)
+182             \{\textcolor{keywordflow}{if}(x==\textcolor{charliteral}{'4'})
+183             \textcolor{keywordflow}{return} x;\textcolor{keywordflow}{else}
+184             \textcolor{keywordflow}{return} 17;\}
+185         \textcolor{keywordflow}{else} \textcolor{keywordflow}{if}(scanned==0x4d)\{\textcolor{keywordflow}{if}(x==\textcolor{charliteral}{'6'})
+186             \textcolor{keywordflow}{return} x;\textcolor{keywordflow}{else} \textcolor{keywordflow}{return} 18;\}
+187         \textcolor{keywordflow}{if} (x)
+188             \textcolor{keywordflow}{return} (x);
+189     \}
+190 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{dadio_8c_a54b3166c4a042f01e94e6cba1b5f186a}\label{dadio_8c_a54b3166c4a042f01e94e6cba1b5f186a}} 
+\index{dadio.\+c@{dadio.\+c}!monitor\+\_\+puts@{monitor\+\_\+puts}}
+\index{monitor\+\_\+puts@{monitor\+\_\+puts}!dadio.\+c@{dadio.\+c}}
+\subsubsection{\texorpdfstring{monitor\+\_\+puts()}{monitor\_puts()}}
+{\footnotesize\ttfamily void monitor\+\_\+puts (\begin{DoxyParamCaption}\item[{char $\ast$}]{Message }\end{DoxyParamCaption})}
+
+
+
+A function that prints a given string on the V\+GA Display. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Message} & Input the given string \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+
+
+Definition at line 38 of file dadio.\+c.
+
+
+\begin{DoxyCode}
+39 \{
+40     uint32\_t pointer = get\_cursor();
+41     pointer <<= 1;
+42     \textcolor{keywordtype}{char}* vga\_cursor = (\textcolor{keywordtype}{char}*) \hyperlink{dadio_8c_a16ae0e4e8728a8b760ca5b3c77036fb0}{\_\_VGA\_text\_memory};
+43     vga\_cursor += pointer;
+44     \textcolor{keywordflow}{while} (*Message)
+45     \{
+46         \textcolor{keywordtype}{char} c = *Message;
+47         \textcolor{keywordflow}{switch} (c)
+48         \{
+49          \textcolor{keywordflow}{case} \textcolor{charliteral}{'\(\backslash\)n'}:
+50             pointer = (uint32\_t)(vga\_cursor - \hyperlink{dadio_8c_a16ae0e4e8728a8b760ca5b3c77036fb0}{\_\_VGA\_text\_memory});
+51             pointer -= (pointer % (2 * \hyperlink{dadio_8c_ac6f18a9e1d00b4637522b1b469a92021}{ROW}));
+52             pointer += (2 * \hyperlink{dadio_8c_ac6f18a9e1d00b4637522b1b469a92021}{ROW});
+53             \textcolor{keywordflow}{if} (pointer == 2 * \hyperlink{dadio_8c_ac6f18a9e1d00b4637522b1b469a92021}{ROW} * \hyperlink{dadio_8c_ab00f2b8e8bad4307cf0775a5520cf663}{COL}) \textcolor{comment}{//This is to control overflow}
+54                 pointer = 0;
+55             vga\_cursor = (\textcolor{keywordtype}{char} *)(\hyperlink{dadio_8c_a16ae0e4e8728a8b760ca5b3c77036fb0}{\_\_VGA\_text\_memory} + pointer);
+56             \textcolor{keywordflow}{break};
+57         \textcolor{keywordflow}{case} \textcolor{charliteral}{'\(\backslash\)t'}:
+58             pointer=(uint32\_t)(vga\_cursor-\hyperlink{dadio_8c_a16ae0e4e8728a8b760ca5b3c77036fb0}{\_\_VGA\_text\_memory});
+59             pointer+=16;
+60             vga\_cursor=(\textcolor{keywordtype}{char}*)(\hyperlink{dadio_8c_a16ae0e4e8728a8b760ca5b3c77036fb0}{\_\_VGA\_text\_memory}+pointer);
+61             \textcolor{keywordflow}{break};
+62         \textcolor{keywordflow}{default}:
+63             *vga\_cursor = *Message;
+64             vga\_cursor++;
+65             *vga\_cursor = current\_color;
+66             vga\_cursor++;
+67         \}
+68         Message++;
+69     \}
+70     \textcolor{comment}{//Resetting the pointer}
+71     vga\_cursor -= (uint32\_t)\hyperlink{dadio_8c_a16ae0e4e8728a8b760ca5b3c77036fb0}{\_\_VGA\_text\_memory};
+72     pointer = (uint32\_t)vga\_cursor;
+73     pointer >>= 1;
+74     set\_cursor(pointer);
+75 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{dadio_8c_aef61864baeea47473a5de32e4e1ed7d4}\label{dadio_8c_aef61864baeea47473a5de32e4e1ed7d4}} 
+\index{dadio.\+c@{dadio.\+c}!printhex@{printhex}}
+\index{printhex@{printhex}!dadio.\+c@{dadio.\+c}}
+\subsubsection{\texorpdfstring{printhex()}{printhex()}}
+{\footnotesize\ttfamily void printhex (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{input }\end{DoxyParamCaption})}
+
+
+
+A function to print hexadecimal numbers. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em input} & A 32 bit integer to print in hexadecimal \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Should not return 
+\end{DoxyReturn}
+
+
+Definition at line 80 of file dadio.\+c.
+
+
+\begin{DoxyCode}
+81 \{
+82     \textcolor{keywordtype}{char} buffer[11]  = \textcolor{stringliteral}{"0x00000000"};
+83     uint8\_t pointer = 9;
+84     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < 8; i++)
+85     \{
+86         \textcolor{keywordtype}{int} c = input & 0xF;
+87         \textcolor{keywordflow}{if} (c < 10)
+88             c += 0x30;
+89         \textcolor{keywordflow}{else}
+90             c += 55;
+91         buffer[pointer] = (char)c;
+92         pointer--;
+93         input >>= 4;
+94     \}
+95 
+96     \textcolor{comment}{//This is to make the thing smaller}
+97     pointer = 2;
+98     \textcolor{keywordflow}{while}((buffer[pointer] == \textcolor{charliteral}{'0'})&& (pointer < 9)) pointer ++;
+99     pointer--;buffer[pointer] = \textcolor{charliteral}{'x'};
+100     pointer--;buffer[pointer] = \textcolor{charliteral}{'0'};
+101     \hyperlink{dadio_8c_a54b3166c4a042f01e94e6cba1b5f186a}{monitor\_puts}(buffer + pointer);
+102 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{dadio_8c_a5663d1e12dd66fc3621fe15b7d7725ba}\label{dadio_8c_a5663d1e12dd66fc3621fe15b7d7725ba}} 
+\index{dadio.\+c@{dadio.\+c}!printint@{printint}}
+\index{printint@{printint}!dadio.\+c@{dadio.\+c}}
+\subsubsection{\texorpdfstring{printint()}{printint()}}
+{\footnotesize\ttfamily void printint (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{input }\end{DoxyParamCaption})}
+
+
+
+A function to print integer datatype. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em input} & A 32 bit integer to print on the screen \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Should not return 
+\end{DoxyReturn}
+
+
+Definition at line 107 of file dadio.\+c.
+
+
+\begin{DoxyCode}
+108 \{
+109     \textcolor{keywordtype}{char} buffer[11] = \textcolor{stringliteral}{"0000000000"};
+110     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < 10; i++)
+111     \{
+112         \textcolor{keywordtype}{int} temp = input % 10;
+113         buffer[10 - i] = (char)(temp + 0x30);
+114         input /= 10;
+115     \}
+116     \hyperlink{dadio_8c_a54b3166c4a042f01e94e6cba1b5f186a}{monitor\_puts}(buffer);
+117 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{dadio_8c_a0a889ac2f45be624d78be476f121c114}\label{dadio_8c_a0a889ac2f45be624d78be476f121c114}} 
+\index{dadio.\+c@{dadio.\+c}!putc@{putc}}
+\index{putc@{putc}!dadio.\+c@{dadio.\+c}}
+\subsubsection{\texorpdfstring{putc()}{putc()}}
+{\footnotesize\ttfamily void putc (\begin{DoxyParamCaption}\item[{char}]{x }\end{DoxyParamCaption})}
+
+
+
+A function to print a character on the screen. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em x} & A character to print on the screen \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Should not return 
+\end{DoxyReturn}
+
+
+Definition at line 122 of file dadio.\+c.
+
+
+\begin{DoxyCode}
+123 \{
+124     uint32\_t pointer = get\_cursor();
+125     \textcolor{keywordtype}{char}* vga\_cursor = \hyperlink{dadio_8c_a16ae0e4e8728a8b760ca5b3c77036fb0}{\_\_VGA\_text\_memory};
+126     \textcolor{keywordflow}{if}(x == \textcolor{charliteral}{'\(\backslash\)b'})
+127     \{
+128         \textcolor{keywordflow}{if} (pointer)
+129         \{
+130             pointer--;
+131             vga\_cursor += (pointer << 1);
+132             *vga\_cursor = 0;
+133             vga\_cursor[1] = vga\_cursor[3];
+134             set\_cursor(pointer);
+135         \}
+136     \}
+137     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if}(x == \textcolor{charliteral}{'\(\backslash\)n'})
+138         \{
+139              pointer=pointer-(pointer%\hyperlink{dadio_8c_ac6f18a9e1d00b4637522b1b469a92021}{ROW})+\hyperlink{dadio_8c_ac6f18a9e1d00b4637522b1b469a92021}{ROW};
+140              \textcolor{keywordflow}{if}(pointer==\hyperlink{dadio_8c_ac6f18a9e1d00b4637522b1b469a92021}{ROW}*\hyperlink{dadio_8c_ab00f2b8e8bad4307cf0775a5520cf663}{COL})
+141                 pointer=0;
+142              set\_cursor(pointer);
+143         \}
+144     \textcolor{keywordflow}{else}
+145     \{
+146         vga\_cursor += (pointer << 1);
+147         vga\_cursor[1] = (char)current\_color;
+148         *vga\_cursor = x;
+149         set\_cursor(pointer + 1);
+150     \}
+151 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{dadio_8c_a04a2fdb6da97c8906db7ae133a79cdbc}\label{dadio_8c_a04a2fdb6da97c8906db7ae133a79cdbc}} 
+\index{dadio.\+c@{dadio.\+c}!set\+\_\+bg\+\_\+color@{set\+\_\+bg\+\_\+color}}
+\index{set\+\_\+bg\+\_\+color@{set\+\_\+bg\+\_\+color}!dadio.\+c@{dadio.\+c}}
+\subsubsection{\texorpdfstring{set\+\_\+bg\+\_\+color()}{set\_bg\_color()}}
+{\footnotesize\ttfamily void set\+\_\+bg\+\_\+color (\begin{DoxyParamCaption}\item[{enum vga\+\_\+color}]{c }\end{DoxyParamCaption})}
+
+
+
+A function to set the background color to specified value. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em c} & A color name chosen from the predefined color \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Should not return 
+\end{DoxyReturn}
+
+
+Definition at line 165 of file dadio.\+c.
+
+
+\begin{DoxyCode}
+166 \{
+167     current\_color &= 0x0f;
+168     current\_color |= (c << 4);
+169 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{dadio_8c_a7477497db66e82b498fc2489b522eb9a}\label{dadio_8c_a7477497db66e82b498fc2489b522eb9a}} 
+\index{dadio.\+c@{dadio.\+c}!set\+\_\+fg\+\_\+color@{set\+\_\+fg\+\_\+color}}
+\index{set\+\_\+fg\+\_\+color@{set\+\_\+fg\+\_\+color}!dadio.\+c@{dadio.\+c}}
+\subsubsection{\texorpdfstring{set\+\_\+fg\+\_\+color()}{set\_fg\_color()}}
+{\footnotesize\ttfamily void set\+\_\+fg\+\_\+color (\begin{DoxyParamCaption}\item[{enum vga\+\_\+color}]{c }\end{DoxyParamCaption})}
+
+
+
+A function to set the foreground color to specified value. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em c} & A color name chosen from the predefined color \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Should not return 
+\end{DoxyReturn}
+
+
+Definition at line 156 of file dadio.\+c.
+
+
+\begin{DoxyCode}
+157 \{
+158     current\_color &= 0xf0;
+159     current\_color |= c;
+160 \}
+\end{DoxyCode}
+
+
+\subsection{Variable Documentation}
+\mbox{\Hypertarget{dadio_8c_a16ae0e4e8728a8b760ca5b3c77036fb0}\label{dadio_8c_a16ae0e4e8728a8b760ca5b3c77036fb0}} 
+\index{dadio.\+c@{dadio.\+c}!\+\_\+\+\_\+\+V\+G\+A\+\_\+text\+\_\+memory@{\+\_\+\+\_\+\+V\+G\+A\+\_\+text\+\_\+memory}}
+\index{\+\_\+\+\_\+\+V\+G\+A\+\_\+text\+\_\+memory@{\+\_\+\+\_\+\+V\+G\+A\+\_\+text\+\_\+memory}!dadio.\+c@{dadio.\+c}}
+\subsubsection{\texorpdfstring{\+\_\+\+\_\+\+V\+G\+A\+\_\+text\+\_\+memory}{\_\_VGA\_text\_memory}}
+{\footnotesize\ttfamily char \+\_\+\+\_\+\+V\+G\+A\+\_\+text\+\_\+memory\mbox{[}$\,$\mbox{]}}
+
+Stores the starting address of a display screen 

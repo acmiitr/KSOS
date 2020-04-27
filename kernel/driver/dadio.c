@@ -1,14 +1,23 @@
+/**  
+ * @file dadio.c
+ * @brief File containing functions that help display on VGA display
+ * @see 
+ */
+
+
 #include <stdint.h>
 #include "dadio.h"
 #include "hardware.h"
 #include "hal.h"
 
-#define ROW 80
-#define COL 25
+#define ROW 80/**< Number of Rows on the screen*/
+#define COL 25/**< Number of Columns on the screen*/
 
-extern char __VGA_text_memory[];
-static char current_color = 0xf8;
-
+extern char __VGA_text_memory[];/**< Stores the starting address of a display screen*/ 
+static char current_color = 0xf8;/**< Current Color */
+/** @brief A function to clear the output display 
+ * @return Should not return
+ * */
 void clear()
 {
 	char* cursor=(char*)__VGA_text_memory;
@@ -21,7 +30,11 @@ void clear()
 		}
 	set_cursor(0);
 }
-
+/** @brief A function that prints a given string on the VGA Display
+*
+* @param Message Input the given string
+* @return  
+*/
 void monitor_puts(char* Message)
 {
 	uint32_t pointer = get_cursor();
@@ -60,7 +73,10 @@ void monitor_puts(char* Message)
 	pointer >>= 1;
 	set_cursor(pointer);
 }
-
+/** @brief A function to print hexadecimal numbers
+ * @param input	A 32 bit integer to print in hexadecimal 
+ * @return Should not return
+ * */
 void printhex(uint32_t input)
 {
 	char buffer[11]  = "0x00000000";
@@ -84,7 +100,10 @@ void printhex(uint32_t input)
 	pointer--;buffer[pointer] = '0';
 	monitor_puts(buffer + pointer);
 }
-
+/** @brief A function to print integer datatype
+ * @param input	A 32 bit integer to print on the screen
+ * @return Should not return
+ * */
 void printint(uint32_t input)
 {
 	char buffer[11] = "0000000000";
@@ -96,7 +115,10 @@ void printint(uint32_t input)
 	}
 	monitor_puts(buffer);
 }
-
+/** @brief A function to print a character on the screen
+ * @param x	A character to print on the screen 
+ * @return Should not return
+ * */
 void putc(char x)
 {
 	uint32_t pointer = get_cursor();
@@ -127,19 +149,28 @@ void putc(char x)
 		set_cursor(pointer + 1);
 	}
 }
-
+/** @brief A function to set the foreground color to specified value
+ * @param c	A color name chosen from the predefined color 
+ * @return Should not return
+ * */
 void set_fg_color(enum vga_color c)
 {
 	current_color &= 0xf0;
 	current_color |= c;
 }
-
+/** @brief A function to set the background color to specified value
+ * @param c	A color name chosen from the predefined color 
+ * @return Should not return
+ * */
 void set_bg_color(enum vga_color c)
 {
 	current_color &= 0x0f;
 	current_color |= (c << 4);
 }
-
+/** @brief A function that returns the current monitor character printed
+ * 
+ * @return Current monitor character
+ * */
 char get_monitor_char()
 {
 	while (1)

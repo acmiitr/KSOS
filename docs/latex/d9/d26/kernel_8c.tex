@@ -1,0 +1,255 @@
+\hypertarget{kernel_8c}{}\section{kernel/kernel/kernel.c File Reference}
+\label{kernel_8c}\index{kernel/kernel/kernel.\+c@{kernel/kernel/kernel.\+c}}
+
+
+...  
+
+
+{\ttfamily \#include $<$stdint.\+h$>$}\newline
+{\ttfamily \#include $<$string.\+h$>$}\newline
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}dadio.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}phymem.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}virtmem.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}hardware.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}hal.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}inthandling.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}F\+A\+T12.\+h\char`\"{}}\newline
+Include dependency graph for kernel.\+c\+:
+% FIG 0
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{kernel_8c_a4017f0dd96a5b008a68efd9a34a69522}{U\+S\+E\+R\+S\+T\+A\+C\+K\+\_\+\+P\+HY}~0x40000
+\item 
+\#define \hyperlink{kernel_8c_a6cb74c1bb9083447151e53bcb422883d}{U\+S\+E\+R\+S\+T\+A\+CK}~0x\+C0000000
+\item 
+\#define \hyperlink{kernel_8c_a7d467c1d283fdfa1f2081ba1e0d01b6e}{P\+A\+G\+E\+\_\+\+S\+I\+ZE}~4096
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{kernel_8c_acefb8a889e6728d61ab75f55ad33991c}{kshell} ()
+\begin{DoxyCompactList}\small\item\em ...The main shell function \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{kernel_8c_a189cc241bb881b2097b7c1e94c45ffec}\label{kernel_8c_a189cc241bb881b2097b7c1e94c45ffec}} 
+void {\bfseries refresh\+\_\+stack} ()
+\item 
+\mbox{\Hypertarget{kernel_8c_a9a2d987c24358314dff1df20033bed1b}\label{kernel_8c_a9a2d987c24358314dff1df20033bed1b}} 
+void {\bfseries switch\+\_\+to\+\_\+user} (uint32\+\_\+t $\ast$address)
+\item 
+\mbox{\Hypertarget{kernel_8c_a02fd73d861ef2e4aabb38c0c9ff82947}\label{kernel_8c_a02fd73d861ef2e4aabb38c0c9ff82947}} 
+void {\bfseries init} ()
+\item 
+void \hyperlink{kernel_8c_a310273ac0e946f6c578139b3ae5c47d4}{kmain} (uint32\+\_\+t mmapsize, uint32\+\_\+t data\+\_\+sect, uint32\+\_\+t root\+\_\+sect, uint32\+\_\+t fat\+\_\+sect)
+\begin{DoxyCompactList}\small\item\em ... \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+uint32\+\_\+t \hyperlink{kernel_8c_a3dd9a9df7be1a7ce1165a113c2a4d88c}{\+\_\+\+\_\+user\+\_\+begin} \mbox{[}$\,$\mbox{]}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+... 
+
+\begin{DoxySeeAlso}{See also}
+
+\end{DoxySeeAlso}
+
+
+\subsection{Macro Definition Documentation}
+\mbox{\Hypertarget{kernel_8c_a7d467c1d283fdfa1f2081ba1e0d01b6e}\label{kernel_8c_a7d467c1d283fdfa1f2081ba1e0d01b6e}} 
+\index{kernel.\+c@{kernel.\+c}!P\+A\+G\+E\+\_\+\+S\+I\+ZE@{P\+A\+G\+E\+\_\+\+S\+I\+ZE}}
+\index{P\+A\+G\+E\+\_\+\+S\+I\+ZE@{P\+A\+G\+E\+\_\+\+S\+I\+ZE}!kernel.\+c@{kernel.\+c}}
+\subsubsection{\texorpdfstring{P\+A\+G\+E\+\_\+\+S\+I\+ZE}{PAGE\_SIZE}}
+{\footnotesize\ttfamily \#define P\+A\+G\+E\+\_\+\+S\+I\+ZE~4096}
+
+Description here 
+
+Definition at line 19 of file kernel.\+c.
+
+\mbox{\Hypertarget{kernel_8c_a6cb74c1bb9083447151e53bcb422883d}\label{kernel_8c_a6cb74c1bb9083447151e53bcb422883d}} 
+\index{kernel.\+c@{kernel.\+c}!U\+S\+E\+R\+S\+T\+A\+CK@{U\+S\+E\+R\+S\+T\+A\+CK}}
+\index{U\+S\+E\+R\+S\+T\+A\+CK@{U\+S\+E\+R\+S\+T\+A\+CK}!kernel.\+c@{kernel.\+c}}
+\subsubsection{\texorpdfstring{U\+S\+E\+R\+S\+T\+A\+CK}{USERSTACK}}
+{\footnotesize\ttfamily \#define U\+S\+E\+R\+S\+T\+A\+CK~0x\+C0000000}
+
+Description here 
+
+Definition at line 18 of file kernel.\+c.
+
+\mbox{\Hypertarget{kernel_8c_a4017f0dd96a5b008a68efd9a34a69522}\label{kernel_8c_a4017f0dd96a5b008a68efd9a34a69522}} 
+\index{kernel.\+c@{kernel.\+c}!U\+S\+E\+R\+S\+T\+A\+C\+K\+\_\+\+P\+HY@{U\+S\+E\+R\+S\+T\+A\+C\+K\+\_\+\+P\+HY}}
+\index{U\+S\+E\+R\+S\+T\+A\+C\+K\+\_\+\+P\+HY@{U\+S\+E\+R\+S\+T\+A\+C\+K\+\_\+\+P\+HY}!kernel.\+c@{kernel.\+c}}
+\subsubsection{\texorpdfstring{U\+S\+E\+R\+S\+T\+A\+C\+K\+\_\+\+P\+HY}{USERSTACK\_PHY}}
+{\footnotesize\ttfamily \#define U\+S\+E\+R\+S\+T\+A\+C\+K\+\_\+\+P\+HY~0x40000}
+
+Description here 
+
+Definition at line 17 of file kernel.\+c.
+
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{kernel_8c_a310273ac0e946f6c578139b3ae5c47d4}\label{kernel_8c_a310273ac0e946f6c578139b3ae5c47d4}} 
+\index{kernel.\+c@{kernel.\+c}!kmain@{kmain}}
+\index{kmain@{kmain}!kernel.\+c@{kernel.\+c}}
+\subsubsection{\texorpdfstring{kmain()}{kmain()}}
+{\footnotesize\ttfamily void kmain (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{mmapsize,  }\item[{uint32\+\_\+t}]{data\+\_\+sect,  }\item[{uint32\+\_\+t}]{root\+\_\+sect,  }\item[{uint32\+\_\+t}]{fat\+\_\+sect }\end{DoxyParamCaption})}
+
+
+
+... 
+
+
+\begin{DoxyParams}{Parameters}
+{\em mmapsize} & \\
+\hline
+{\em data\+\_\+sect} & \\
+\hline
+{\em root\+\_\+sect} & \\
+\hline
+{\em fat\+\_\+sect} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+
+
+Definition at line 36 of file kernel.\+c.
+
+
+\begin{DoxyCode}
+37 \{
+38     \hyperlink{gdt_8c_aaa7a7d6a41843f8a0c64fd66967feef4}{gdt\_init}();
+39     \hyperlink{phymem_8c_a838cffb4967812c2a2ac1ffe5879ec42}{pmmngr\_init}(mmapsize); \textcolor{comment}{//Uses 0x1000... Don't remove identity map before that}
+40     vmmngr\_init();  \textcolor{comment}{//Sets recursive map, remaps stack and vidmem}
+41     \hyperlink{dadio_8c_ac8bb3912a3ce86b15842e79d0b421204}{clear}();
+42 
+43     \hyperlink{dadio_8c_a54b3166c4a042f01e94e6cba1b5f186a}{monitor\_puts}(\textcolor{stringliteral}{"Data starts: "});\hyperlink{dadio_8c_aef61864baeea47473a5de32e4e1ed7d4}{printhex}(data\_sect*512);
+44     \hyperlink{dadio_8c_a54b3166c4a042f01e94e6cba1b5f186a}{monitor\_puts}(\textcolor{stringliteral}{"\(\backslash\)nRoot starts: "});\hyperlink{dadio_8c_aef61864baeea47473a5de32e4e1ed7d4}{printhex}(root\_sect*512);
+45     \hyperlink{dadio_8c_a54b3166c4a042f01e94e6cba1b5f186a}{monitor\_puts}(\textcolor{stringliteral}{"\(\backslash\)nFAT starts: "});\hyperlink{dadio_8c_aef61864baeea47473a5de32e4e1ed7d4}{printhex}(fat\_sect*512);
+46 
+47     refresh\_stack(); \textcolor{comment}{//This is some next level function: It forces stack remapping, some legend.. Debugging
+       will get confused here}
+48     remove\_identity\_map();
+49 
+50     \hyperlink{inthandling_8c_a1c62fca549a4981d6684d4a5c72874b9}{interrupt\_init}();
+51     tss\_kernel\_init();
+52 
+53 puts(\textcolor{stringliteral}{"What is this shit??"});
+54     \textcolor{keywordflow}{if}(\hyperlink{dadio_8c_a145a5ba7f7c1451e7753deb88f34e1cb}{get\_monitor\_char}() == \textcolor{charliteral}{'s'}) \hyperlink{kernel_8c_acefb8a889e6728d61ab75f55ad33991c}{kshell}();
+55 
+56     map\_page(\hyperlink{kernel_8c_a6cb74c1bb9083447151e53bcb422883d}{USERSTACK} - \hyperlink{kernel_8c_a7d467c1d283fdfa1f2081ba1e0d01b6e}{PAGE\_SIZE},\hyperlink{kernel_8c_a4017f0dd96a5b008a68efd9a34a69522}{USERSTACK\_PHY} - 
+      \hyperlink{kernel_8c_a7d467c1d283fdfa1f2081ba1e0d01b6e}{PAGE\_SIZE},\textcolor{keyword}{true},\textcolor{keyword}{true});
+57     map\_page((uint32\_t)\hyperlink{kernel_8c_a3dd9a9df7be1a7ce1165a113c2a4d88c}{\_\_user\_begin},virtual\_to\_physical(\_\_user\_begin),\textcolor{keyword}{true},\textcolor{keyword}{true});
+58 
+59 \textcolor{comment}{//  switch\_to\_user((uint32\_t*)init);  //TODO: Make this a function pointer instead of uint32\_t*}
+60 
+61 
+62     clear\_interrupts();
+63     kernel\_wait();
+64 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{kernel_8c_acefb8a889e6728d61ab75f55ad33991c}\label{kernel_8c_acefb8a889e6728d61ab75f55ad33991c}} 
+\index{kernel.\+c@{kernel.\+c}!kshell@{kshell}}
+\index{kshell@{kshell}!kernel.\+c@{kernel.\+c}}
+\subsubsection{\texorpdfstring{kshell()}{kshell()}}
+{\footnotesize\ttfamily void kshell (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+...The main shell function 
+
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+
+
+Definition at line 45 of file kshell.\+c.
+
+
+\begin{DoxyCode}
+46 \{
+47     command\_fresh();
+48     \textcolor{comment}{//This loop gets the commands from us}
+49     \textcolor{keywordflow}{while}(1)
+50     \{
+51         \hyperlink{dadio_8c_a54b3166c4a042f01e94e6cba1b5f186a}{monitor\_puts}(\textcolor{stringliteral}{"\(\backslash\)n"}); \hyperlink{dadio_8c_a54b3166c4a042f01e94e6cba1b5f186a}{monitor\_puts}(\_shell\_name); 
+      \hyperlink{dadio_8c_a54b3166c4a042f01e94e6cba1b5f186a}{monitor\_puts}(\textcolor{stringliteral}{" >"});
+52         flush\_command\_buffer();
+53         \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} i=0;i<\hyperlink{kshell_8c_ab95c4556ea9e5b815392d36c3d7b2ec0}{MAX\_COMMAND\_SIZE};i++)
+54         \{
+55             \textcolor{keywordtype}{char} input = \hyperlink{dadio_8c_a145a5ba7f7c1451e7753deb88f34e1cb}{get\_monitor\_char}();
+56             \textcolor{keywordflow}{if} (input == 17)
+57             \{   
+58                 \textcolor{comment}{//uint8\_t scanned=get\_latest\_scan\_code();}
+59                 \textcolor{keywordflow}{if}(i!=0)
+60                 \{   uint32\_t pointer = get\_cursor();
+61                     i-=2;
+62                     pointer--;
+63                     set\_cursor(pointer);
+64                 \}
+65                 \textcolor{keywordflow}{else} i--;
+66                 \textcolor{keywordflow}{continue};
+67             \}
+68             \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (input == 18)
+69             \{
+70                 \textcolor{keywordflow}{if}(i==0&&\_cmd\_buffer[i]==0)
+71                     \{i--;\textcolor{keywordflow}{continue};\} 
+72                 uint32\_t pointer = get\_cursor();
+73                 \textcolor{keywordflow}{if}(\_cmd\_buffer[i]!=0)
+74                     \{pointer++;\}
+75                 \textcolor{keywordflow}{else}
+76                     i--;
+77                 set\_cursor(pointer);
+78                 \textcolor{keywordflow}{continue};               
+79             \}
+80             \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (input == \textcolor{charliteral}{'\(\backslash\)b'})
+81                 \{
+82                     \textcolor{keywordflow}{if} (i > 0)
+83                     \{
+84                         \hyperlink{dadio_8c_a0a889ac2f45be624d78be476f121c114}{putc}(\textcolor{charliteral}{'\(\backslash\)b'});
+85                         \textcolor{keywordflow}{if}(\_cmd\_buffer[i]!=0)
+86                         \{
+87                             i--;
+88                             \textcolor{keywordtype}{int} k=i;uint32\_t pointer=get\_cursor();
+89                             \textcolor{keywordflow}{while}(\_cmd\_buffer[k]!=0)
+90                             \{
+91                                 \_cmd\_buffer[k]=\_cmd\_buffer[k+1];
+92                                 \hyperlink{dadio_8c_a0a889ac2f45be624d78be476f121c114}{putc}(\_cmd\_buffer[k]);
+93                                 k++;
+94                             \}
+95                             set\_cursor(pointer);
+96                         \}
+97                         \textcolor{keywordflow}{else}
+98                         \{
+99                         i--;
+100                         \_cmd\_buffer[i] = 0;\}
+101                     \}
+102                     i--;
+103                     \textcolor{keywordflow}{continue};
+104                 \}
+105             \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (input == \textcolor{charliteral}{'\(\backslash\)n'})
+106             \{
+107                 parse\_command();
+108                 \textcolor{keywordflow}{break};
+109             \}
+110             \textcolor{keywordflow}{else}
+111             \_cmd\_buffer[i] = input;
+112             \hyperlink{dadio_8c_a0a889ac2f45be624d78be476f121c114}{putc}(input);
+113         \}
+114     \}
+115 \}
+\end{DoxyCode}
+
+
+\subsection{Variable Documentation}
+\mbox{\Hypertarget{kernel_8c_a3dd9a9df7be1a7ce1165a113c2a4d88c}\label{kernel_8c_a3dd9a9df7be1a7ce1165a113c2a4d88c}} 
+\index{kernel.\+c@{kernel.\+c}!\+\_\+\+\_\+user\+\_\+begin@{\+\_\+\+\_\+user\+\_\+begin}}
+\index{\+\_\+\+\_\+user\+\_\+begin@{\+\_\+\+\_\+user\+\_\+begin}!kernel.\+c@{kernel.\+c}}
+\subsubsection{\texorpdfstring{\+\_\+\+\_\+user\+\_\+begin}{\_\_user\_begin}}
+{\footnotesize\ttfamily uint32\+\_\+t \+\_\+\+\_\+user\+\_\+begin\mbox{[}$\,$\mbox{]}}
+
+Description here 

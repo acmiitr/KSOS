@@ -1,5 +1,18 @@
+/**  
+ * @file memmove.c
+ * @brief MOving data stored in memory from one location to another
+ * @see 
+ */
 #include <string.h>
 
+/**
+ * A simple function to move data using memory address
+ * @param dstptr Pointing to the destination adress 
+ * @param srcptr Pointing to the source adress 
+ * @param size Size to move memory
+ * 
+ * @return A null pointer pointing to the destination
+*/
 void* memmove(void* dstptr, const void* srcptr, size_t size) {
 	unsigned char* dst = (unsigned char*) dstptr;
 	const unsigned char* src = (const unsigned char*) srcptr;

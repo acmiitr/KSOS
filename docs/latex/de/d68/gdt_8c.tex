@@ -1,0 +1,202 @@
+\hypertarget{gdt_8c}{}\section{kernel/hal/gdt.c File Reference}
+\label{gdt_8c}\index{kernel/hal/gdt.\+c@{kernel/hal/gdt.\+c}}
+
+
+...  
+
+
+{\ttfamily \#include $<$stdint.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}hal.\+h\char`\"{}}\newline
+Include dependency graph for gdt.\+c\+:
+% FIG 0
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{gdt_8c_a9c56a74972e781773685e1f69d6830eb}{G\+D\+T\+\_\+\+D\+E\+S\+C\+R\+I\+P\+T\+O\+R\+\_\+\+C\+O\+U\+NT}~6
+\item 
+\mbox{\Hypertarget{gdt_8c_acfffacd81acbe9e3ddc54df096e19412}\label{gdt_8c_acfffacd81acbe9e3ddc54df096e19412}} 
+\#define {\bfseries I86\+\_\+\+G\+D\+T\+\_\+\+D\+E\+S\+C\+\_\+\+A\+C\+C\+E\+SS}~0x0001
+\item 
+\mbox{\Hypertarget{gdt_8c_ad042b8fa1d1a0f0aedf021cd0cbe8112}\label{gdt_8c_ad042b8fa1d1a0f0aedf021cd0cbe8112}} 
+\#define {\bfseries I86\+\_\+\+G\+D\+T\+\_\+\+D\+E\+S\+C\+\_\+\+R\+E\+A\+D\+W\+R\+I\+TE}~0x0002
+\item 
+\mbox{\Hypertarget{gdt_8c_a3dea9aba5b9aaa7b3f7cef54712c2a25}\label{gdt_8c_a3dea9aba5b9aaa7b3f7cef54712c2a25}} 
+\#define {\bfseries I86\+\_\+\+G\+D\+T\+\_\+\+D\+E\+S\+C\+\_\+\+E\+X\+P\+A\+N\+S\+I\+ON}~0x0004
+\item 
+\mbox{\Hypertarget{gdt_8c_ab5e08020b046b8ee8e09134201ec6888}\label{gdt_8c_ab5e08020b046b8ee8e09134201ec6888}} 
+\#define {\bfseries I86\+\_\+\+G\+D\+T\+\_\+\+D\+E\+S\+C\+\_\+\+E\+X\+E\+C\+\_\+\+C\+O\+DE}~0x0008
+\item 
+\mbox{\Hypertarget{gdt_8c_ae1ba0326b9d47b5ac474bdbdd63d57f8}\label{gdt_8c_ae1ba0326b9d47b5ac474bdbdd63d57f8}} 
+\#define {\bfseries I86\+\_\+\+G\+D\+T\+\_\+\+D\+E\+S\+C\+\_\+\+C\+O\+D\+E\+D\+A\+TA}~0x0010
+\item 
+\mbox{\Hypertarget{gdt_8c_ad61c15cce2101f7e4bc4ba0dc69d9437}\label{gdt_8c_ad61c15cce2101f7e4bc4ba0dc69d9437}} 
+\#define {\bfseries I86\+\_\+\+G\+D\+T\+\_\+\+D\+E\+S\+C\+\_\+\+D\+PL}~0x0060
+\item 
+\mbox{\Hypertarget{gdt_8c_a8b4e0da403a66b1967c1f27b08c509ad}\label{gdt_8c_a8b4e0da403a66b1967c1f27b08c509ad}} 
+\#define {\bfseries I86\+\_\+\+G\+D\+T\+\_\+\+D\+E\+S\+C\+\_\+\+M\+E\+M\+O\+RY}~0x0080
+\item 
+\mbox{\Hypertarget{gdt_8c_af2f651cbe81fb5535f7aaa77e724b850}\label{gdt_8c_af2f651cbe81fb5535f7aaa77e724b850}} 
+\#define {\bfseries I86\+\_\+\+G\+D\+T\+\_\+\+G\+R\+A\+N\+D\+\_\+\+L\+I\+M\+I\+T\+H\+I\+\_\+\+M\+A\+SK}~0x0f
+\item 
+\mbox{\Hypertarget{gdt_8c_aaf6d2b045fab48f4ebeb9570c835fb6a}\label{gdt_8c_aaf6d2b045fab48f4ebeb9570c835fb6a}} 
+\#define {\bfseries I86\+\_\+\+G\+D\+T\+\_\+\+G\+R\+A\+N\+D\+\_\+\+OS}~0x10
+\item 
+\mbox{\Hypertarget{gdt_8c_ab4576d924d22817f7cbc1ec7b4d32779}\label{gdt_8c_ab4576d924d22817f7cbc1ec7b4d32779}} 
+\#define {\bfseries I86\+\_\+\+G\+D\+T\+\_\+\+G\+R\+A\+N\+D\+\_\+32\+B\+IT}~0x40
+\item 
+\mbox{\Hypertarget{gdt_8c_aea4363571406a3aa4d92bab9e2042084}\label{gdt_8c_aea4363571406a3aa4d92bab9e2042084}} 
+\#define {\bfseries I86\+\_\+\+G\+D\+T\+\_\+\+G\+R\+A\+N\+D\+\_\+4K}~0x80
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{gdt_8c_ad09246453a4dabd919c7541484046a87}{\+\_\+\+\_\+attribute\+\_\+\+\_\+} ((\+\_\+\+\_\+packed\+\_\+\+\_\+))
+\item 
+void \hyperlink{gdt_8c_a5075cc3f7d88b5d1ed8c84512a959b82}{gdt\+\_\+set\+\_\+descriptor} (uint16\+\_\+t i, uint32\+\_\+t base, uint32\+\_\+t limit, uint8\+\_\+t access, uint8\+\_\+t grand)
+\begin{DoxyCompactList}\small\item\em ... \end{DoxyCompactList}\item 
+void \hyperlink{gdt_8c_aaa7a7d6a41843f8a0c64fd66967feef4}{gdt\+\_\+init} ()
+\begin{DoxyCompactList}\small\item\em ... \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{gdt_8c_af723884ee265976c7195e6bcd303befc}\label{gdt_8c_af723884ee265976c7195e6bcd303befc}} 
+{\bfseries gdtr\+\_\+t}
+\item 
+\mbox{\Hypertarget{gdt_8c_ab9c337c9a6a781bbdf29748ba8c0c165}\label{gdt_8c_ab9c337c9a6a781bbdf29748ba8c0c165}} 
+{\bfseries gdt\+\_\+descriptor\+\_\+t}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+... 
+
+\begin{DoxySeeAlso}{See also}
+
+\end{DoxySeeAlso}
+
+
+\subsection{Macro Definition Documentation}
+\mbox{\Hypertarget{gdt_8c_a9c56a74972e781773685e1f69d6830eb}\label{gdt_8c_a9c56a74972e781773685e1f69d6830eb}} 
+\index{gdt.\+c@{gdt.\+c}!G\+D\+T\+\_\+\+D\+E\+S\+C\+R\+I\+P\+T\+O\+R\+\_\+\+C\+O\+U\+NT@{G\+D\+T\+\_\+\+D\+E\+S\+C\+R\+I\+P\+T\+O\+R\+\_\+\+C\+O\+U\+NT}}
+\index{G\+D\+T\+\_\+\+D\+E\+S\+C\+R\+I\+P\+T\+O\+R\+\_\+\+C\+O\+U\+NT@{G\+D\+T\+\_\+\+D\+E\+S\+C\+R\+I\+P\+T\+O\+R\+\_\+\+C\+O\+U\+NT}!gdt.\+c@{gdt.\+c}}
+\subsubsection{\texorpdfstring{G\+D\+T\+\_\+\+D\+E\+S\+C\+R\+I\+P\+T\+O\+R\+\_\+\+C\+O\+U\+NT}{GDT\_DESCRIPTOR\_COUNT}}
+{\footnotesize\ttfamily \#define G\+D\+T\+\_\+\+D\+E\+S\+C\+R\+I\+P\+T\+O\+R\+\_\+\+C\+O\+U\+NT~6}
+
+Description here 
+
+Definition at line 9 of file gdt.\+c.
+
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{gdt_8c_ad09246453a4dabd919c7541484046a87}\label{gdt_8c_ad09246453a4dabd919c7541484046a87}} 
+\index{gdt.\+c@{gdt.\+c}!\+\_\+\+\_\+attribute\+\_\+\+\_\+@{\+\_\+\+\_\+attribute\+\_\+\+\_\+}}
+\index{\+\_\+\+\_\+attribute\+\_\+\+\_\+@{\+\_\+\+\_\+attribute\+\_\+\+\_\+}!gdt.\+c@{gdt.\+c}}
+\subsubsection{\texorpdfstring{\+\_\+\+\_\+attribute\+\_\+\+\_\+()}{\_\_attribute\_\_()}}
+{\footnotesize\ttfamily struct \+\_\+\+\_\+attribute\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{(\+\_\+\+\_\+packed\+\_\+\+\_\+)}]{ }\end{DoxyParamCaption})}
+
+Description here 
+
+Definition at line 25 of file gdt.\+c.
+
+
+\begin{DoxyCode}
+26 \{
+27     uint16\_t    limit;
+28     uint32\_t    base;
+29 \}gdtr\_t;
+\end{DoxyCode}
+\mbox{\Hypertarget{gdt_8c_aaa7a7d6a41843f8a0c64fd66967feef4}\label{gdt_8c_aaa7a7d6a41843f8a0c64fd66967feef4}} 
+\index{gdt.\+c@{gdt.\+c}!gdt\+\_\+init@{gdt\+\_\+init}}
+\index{gdt\+\_\+init@{gdt\+\_\+init}!gdt.\+c@{gdt.\+c}}
+\subsubsection{\texorpdfstring{gdt\+\_\+init()}{gdt\_init()}}
+{\footnotesize\ttfamily void gdt\+\_\+init (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+... 
+
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+
+
+Definition at line 84 of file gdt.\+c.
+
+
+\begin{DoxyCode}
+85 \{
+86 
+87     \_gdtr.limit = (\textcolor{keyword}{sizeof} (\textcolor{keyword}{struct }gdt\_descriptor) * \hyperlink{gdt_8c_a9c56a74972e781773685e1f69d6830eb}{GDT\_DESCRIPTOR\_COUNT})-1;
+88     \_gdtr.base = (uint32\_t)&\_gdt[0];
+89 
+90     \hyperlink{gdt_8c_a5075cc3f7d88b5d1ed8c84512a959b82}{gdt\_set\_descriptor}(0, 0, 0, 0, 0);
+91 
+92     \hyperlink{gdt_8c_a5075cc3f7d88b5d1ed8c84512a959b82}{gdt\_set\_descriptor} (1,0,0xffffffff,
+93         I86\_GDT\_DESC\_READWRITE|I86\_GDT\_DESC\_EXEC\_CODE|I86\_GDT\_DESC\_CODEDATA|I86\_GDT\_DESC\_MEMORY,
+94         I86\_GDT\_GRAND\_4K | I86\_GDT\_GRAND\_32BIT | I86\_GDT\_GRAND\_LIMITHI\_MASK);
+95 
+96     \hyperlink{gdt_8c_a5075cc3f7d88b5d1ed8c84512a959b82}{gdt\_set\_descriptor} (2,0,0xffffffff,
+97         I86\_GDT\_DESC\_READWRITE|I86\_GDT\_DESC\_CODEDATA|I86\_GDT\_DESC\_MEMORY,
+98         I86\_GDT\_GRAND\_4K | I86\_GDT\_GRAND\_32BIT | I86\_GDT\_GRAND\_LIMITHI\_MASK);
+99 
+100     \hyperlink{gdt_8c_a5075cc3f7d88b5d1ed8c84512a959b82}{gdt\_set\_descriptor} (3,0,0xffffffff,
+101         I86\_GDT\_DESC\_READWRITE|I86\_GDT\_DESC\_EXEC\_CODE|I86\_GDT\_DESC\_CODEDATA|I86\_GDT\_DESC\_MEMORY|
+      I86\_GDT\_DESC\_DPL,
+102         I86\_GDT\_GRAND\_4K | I86\_GDT\_GRAND\_32BIT | I86\_GDT\_GRAND\_LIMITHI\_MASK);
+103 
+104     \hyperlink{gdt_8c_a5075cc3f7d88b5d1ed8c84512a959b82}{gdt\_set\_descriptor} (4,0,0xffffffff,
+105         I86\_GDT\_DESC\_READWRITE|I86\_GDT\_DESC\_CODEDATA|I86\_GDT\_DESC\_MEMORY|I86\_GDT\_DESC\_DPL,
+106         I86\_GDT\_GRAND\_4K | I86\_GDT\_GRAND\_32BIT | I86\_GDT\_GRAND\_LIMITHI\_MASK);
+107 
+108     install\_gdt((uint32\_t)&\_gdtr);
+109 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{gdt_8c_a5075cc3f7d88b5d1ed8c84512a959b82}\label{gdt_8c_a5075cc3f7d88b5d1ed8c84512a959b82}} 
+\index{gdt.\+c@{gdt.\+c}!gdt\+\_\+set\+\_\+descriptor@{gdt\+\_\+set\+\_\+descriptor}}
+\index{gdt\+\_\+set\+\_\+descriptor@{gdt\+\_\+set\+\_\+descriptor}!gdt.\+c@{gdt.\+c}}
+\subsubsection{\texorpdfstring{gdt\+\_\+set\+\_\+descriptor()}{gdt\_set\_descriptor()}}
+{\footnotesize\ttfamily void gdt\+\_\+set\+\_\+descriptor (\begin{DoxyParamCaption}\item[{uint16\+\_\+t}]{i,  }\item[{uint32\+\_\+t}]{base,  }\item[{uint32\+\_\+t}]{limit,  }\item[{uint8\+\_\+t}]{access,  }\item[{uint8\+\_\+t}]{grand }\end{DoxyParamCaption})}
+
+
+
+... 
+
+
+\begin{DoxyParams}{Parameters}
+{\em i} & .. \\
+\hline
+{\em base} & ... \\
+\hline
+{\em limit} & ... \\
+\hline
+{\em access} & ... \\
+\hline
+{\em grand} & .. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+set limit and base addresses
+
+set flags and grandularity bytes 
+
+Definition at line 52 of file gdt.\+c.
+
+
+\begin{DoxyCode}
+53 \{   
+54     \textcolor{keywordflow}{if} (i > \hyperlink{gdt_8c_a9c56a74972e781773685e1f69d6830eb}{GDT\_DESCRIPTOR\_COUNT})
+55         \textcolor{keywordflow}{return};
+56 
+58     \_gdt[i].baseLo  = (uint16\_t)(base & 0xffff);
+59     \_gdt[i].baseMid = (uint8\_t)((base >> 16) & 0xff);
+60     \_gdt[i].baseHi  = (uint8\_t)((base >> 24) & 0xff);
+61     \_gdt[i].limit   = (uint16\_t)(limit & 0xffff);
+62 
+64     \_gdt[i].flags = access;
+65     \_gdt[i].grand = (uint8\_t)((limit >> 16) & 0x0f);
+66     \_gdt[i].grand |= grand & 0xf0;
+67 \}
+\end{DoxyCode}

@@ -1,0 +1,63 @@
+This OS is being built for {\bfseries x86 architecture} system using {\bfseries Legacy B\+I\+OS} and started from scratch since November 2019. The OS is being developed on Linux Mint, using a C\+PU emulator called qemu. As we write our own bootloader, we start out in 16 bit real mode. The bootloader handles the switch to 32 bit protected mode, parses the filesystem and loads the kernel before passing control to the it. The kernel has been implemented mostly using C . Right now, the features are
+
+
+\begin{DoxyItemize}
+\item Interrupt handler
+\item Timer
+\item Keyboard driver
+\item Virtual Memory
+\item File System
+\item Video driver
+\item Memory manager
+\end{DoxyItemize}
+
+A lot of the work from this stage can now be done mainly in C, and possible developments could include implementing more general standard input/output functions, file system (disk) driver, mini games etc
+
+And no, the D\+OS does {\bfseries N\+OT} mean it\textquotesingle{}s a disk operating system, but what it does mean shall remain a secret ;)
+
+\section*{How to run the OS using qemu}
+
+This section will mainly explain how to run the OS on Debian-\/based Linux
+
+Firstly, clone the repository using
+
+{\ttfamily git clone \href{https://github.com/kssuraaj28/OS.git}{\tt https\+://github.\+com/kssuraaj28/\+O\+S.\+git}}
+
+You would need to install qemu using
+
+{\ttfamily sudo apt-\/get install qemu}
+
+Then, since most systems nowadays work on 64 bit, but this OS is 32 bit, we need to build a cross compiler using gcc for 32 bit binaries. If this went over your head, don\textquotesingle{}t worry, a bash script comes along with the repository and you just need to run the script, the rest is handled by the script. Go to the directory where script is stored and run
+
+{\ttfamily ./configure/script.sh}
+
+If you don\textquotesingle{}t believe that you need a cross complier, read this\+: \href{https://wiki.osdev.org/Why_do_I_need_a_Cross_Compiler%3F}{\tt https\+://wiki.\+osdev.\+org/\+Why\+\_\+do\+\_\+\+I\+\_\+need\+\_\+a\+\_\+\+Cross\+\_\+\+Compiler\%3F} and think again.
+
+To build the OS, we need to compile the C code, assemble the assembly code, link them, make a file system, copy the kernel to the file system and make the file system bootable. Did you catch all that xD? Thankfully, all of this is done using Makefile and we just need to run a single line
+
+{\ttfamily ./run.sh}
+
+And voila!, it creates a disk.\+img file that you runs using the emulator that we just installed.
+
+To clean the build files, simply \textquotesingle{}./clean.sh\textquotesingle{}
+
+This results in a new window that runs the OS. Enjoy the bright colours!
+
+To actually run it directly on a PC without an emulator, you would need to have a Legacy B\+I\+OS system. Let\textquotesingle{}s say you did have one lying around for 12+ years, first we would have to copy it to a U\+SB by plugging it into your system where you have built the OS and run
+
+{\ttfamily sudo dd if=disk.\+img of=/dev/sdx}
+
+where {\ttfamily sdx} is {\ttfamily sda/sdb/sdc} depending on the output of {\ttfamily lsblk}
+
+Then just plug in your U\+SB into the system and the OS boots up!
+
+\subsubsection*{Resources}
+
+
+\begin{DoxyItemize}
+\item The Os\+Dev wiki and forums \+: \href{https://wiki.osdev.org/Main_Page}{\tt https\+://wiki.\+osdev.\+org/\+Main\+\_\+\+Page} , \href{https://forum.osdev.org/}{\tt https\+://forum.\+osdev.\+org/}
+\item Broken\+Thorn \+: \href{http://www.brokenthorn.com/Resources/OSDevIndex.html}{\tt http\+://www.\+brokenthorn.\+com/\+Resources/\+O\+S\+Dev\+Index.\+html}
+\item Dr. Nick Blundell\textquotesingle{}s book\+: \href{https://www.cs.bham.ac.uk/~exr/lectures/opsys/10_11/lectures/os-dev.pdf}{\tt https\+://www.\+cs.\+bham.\+ac.\+uk/$\sim$exr/lectures/opsys/10\+\_\+11/lectures/os-\/dev.\+pdf}
+\item Stack\+Overflow (Obviously)
+\item \#osdev on Freenode I\+RC (Try it! They\textquotesingle{}re the best!) 
+\end{DoxyItemize}

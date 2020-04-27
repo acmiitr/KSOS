@@ -1,3 +1,8 @@
+/**  
+ * @file intit.c
+ * @brief ...
+ * @see 
+ */
 #include <stdint.h>
 
 extern uint32_t system_call(uint32_t eax,uint32_t esi, uint32_t edi);

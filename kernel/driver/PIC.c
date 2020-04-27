@@ -1,3 +1,10 @@
+/**  
+ * @file PIC.c
+ * @brief Programmable Interrupt Controller 
+ * 
+ * 
+ * @see 
+ */
 #include "hal.h"
 
 #define PIC1_COMMAND 0x20
@@ -5,6 +12,11 @@
 #define PIC1_DATA 0x21
 #define PIC2_DATA 0xA1
 
+/**
+ * @brief 
+ * @param 
+ * @return 
+*/
 void pic_init()
 {
 	
@@ -35,12 +47,20 @@ void pic_init()
 	write_port(PIC1_DATA,0);
 	write_port(PIC2_DATA,0);
 }
-
+/**
+ * @brief 
+ * @param 
+ * @return 
+*/
 void send_EOI_master()
 {
 	write_port(PIC1_COMMAND,0x20);
 }
-
+/**
+ * @brief 
+ * @param 
+ * @return 
+*/
 void send_EOI_slave()
 {
 	write_port(PIC2_COMMAND,0x20);

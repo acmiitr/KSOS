@@ -1,10 +1,17 @@
+/**  
+ * @file keyboard.c
+ * @brief File used to handle the input output using the keyboard.
+ * Appropriate actions taken when keys are pressed on the keyboard.
+ * 
+ * @see 
+ */
 #include<stdint.h>
 #include<stdbool.h>
 #include"dadio.h"
 #include"hal.h"
 #include"hardware.h"
 
-//These are helpful enums, i.e. names of keys - courtesy brokenthorn
+/**These are helpful enums, i.e. names of keys - courtesy brokenthorn*/
 enum KEYCODE {
 
 // Alphanumeric keys ////////////////
@@ -158,7 +165,7 @@ enum KEYCODE {
 	KEY_UNKNOWN
 };
 
-//Global scancode table
+/**A Global scancode table*/
 static int _scancode_std [] = {
 	//! key			scancode
 	KEY_UNKNOWN,	//0
@@ -252,11 +259,11 @@ static int _scancode_std [] = {
 	KEY_F12			//0x58
 };
 
-//Global variables
-static char _latest_char;
-static uint8_t _latest_scan_code;
 
-bool _is_keyboard_interrupt;
+static char _latest_char; /**< Stores the latest character to be displayed on the screen*/
+static uint8_t _latest_scan_code;/**< Stores the latest scan code read from the keys pressed on the keyboard*/
+
+bool _is_keyboard_interrupt;/**< checks if there was a keyboard interrupt raised*/
 
 
 //Helper functions
@@ -264,9 +271,17 @@ bool is_output_full();
 bool is_input_empty();
 bool is_alphabet(char);
 bool is_on_keypad(uint8_t);
-static bool is_shift_pressed = false;
-static bool caps_toggle = false;
-static bool num_lock_toggle = false;
+static bool is_shift_pressed = false;/**< Shift pressed flag*/
+static bool caps_toggle = false;/**< Caps Lock toggle*/
+static bool num_lock_toggle = false;/**< Num Lock toggle*/
+
+/**
+ * @brief Keyboard handler handles the keys pressed on the keyboard
+ * and takes appropriate action ...
+ * 
+ * 
+ * @return Nothing to return
+*/
 void keyboard_handler()
 {
 	send_EOI_master(); //Tell the keyboard to send interrupts again
@@ -362,7 +377,12 @@ void keyboard_handler()
 		_latest_char = 0;
 	}
 }
-
+/**
+ * @brief Checks whether a character is an alphabet
+ * @param c  A character to be checked for alphabet
+ * 
+ * @return Returns a whether given char is an alphabet or no
+*/
 bool is_alphabet(char c)
 {
 	if(c >= 'a' && c<='z') 
@@ -370,24 +390,37 @@ bool is_alphabet(char c)
 	else
 		return false;
 }
-
+/**
+ * @brief A function which is used to get the latest character to be printed
+ * 
+ * @return Returns the latest character to be printed on the screen
+*/
 char get_latest_char(){
 	return _latest_char;
 }
-
+/**
+ * @brief A function which is used to get the latest scan code entered in the keyboard * 
+ *
+ * @return Returns the latest scan code
+*/
 uint8_t get_latest_scan_code(){
 	return _latest_scan_code;
 }
-
+/**
+ * @brief  
+ *
+ * @return 
+*/
 bool kbc_init()
 {
-	//Disable keyboard and mouse
-//	if(is_output_full()) printf("\nKBC initialization. Output buffer full at start");
 	read_port(0x60); //Flushing the output buffer
 	return true;
 
 }
-
+/**
+ * @brief Waits for an keyboard interrupt 
+ *
+*/
 void wait_for_keyboard()
 {
 	_is_keyboard_interrupt = false;  //Wait for this thing to be flicked on
@@ -401,16 +434,29 @@ void wait_for_keyboard()
 		}
 	}
 }
-
+/**
+ * @brief Checks if the Port 0x60 is Full  
+ *
+ * @return Return whether output is full or not
+*/
 bool is_output_full()  //This is in perspective of the controller
 {
 	return (read_port(0x64)&1);
 }
-
+/**
+ * @brief Cheks if input is empty so that we can write to it 
+ *
+ * @return Return whether input port is empty or not
+*/
 bool is_input_empty()  //If this returns true, you can write into the buffer
 {
 	return (!(read_port(0x64)&2));
 }
+/**
+ * @brief A function which is used to get the latest scan code entered in the keyboard * 
+ * @param scan_code Checks if the scan code is from numpad
+ * @return Returns the latest scan code
+*/
 bool is_on_keypad(uint8_t scan_code)
 {
 	if(scan_code>=0x47&&scan_code<=0x52&&scan_code!=0x4e)

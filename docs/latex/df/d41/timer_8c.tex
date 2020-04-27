@@ -1,0 +1,194 @@
+\hypertarget{timer_8c}{}\section{kernel/driver/timer.c File Reference}
+\label{timer_8c}\index{kernel/driver/timer.\+c@{kernel/driver/timer.\+c}}
+
+
+Handles the operating systems\textquotesingle{}s Timer.  
+
+
+{\ttfamily \#include $<$stdint.\+h$>$}\newline
+{\ttfamily \#include $<$stdbool.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}hardware.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}hal.\+h\char`\"{}}\newline
+Include dependency graph for timer.\+c\+:
+% FIG 0
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{timer_8c_a61fe1bf49db8840cc842c178a9137978}{T\+I\+M\+E\+R\+\_\+\+C\+O\+N\+T\+R\+O\+L\+\_\+\+P\+O\+RT}~0x43
+\item 
+\#define \hyperlink{timer_8c_aed1aab994ad876be2344591496ac2cd6}{T\+I\+M\+E\+R\+\_\+\+D\+A\+T\+A\+\_\+\+P\+O\+RT}~0x40
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+uint32\+\_\+t \hyperlink{timer_8c_a2102666d94d6b23bfe2c68556266c3e2}{get\+\_\+tick\+\_\+count} ()
+\item 
+void \hyperlink{timer_8c_a9e63ea32abae3f871fcbe66fd99003b2}{timer\+\_\+handler} ()
+\item 
+void \hyperlink{timer_8c_a3cbe137ca6d2fe48c3f645babc335815}{set\+\_\+timer} (uint16\+\_\+t count)
+\item 
+void \hyperlink{timer_8c_a01303bbe8798338ed96c5868bbe698f9}{wait\+\_\+for\+\_\+timer} ()
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+char \hyperlink{timer_8c_a16ae0e4e8728a8b760ca5b3c77036fb0}{\+\_\+\+\_\+\+V\+G\+A\+\_\+text\+\_\+memory} \mbox{[}$\,$\mbox{]}
+\item 
+bool \hyperlink{timer_8c_a31e29a914d20537bcca7bb684fda8018}{\+\_\+is\+\_\+timer\+\_\+interrupt} = false
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Handles the operating systems\textquotesingle{}s Timer. 
+
+\begin{DoxySeeAlso}{See also}
+
+\end{DoxySeeAlso}
+
+
+\subsection{Macro Definition Documentation}
+\mbox{\Hypertarget{timer_8c_a61fe1bf49db8840cc842c178a9137978}\label{timer_8c_a61fe1bf49db8840cc842c178a9137978}} 
+\index{timer.\+c@{timer.\+c}!T\+I\+M\+E\+R\+\_\+\+C\+O\+N\+T\+R\+O\+L\+\_\+\+P\+O\+RT@{T\+I\+M\+E\+R\+\_\+\+C\+O\+N\+T\+R\+O\+L\+\_\+\+P\+O\+RT}}
+\index{T\+I\+M\+E\+R\+\_\+\+C\+O\+N\+T\+R\+O\+L\+\_\+\+P\+O\+RT@{T\+I\+M\+E\+R\+\_\+\+C\+O\+N\+T\+R\+O\+L\+\_\+\+P\+O\+RT}!timer.\+c@{timer.\+c}}
+\subsubsection{\texorpdfstring{T\+I\+M\+E\+R\+\_\+\+C\+O\+N\+T\+R\+O\+L\+\_\+\+P\+O\+RT}{TIMER\_CONTROL\_PORT}}
+{\footnotesize\ttfamily \#define T\+I\+M\+E\+R\+\_\+\+C\+O\+N\+T\+R\+O\+L\+\_\+\+P\+O\+RT~0x43}
+
+Variable description here 
+
+Definition at line 12 of file timer.\+c.
+
+\mbox{\Hypertarget{timer_8c_aed1aab994ad876be2344591496ac2cd6}\label{timer_8c_aed1aab994ad876be2344591496ac2cd6}} 
+\index{timer.\+c@{timer.\+c}!T\+I\+M\+E\+R\+\_\+\+D\+A\+T\+A\+\_\+\+P\+O\+RT@{T\+I\+M\+E\+R\+\_\+\+D\+A\+T\+A\+\_\+\+P\+O\+RT}}
+\index{T\+I\+M\+E\+R\+\_\+\+D\+A\+T\+A\+\_\+\+P\+O\+RT@{T\+I\+M\+E\+R\+\_\+\+D\+A\+T\+A\+\_\+\+P\+O\+RT}!timer.\+c@{timer.\+c}}
+\subsubsection{\texorpdfstring{T\+I\+M\+E\+R\+\_\+\+D\+A\+T\+A\+\_\+\+P\+O\+RT}{TIMER\_DATA\_PORT}}
+{\footnotesize\ttfamily \#define T\+I\+M\+E\+R\+\_\+\+D\+A\+T\+A\+\_\+\+P\+O\+RT~0x40}
+
+Variable description here 
+
+Definition at line 13 of file timer.\+c.
+
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{timer_8c_a2102666d94d6b23bfe2c68556266c3e2}\label{timer_8c_a2102666d94d6b23bfe2c68556266c3e2}} 
+\index{timer.\+c@{timer.\+c}!get\+\_\+tick\+\_\+count@{get\+\_\+tick\+\_\+count}}
+\index{get\+\_\+tick\+\_\+count@{get\+\_\+tick\+\_\+count}!timer.\+c@{timer.\+c}}
+\subsubsection{\texorpdfstring{get\+\_\+tick\+\_\+count()}{get\_tick\_count()}}
+{\footnotesize\ttfamily uint32\+\_\+t get\+\_\+tick\+\_\+count (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+\begin{DoxyParams}{Parameters}
+{\em } & \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 29 of file timer.\+c.
+
+
+\begin{DoxyCode}
+30 \{
+31     \textcolor{keywordflow}{return} tick\_counter;
+32 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{timer_8c_a3cbe137ca6d2fe48c3f645babc335815}\label{timer_8c_a3cbe137ca6d2fe48c3f645babc335815}} 
+\index{timer.\+c@{timer.\+c}!set\+\_\+timer@{set\+\_\+timer}}
+\index{set\+\_\+timer@{set\+\_\+timer}!timer.\+c@{timer.\+c}}
+\subsubsection{\texorpdfstring{set\+\_\+timer()}{set\_timer()}}
+{\footnotesize\ttfamily void set\+\_\+timer (\begin{DoxyParamCaption}\item[{uint16\+\_\+t}]{count }\end{DoxyParamCaption})}
+
+
+\begin{DoxyParams}{Parameters}
+{\em } & \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 49 of file timer.\+c.
+
+
+\begin{DoxyCode}
+50 \{
+51 \textcolor{comment}{// FIRST send the command word to the PIT. Sets binary counting,}
+52 \textcolor{comment}{//   Mode 3, Read or Load LSB first then MSB, Channel 0}
+53  
+54     write\_port(\hyperlink{timer_8c_a61fe1bf49db8840cc842c178a9137978}{TIMER\_CONTROL\_PORT},0x36);
+55 \textcolor{comment}{//  mov al, 110110b}
+56 \textcolor{comment}{//  out 0x43, al}
+57     write\_port(\hyperlink{timer_8c_aed1aab994ad876be2344591496ac2cd6}{TIMER\_DATA\_PORT}, count & 0xff);
+58     write\_port(\hyperlink{timer_8c_aed1aab994ad876be2344591496ac2cd6}{TIMER\_DATA\_PORT}, count >> 8);
+59 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{timer_8c_a9e63ea32abae3f871fcbe66fd99003b2}\label{timer_8c_a9e63ea32abae3f871fcbe66fd99003b2}} 
+\index{timer.\+c@{timer.\+c}!timer\+\_\+handler@{timer\+\_\+handler}}
+\index{timer\+\_\+handler@{timer\+\_\+handler}!timer.\+c@{timer.\+c}}
+\subsubsection{\texorpdfstring{timer\+\_\+handler()}{timer\_handler()}}
+{\footnotesize\ttfamily void timer\+\_\+handler (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+\begin{DoxyParams}{Parameters}
+{\em } & \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 38 of file timer.\+c.
+
+
+\begin{DoxyCode}
+38                     \{
+39     \hyperlink{PIC_8c_aa6fb7395de34075ae303b15decf40c39}{send\_EOI\_master}();
+40     \hyperlink{timer_8c_a31e29a914d20537bcca7bb684fda8018}{\_is\_timer\_interrupt} = \textcolor{keyword}{true};
+41     tick\_counter ++;
+42     rotate\_pole(79,0);
+43 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{timer_8c_a01303bbe8798338ed96c5868bbe698f9}\label{timer_8c_a01303bbe8798338ed96c5868bbe698f9}} 
+\index{timer.\+c@{timer.\+c}!wait\+\_\+for\+\_\+timer@{wait\+\_\+for\+\_\+timer}}
+\index{wait\+\_\+for\+\_\+timer@{wait\+\_\+for\+\_\+timer}!timer.\+c@{timer.\+c}}
+\subsubsection{\texorpdfstring{wait\+\_\+for\+\_\+timer()}{wait\_for\_timer()}}
+{\footnotesize\ttfamily void wait\+\_\+for\+\_\+timer (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+\begin{DoxyParams}{Parameters}
+{\em } & \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 65 of file timer.\+c.
+
+
+\begin{DoxyCode}
+66 \{
+67     \hyperlink{timer_8c_a31e29a914d20537bcca7bb684fda8018}{\_is\_timer\_interrupt} = \textcolor{keyword}{false};
+68     \textcolor{keywordflow}{while}(1)
+69     \{
+70         kernel\_wait();
+71         \textcolor{keywordflow}{if}(\hyperlink{timer_8c_a31e29a914d20537bcca7bb684fda8018}{\_is\_timer\_interrupt})
+72         \{
+73             \hyperlink{timer_8c_a31e29a914d20537bcca7bb684fda8018}{\_is\_timer\_interrupt} = \textcolor{keyword}{false};
+74             \textcolor{keywordflow}{return};
+75         \}
+76     \}
+77 \}
+\end{DoxyCode}
+
+
+\subsection{Variable Documentation}
+\mbox{\Hypertarget{timer_8c_a16ae0e4e8728a8b760ca5b3c77036fb0}\label{timer_8c_a16ae0e4e8728a8b760ca5b3c77036fb0}} 
+\index{timer.\+c@{timer.\+c}!\+\_\+\+\_\+\+V\+G\+A\+\_\+text\+\_\+memory@{\+\_\+\+\_\+\+V\+G\+A\+\_\+text\+\_\+memory}}
+\index{\+\_\+\+\_\+\+V\+G\+A\+\_\+text\+\_\+memory@{\+\_\+\+\_\+\+V\+G\+A\+\_\+text\+\_\+memory}!timer.\+c@{timer.\+c}}
+\subsubsection{\texorpdfstring{\+\_\+\+\_\+\+V\+G\+A\+\_\+text\+\_\+memory}{\_\_VGA\_text\_memory}}
+{\footnotesize\ttfamily char \+\_\+\+\_\+\+V\+G\+A\+\_\+text\+\_\+memory\mbox{[}$\,$\mbox{]}}
+
+Video memory \mbox{\Hypertarget{timer_8c_a31e29a914d20537bcca7bb684fda8018}\label{timer_8c_a31e29a914d20537bcca7bb684fda8018}} 
+\index{timer.\+c@{timer.\+c}!\+\_\+is\+\_\+timer\+\_\+interrupt@{\+\_\+is\+\_\+timer\+\_\+interrupt}}
+\index{\+\_\+is\+\_\+timer\+\_\+interrupt@{\+\_\+is\+\_\+timer\+\_\+interrupt}!timer.\+c@{timer.\+c}}
+\subsubsection{\texorpdfstring{\+\_\+is\+\_\+timer\+\_\+interrupt}{\_is\_timer\_interrupt}}
+{\footnotesize\ttfamily bool \+\_\+is\+\_\+timer\+\_\+interrupt = false}
+
+Variable description here 
+
+Definition at line 20 of file timer.\+c.
+

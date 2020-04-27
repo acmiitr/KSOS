@@ -1,0 +1,323 @@
+\hypertarget{phymem_8c}{}\section{kernel/mem/phymem.c File Reference}
+\label{phymem_8c}\index{kernel/mem/phymem.\+c@{kernel/mem/phymem.\+c}}
+
+
+...  
+
+
+{\ttfamily \#include $<$stdint.\+h$>$}\newline
+{\ttfamily \#include $<$stdbool.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}phymem.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}dadio.\+h\char`\"{}}\newline
+Include dependency graph for phymem.\+c\+:
+% FIG 0
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structmmap__entry}{mmap\+\_\+entry}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{phymem_8c_a6fbf4f5bc2531c2ce7d8480c215f9846}{P\+M\+M\+AP}~0x1000
+\item 
+\#define \hyperlink{phymem_8c_afcccbf57c7f20c305ae0b90418da4513}{K\+E\+R\+N\+E\+L\+\_\+P}~0x100000
+\item 
+\#define \hyperlink{phymem_8c_ad51ded0bbd705f02f73fc60c0b721ced}{B\+L\+O\+C\+K\+\_\+\+S\+I\+ZE}~4096
+\item 
+\#define \hyperlink{phymem_8c_aa35bad1e92008da628f27b2f6bb270aa}{S\+E\+C\+T\+O\+R\+\_\+\+S\+I\+ZE}~512
+\item 
+\#define \hyperlink{phymem_8c_a39d85006b28980451bf665d1d13f40b4}{S\+E\+C\+T\+O\+R\+S\+\_\+\+P\+E\+R\+\_\+\+B\+L\+O\+CK}~8
+\item 
+\#define \hyperlink{phymem_8c_a19cc5919aa7e7c84cc94ee10ce233466}{B\+L\+O\+C\+K\+\_\+\+S\+I\+Z\+E\+\_\+B}~12
+\item 
+\#define \hyperlink{phymem_8c_a5d0617cfe5b2856db9dfdb8146ec1e8d}{S\+E\+C\+T\+O\+R\+\_\+\+S\+I\+Z\+E\+\_\+B}~9
+\item 
+\#define \hyperlink{phymem_8c_a7dfd7558c02be6686656c7a9bb9c0582}{S\+E\+C\+T\+O\+R\+S\+\_\+\+P\+E\+R\+\_\+\+B\+L\+O\+C\+K\+\_\+B}~3
+\item 
+\#define \hyperlink{phymem_8c_afaec5a6f9267eae530584cd51db12ee9}{K\+E\+R\+N\+E\+L\+\_\+\+M\+A\+P\+P\+E\+D\+\_\+\+S\+I\+ZE}~0x400000
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{structmmap__entry}{mmap\+\_\+entry} \hyperlink{phymem_8c_a2a62627910f985a1fa597e46fbd58f0a}{mmap\+\_\+entry\+\_\+t}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{phymem_8c_a838cffb4967812c2a2ac1ffe5879ec42}{pmmngr\+\_\+init} (uint32\+\_\+t mapentrycount)
+\begin{DoxyCompactList}\small\item\em ... \end{DoxyCompactList}\item 
+uint32\+\_\+t \hyperlink{phymem_8c_a0933032c36e1d767da4c43be0b2307d3}{pmmngr\+\_\+allocate\+\_\+block} ()
+\begin{DoxyCompactList}\small\item\em ... \end{DoxyCompactList}\item 
+bool \hyperlink{phymem_8c_a1a4d31618b117472eddf0c42fb1f838c}{pmmngr\+\_\+free\+\_\+block} (uint32\+\_\+t address)
+\begin{DoxyCompactList}\small\item\em ... \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{phymem_8c_ad280bbfa73bde1a57f36a458315a82c3}\label{phymem_8c_ad280bbfa73bde1a57f36a458315a82c3}} 
+uint32\+\_\+t {\bfseries \+\_\+\+\_\+begin} \mbox{[}$\,$\mbox{]}
+\item 
+\mbox{\Hypertarget{phymem_8c_a0f85173ca910222794cc5f1fb0849328}\label{phymem_8c_a0f85173ca910222794cc5f1fb0849328}} 
+uint32\+\_\+t {\bfseries \+\_\+\+\_\+end} \mbox{[}$\,$\mbox{]}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+... 
+
+\begin{DoxySeeAlso}{See also}
+
+\end{DoxySeeAlso}
+
+
+\subsection{Macro Definition Documentation}
+\mbox{\Hypertarget{phymem_8c_ad51ded0bbd705f02f73fc60c0b721ced}\label{phymem_8c_ad51ded0bbd705f02f73fc60c0b721ced}} 
+\index{phymem.\+c@{phymem.\+c}!B\+L\+O\+C\+K\+\_\+\+S\+I\+ZE@{B\+L\+O\+C\+K\+\_\+\+S\+I\+ZE}}
+\index{B\+L\+O\+C\+K\+\_\+\+S\+I\+ZE@{B\+L\+O\+C\+K\+\_\+\+S\+I\+ZE}!phymem.\+c@{phymem.\+c}}
+\subsubsection{\texorpdfstring{B\+L\+O\+C\+K\+\_\+\+S\+I\+ZE}{BLOCK\_SIZE}}
+{\footnotesize\ttfamily \#define B\+L\+O\+C\+K\+\_\+\+S\+I\+ZE~4096}
+
+Description here 
+
+Definition at line 15 of file phymem.\+c.
+
+\mbox{\Hypertarget{phymem_8c_a19cc5919aa7e7c84cc94ee10ce233466}\label{phymem_8c_a19cc5919aa7e7c84cc94ee10ce233466}} 
+\index{phymem.\+c@{phymem.\+c}!B\+L\+O\+C\+K\+\_\+\+S\+I\+Z\+E\+\_\+B@{B\+L\+O\+C\+K\+\_\+\+S\+I\+Z\+E\+\_\+B}}
+\index{B\+L\+O\+C\+K\+\_\+\+S\+I\+Z\+E\+\_\+B@{B\+L\+O\+C\+K\+\_\+\+S\+I\+Z\+E\+\_\+B}!phymem.\+c@{phymem.\+c}}
+\subsubsection{\texorpdfstring{B\+L\+O\+C\+K\+\_\+\+S\+I\+Z\+E\+\_\+B}{BLOCK\_SIZE\_B}}
+{\footnotesize\ttfamily \#define B\+L\+O\+C\+K\+\_\+\+S\+I\+Z\+E\+\_\+B~12}
+
+Description here 
+
+Definition at line 18 of file phymem.\+c.
+
+\mbox{\Hypertarget{phymem_8c_afaec5a6f9267eae530584cd51db12ee9}\label{phymem_8c_afaec5a6f9267eae530584cd51db12ee9}} 
+\index{phymem.\+c@{phymem.\+c}!K\+E\+R\+N\+E\+L\+\_\+\+M\+A\+P\+P\+E\+D\+\_\+\+S\+I\+ZE@{K\+E\+R\+N\+E\+L\+\_\+\+M\+A\+P\+P\+E\+D\+\_\+\+S\+I\+ZE}}
+\index{K\+E\+R\+N\+E\+L\+\_\+\+M\+A\+P\+P\+E\+D\+\_\+\+S\+I\+ZE@{K\+E\+R\+N\+E\+L\+\_\+\+M\+A\+P\+P\+E\+D\+\_\+\+S\+I\+ZE}!phymem.\+c@{phymem.\+c}}
+\subsubsection{\texorpdfstring{K\+E\+R\+N\+E\+L\+\_\+\+M\+A\+P\+P\+E\+D\+\_\+\+S\+I\+ZE}{KERNEL\_MAPPED\_SIZE}}
+{\footnotesize\ttfamily \#define K\+E\+R\+N\+E\+L\+\_\+\+M\+A\+P\+P\+E\+D\+\_\+\+S\+I\+ZE~0x400000}
+
+Description here 
+
+Definition at line 24 of file phymem.\+c.
+
+\mbox{\Hypertarget{phymem_8c_afcccbf57c7f20c305ae0b90418da4513}\label{phymem_8c_afcccbf57c7f20c305ae0b90418da4513}} 
+\index{phymem.\+c@{phymem.\+c}!K\+E\+R\+N\+E\+L\+\_\+P@{K\+E\+R\+N\+E\+L\+\_\+P}}
+\index{K\+E\+R\+N\+E\+L\+\_\+P@{K\+E\+R\+N\+E\+L\+\_\+P}!phymem.\+c@{phymem.\+c}}
+\subsubsection{\texorpdfstring{K\+E\+R\+N\+E\+L\+\_\+P}{KERNEL\_P}}
+{\footnotesize\ttfamily \#define K\+E\+R\+N\+E\+L\+\_\+P~0x100000}
+
+Description here 
+
+Definition at line 14 of file phymem.\+c.
+
+\mbox{\Hypertarget{phymem_8c_a6fbf4f5bc2531c2ce7d8480c215f9846}\label{phymem_8c_a6fbf4f5bc2531c2ce7d8480c215f9846}} 
+\index{phymem.\+c@{phymem.\+c}!P\+M\+M\+AP@{P\+M\+M\+AP}}
+\index{P\+M\+M\+AP@{P\+M\+M\+AP}!phymem.\+c@{phymem.\+c}}
+\subsubsection{\texorpdfstring{P\+M\+M\+AP}{PMMAP}}
+{\footnotesize\ttfamily \#define P\+M\+M\+AP~0x1000}
+
+Description here 
+
+Definition at line 13 of file phymem.\+c.
+
+\mbox{\Hypertarget{phymem_8c_aa35bad1e92008da628f27b2f6bb270aa}\label{phymem_8c_aa35bad1e92008da628f27b2f6bb270aa}} 
+\index{phymem.\+c@{phymem.\+c}!S\+E\+C\+T\+O\+R\+\_\+\+S\+I\+ZE@{S\+E\+C\+T\+O\+R\+\_\+\+S\+I\+ZE}}
+\index{S\+E\+C\+T\+O\+R\+\_\+\+S\+I\+ZE@{S\+E\+C\+T\+O\+R\+\_\+\+S\+I\+ZE}!phymem.\+c@{phymem.\+c}}
+\subsubsection{\texorpdfstring{S\+E\+C\+T\+O\+R\+\_\+\+S\+I\+ZE}{SECTOR\_SIZE}}
+{\footnotesize\ttfamily \#define S\+E\+C\+T\+O\+R\+\_\+\+S\+I\+ZE~512}
+
+Description here 
+
+Definition at line 16 of file phymem.\+c.
+
+\mbox{\Hypertarget{phymem_8c_a5d0617cfe5b2856db9dfdb8146ec1e8d}\label{phymem_8c_a5d0617cfe5b2856db9dfdb8146ec1e8d}} 
+\index{phymem.\+c@{phymem.\+c}!S\+E\+C\+T\+O\+R\+\_\+\+S\+I\+Z\+E\+\_\+B@{S\+E\+C\+T\+O\+R\+\_\+\+S\+I\+Z\+E\+\_\+B}}
+\index{S\+E\+C\+T\+O\+R\+\_\+\+S\+I\+Z\+E\+\_\+B@{S\+E\+C\+T\+O\+R\+\_\+\+S\+I\+Z\+E\+\_\+B}!phymem.\+c@{phymem.\+c}}
+\subsubsection{\texorpdfstring{S\+E\+C\+T\+O\+R\+\_\+\+S\+I\+Z\+E\+\_\+B}{SECTOR\_SIZE\_B}}
+{\footnotesize\ttfamily \#define S\+E\+C\+T\+O\+R\+\_\+\+S\+I\+Z\+E\+\_\+B~9}
+
+Description here 
+
+Definition at line 19 of file phymem.\+c.
+
+\mbox{\Hypertarget{phymem_8c_a39d85006b28980451bf665d1d13f40b4}\label{phymem_8c_a39d85006b28980451bf665d1d13f40b4}} 
+\index{phymem.\+c@{phymem.\+c}!S\+E\+C\+T\+O\+R\+S\+\_\+\+P\+E\+R\+\_\+\+B\+L\+O\+CK@{S\+E\+C\+T\+O\+R\+S\+\_\+\+P\+E\+R\+\_\+\+B\+L\+O\+CK}}
+\index{S\+E\+C\+T\+O\+R\+S\+\_\+\+P\+E\+R\+\_\+\+B\+L\+O\+CK@{S\+E\+C\+T\+O\+R\+S\+\_\+\+P\+E\+R\+\_\+\+B\+L\+O\+CK}!phymem.\+c@{phymem.\+c}}
+\subsubsection{\texorpdfstring{S\+E\+C\+T\+O\+R\+S\+\_\+\+P\+E\+R\+\_\+\+B\+L\+O\+CK}{SECTORS\_PER\_BLOCK}}
+{\footnotesize\ttfamily \#define S\+E\+C\+T\+O\+R\+S\+\_\+\+P\+E\+R\+\_\+\+B\+L\+O\+CK~8}
+
+Description here 
+
+Definition at line 17 of file phymem.\+c.
+
+\mbox{\Hypertarget{phymem_8c_a7dfd7558c02be6686656c7a9bb9c0582}\label{phymem_8c_a7dfd7558c02be6686656c7a9bb9c0582}} 
+\index{phymem.\+c@{phymem.\+c}!S\+E\+C\+T\+O\+R\+S\+\_\+\+P\+E\+R\+\_\+\+B\+L\+O\+C\+K\+\_\+B@{S\+E\+C\+T\+O\+R\+S\+\_\+\+P\+E\+R\+\_\+\+B\+L\+O\+C\+K\+\_\+B}}
+\index{S\+E\+C\+T\+O\+R\+S\+\_\+\+P\+E\+R\+\_\+\+B\+L\+O\+C\+K\+\_\+B@{S\+E\+C\+T\+O\+R\+S\+\_\+\+P\+E\+R\+\_\+\+B\+L\+O\+C\+K\+\_\+B}!phymem.\+c@{phymem.\+c}}
+\subsubsection{\texorpdfstring{S\+E\+C\+T\+O\+R\+S\+\_\+\+P\+E\+R\+\_\+\+B\+L\+O\+C\+K\+\_\+B}{SECTORS\_PER\_BLOCK\_B}}
+{\footnotesize\ttfamily \#define S\+E\+C\+T\+O\+R\+S\+\_\+\+P\+E\+R\+\_\+\+B\+L\+O\+C\+K\+\_\+B~3}
+
+Description here 
+
+Definition at line 20 of file phymem.\+c.
+
+
+
+\subsection{Typedef Documentation}
+\mbox{\Hypertarget{phymem_8c_a2a62627910f985a1fa597e46fbd58f0a}\label{phymem_8c_a2a62627910f985a1fa597e46fbd58f0a}} 
+\index{phymem.\+c@{phymem.\+c}!mmap\+\_\+entry\+\_\+t@{mmap\+\_\+entry\+\_\+t}}
+\index{mmap\+\_\+entry\+\_\+t@{mmap\+\_\+entry\+\_\+t}!phymem.\+c@{phymem.\+c}}
+\subsubsection{\texorpdfstring{mmap\+\_\+entry\+\_\+t}{mmap\_entry\_t}}
+{\footnotesize\ttfamily typedef struct \hyperlink{structmmap__entry}{mmap\+\_\+entry}  \hyperlink{phymem_8c_a2a62627910f985a1fa597e46fbd58f0a}{mmap\+\_\+entry\+\_\+t}}
+
+Description here 
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{phymem_8c_a0933032c36e1d767da4c43be0b2307d3}\label{phymem_8c_a0933032c36e1d767da4c43be0b2307d3}} 
+\index{phymem.\+c@{phymem.\+c}!pmmngr\+\_\+allocate\+\_\+block@{pmmngr\+\_\+allocate\+\_\+block}}
+\index{pmmngr\+\_\+allocate\+\_\+block@{pmmngr\+\_\+allocate\+\_\+block}!phymem.\+c@{phymem.\+c}}
+\subsubsection{\texorpdfstring{pmmngr\+\_\+allocate\+\_\+block()}{pmmngr\_allocate\_block()}}
+{\footnotesize\ttfamily uint32\+\_\+t pmmngr\+\_\+allocate\+\_\+block (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+... 
+
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+
+
+Definition at line 93 of file phymem.\+c.
+
+
+\begin{DoxyCode}
+94 \{
+95     uint32\_t address;
+96     \textcolor{keywordflow}{for}( uint32\_t i=0;i<0x8000;i++)
+97         \textcolor{keywordflow}{if} (physical\_memory\_bitmap[i] < 0xffffffff)
+98         \{
+99             uint8\_t bit = get\_lowest\_bit(physical\_memory\_bitmap[i]);  \textcolor{comment}{//bit lies from 0 to 31}
+100                 \textcolor{keywordflow}{if}(bit == 0xff) \textcolor{keywordflow}{return} 0;
+101             address = (i << 17) + (bit << 12);
+102             pmmngr\_toggle\_block(block\_number(address));
+103             \textcolor{keywordflow}{return} address;
+104         \}
+105     \textcolor{keywordflow}{return} 0;
+106 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{phymem_8c_a1a4d31618b117472eddf0c42fb1f838c}\label{phymem_8c_a1a4d31618b117472eddf0c42fb1f838c}} 
+\index{phymem.\+c@{phymem.\+c}!pmmngr\+\_\+free\+\_\+block@{pmmngr\+\_\+free\+\_\+block}}
+\index{pmmngr\+\_\+free\+\_\+block@{pmmngr\+\_\+free\+\_\+block}!phymem.\+c@{phymem.\+c}}
+\subsubsection{\texorpdfstring{pmmngr\+\_\+free\+\_\+block()}{pmmngr\_free\_block()}}
+{\footnotesize\ttfamily bool pmmngr\+\_\+free\+\_\+block (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{address }\end{DoxyParamCaption})}
+
+
+
+... 
+
+
+\begin{DoxyParams}{Parameters}
+{\em address} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+
+
+Definition at line 112 of file phymem.\+c.
+
+
+\begin{DoxyCode}
+113 \{
+114     \textcolor{keywordflow}{if}((uint32\_t)address % \hyperlink{phymem_8c_ad51ded0bbd705f02f73fc60c0b721ced}{BLOCK\_SIZE} != 0) \textcolor{keywordflow}{return} 0;
+115     
+116     \textcolor{comment}{/*}
+117 \textcolor{comment}{    mmap\_entry\_t* map\_ptr= (mmap\_entry\_t*)PMMAP;}
+118 \textcolor{comment}{    for( uint32\_t i=0;i<\_mapentrycount;i++)}
+119 \textcolor{comment}{    \{}
+120 \textcolor{comment}{        if(((map\_ptr->startLo) <= (uint32\_t)address)&& (((uint32\_t)address-map\_ptr->startLo) <
+       map\_ptr->sizeLo))}
+121 \textcolor{comment}{        \{}
+122 \textcolor{comment}{            if (map\_ptr -> type ==1)}
+123 \textcolor{comment}{            \{}
+124 \textcolor{comment}{}
+125 \textcolor{comment}{                uint32\_t block = block\_number((uint32\_t)address);}
+126 \textcolor{comment}{                uint32\_t dword = block >> 5;}
+127 \textcolor{comment}{                uint8\_t offset = block % 32;}
+128 \textcolor{comment}{                if(extract\_bit((uint32\_t)(physical\_memory\_bitmap + dword),offset)) return 0;}
+129 \textcolor{comment}{                pmmngr\_toggle\_block(block);}
+130 \textcolor{comment}{                return 1;}
+131 \textcolor{comment}{}
+132 \textcolor{comment}{            \}}
+133 \textcolor{comment}{            else return 0;}
+134 \textcolor{comment}{        \}}
+135 \textcolor{comment}{        map\_ptr ++;}
+136 \textcolor{comment}{    \}}
+137 \textcolor{comment}{    */}
+138     uint32\_t block = block\_number((uint32\_t)address);
+139     uint32\_t dword = block >> 5;
+140     uint8\_t offset = block % 32;
+141     \textcolor{keywordflow}{if}(!extract\_bit((uint32\_t)(physical\_memory\_bitmap + dword),offset)) \textcolor{keywordflow}{return} 0;
+142     pmmngr\_toggle\_block(block);
+143     \textcolor{keywordflow}{return} 1;
+144 
+145 \textcolor{comment}{//  return 0;}
+146 
+147 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{phymem_8c_a838cffb4967812c2a2ac1ffe5879ec42}\label{phymem_8c_a838cffb4967812c2a2ac1ffe5879ec42}} 
+\index{phymem.\+c@{phymem.\+c}!pmmngr\+\_\+init@{pmmngr\+\_\+init}}
+\index{pmmngr\+\_\+init@{pmmngr\+\_\+init}!phymem.\+c@{phymem.\+c}}
+\subsubsection{\texorpdfstring{pmmngr\+\_\+init()}{pmmngr\_init()}}
+{\footnotesize\ttfamily void pmmngr\+\_\+init (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{mapentrycount }\end{DoxyParamCaption})}
+
+
+
+... 
+
+
+\begin{DoxyParams}{Parameters}
+{\em mapentrycount} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+
+
+Definition at line 59 of file phymem.\+c.
+
+
+\begin{DoxyCode}
+60 \{ 
+61     \textcolor{comment}{//\_mapentrycount = mapentrycount;}
+62     \hyperlink{structmmap__entry}{mmap\_entry\_t}* map\_ptr= (\hyperlink{structmmap__entry}{mmap\_entry\_t}*)\hyperlink{phymem_8c_a6fbf4f5bc2531c2ce7d8480c215f9846}{PMMAP};
+63 
+64 
+65     \textcolor{keywordflow}{for} (uint32\_t i=0;i<0x8000;i++)
+66             physical\_memory\_bitmap[i] = 0xffffffff; \textcolor{comment}{//Make everything 1 -- Everything is occupied initially}
+67 \textcolor{comment}{/*}
+68 \textcolor{comment}{    printhex((uint32\_t)physical\_memory\_bitmap);}
+69 \textcolor{comment}{}
+70 \textcolor{comment}{}
+71 \textcolor{comment}{    for (int i = 0; i< mapentrycount ; i++)}
+72 \textcolor{comment}{        \{}
+73 \textcolor{comment}{                monitor\_puts("\(\backslash\)nStarting address:"); printhex((map\_ptr+i) -> startLo);}
+74 \textcolor{comment}{                monitor\_puts("\(\backslash\)tSize: "); printhex((map\_ptr+i) -> sizeLo);}
+75 \textcolor{comment}{                monitor\_puts("\(\backslash\)tType:"); printhex((map\_ptr+i) -> type);}
+76 \textcolor{comment}{         \}}
+77 \textcolor{comment}{*/}
+78     \textcolor{keywordflow}{for}(uint32\_t i=0;i<mapentrycount;i++)
+79     \{
+80         \textcolor{keywordflow}{if}((map\_ptr -> type == 1)&&(map\_ptr -> startLo >= \hyperlink{phymem_8c_afcccbf57c7f20c305ae0b90418da4513}{KERNEL\_P}) && !(map\_ptr -> startHi))
+81             pmmngr\_toggle\_range(map\_ptr->startLo, map\_ptr->startLo + map\_ptr ->sizeLo);
+82         map\_ptr ++;
+83     \}               
+84     \textcolor{comment}{//Now we free the space occupied by the kernel and this memory manager :)}
+85 \textcolor{comment}{//  uint32\_t kernel\_start = (uint32\_t)\_\_begin;}
+86 \textcolor{comment}{//  uint32\_t kernel\_end = (uint32\_t)\_\_end;}
+87     pmmngr\_toggle\_range (\hyperlink{phymem_8c_afcccbf57c7f20c305ae0b90418da4513}{KERNEL\_P},\hyperlink{phymem_8c_afcccbf57c7f20c305ae0b90418da4513}{KERNEL\_P} + \hyperlink{phymem_8c_afaec5a6f9267eae530584cd51db12ee9}{KERNEL\_MAPPED\_SIZE});
+88 \}
+\end{DoxyCode}

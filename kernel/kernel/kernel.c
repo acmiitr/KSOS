@@ -1,3 +1,8 @@
+/**  
+ * @file kernel.c
+ * @brief ...
+ * @see 
+ */
 #include<stdint.h> 
 #include<string.h>
 #include<stdio.h>
@@ -9,9 +14,9 @@
 #include "inthandling.h"
 #include "FAT12.h"
 
-#define USERSTACK_PHY 0x40000
-#define USERSTACK 0xC0000000
-#define PAGE_SIZE 4096
+#define USERSTACK_PHY 0x40000	/**< Description here */
+#define USERSTACK 0xC0000000	/**< Description here */
+#define PAGE_SIZE 4096			/**< Description here */
 
 //Are all part of /kernel
 extern void kshell();
@@ -20,8 +25,14 @@ extern void switch_to_user(uint32_t* address);
 extern void init();
 
 //Linker defined symbol
-extern uint32_t __user_begin[];
-
+extern uint32_t __user_begin[];	/**< Description here */
+/** @brief ...
+ * @param mmapsize
+ * @param data_sect
+ * @param root_sect
+ * @param fat_sect
+ * @return  
+ * */
 void kmain(uint32_t mmapsize,uint32_t data_sect,uint32_t root_sect,uint32_t fat_sect)
 {
 	gdt_init();
