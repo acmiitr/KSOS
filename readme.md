@@ -5,8 +5,7 @@ of different places, just write a Unix operating system."      ~ Linus Torvalds
 
 This repository contains the code for the operating system, **KSOS**, developed by the members of [ACM Student Chapter IIT Roorkee](iitr.acm.org).
 
-![You asked for it!](https://i.imgur.com/PVrbaMx.gif)
-
+![You asked for it!](https://i.imgur.com/K23dkge.gif)
 
 ## Contents
 * [Introduction](#Introduction)
