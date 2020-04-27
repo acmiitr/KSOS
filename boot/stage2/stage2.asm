@@ -157,7 +157,7 @@ jmp 0x08:KernelVirt
 Message16: db 0xa,0xd,'Welcome to Stage2!!',0xa,0xd,'Press any key to continue...',0
 Welcome: db 'Everyone likes Flashiing Lights ;)',0
 Stars: db '***********************************************',0
-DaddyOsWelcome: db 'Welcome to ACM DOS',0
+DaddyOsWelcome: db 'Welcome to KSOS!',0
 KernelSize: dw 0
 DataSect: dd 0
 RootSect: dd 0

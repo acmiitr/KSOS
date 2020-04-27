@@ -20,18 +20,12 @@ void kmain(uint32_t mmapsize,uint32_t data_sect,uint32_t root_sect,uint32_t fat_
 	vmmngr_init();  //Sets recursive map, remaps stack and vidmem
 	clear();
 
-	monitor_puts("Data starts: ");printhex(data_sect*512);
-	monitor_puts("\nRoot starts: ");printhex(root_sect*512);
-	monitor_puts("\nFAT starts: ");printhex(fat_sect*512);
-
 	refresh_stack(); //This is some next level function: It forces stack remapping, some legend.. Debugging will get confused here
 	remove_identity_map();
 
 	interrupt_init();
 	kbc_init();
 	set_timer(0xffff);
-
-	get_monitor_char();
 
 	kshell();
 

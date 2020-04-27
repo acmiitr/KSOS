@@ -223,7 +223,7 @@ static void command_fresh()
 	set_bg_color(color[0]);
 	for(int i=0;i<80;i++) putc(' ');
 	set_cursor(20);
-	monitor_puts("ACM DOS KERNEL SHELL 0.01 (help displays commands)");
+	monitor_puts("KSOS KERNEL SHELL 0.01 (help displays commands)");
 
 	set_fg_color(color[0]);
 	set_bg_color(color[1]);
