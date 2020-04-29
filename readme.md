@@ -1,9 +1,9 @@
 > "If you want to travel around the world and be invited to speak at a lot 
-of different places, just write a Unix operating system."      ~ Linus Torvalds
+of different places, just write a Unix operating system."      ~ Linus Torvalds, creator of Linux
 
 # KSOS
 
-This repository contains the code for the operating system, **KSOS**, developed by the members of [ IIT Roorkee ACM Student Chapter](http://iitr.acm.org). To know more about it's development journey from the beginning, read our [blog](https://kssuraaj28.github.io) written by Suraaj! 
+This repository contains the code for the operating system, **KSOS**, developed by the members of [ IIT Roorkee ACM Student Chapter](http://iitr.acm.org). To know more about the development journey from the beginning, read our [blog](https://kssuraaj28.github.io) written by Suraaj! 
 
 In the future, we will be releasing blogs highlighting the different aspects of KSOS, so the best is yet to come. Stay tuned!
 
@@ -18,7 +18,7 @@ In the future, we will be releasing blogs highlighting the different aspects of 
     * [Running on a Real Machine](#Running-on-a-Real-Machine)
 * [Changelog](#Changelog)
     * [Unreleased](#Unreleased)
-    * [v1.0.0 - 2020-04-24](#v1.0.0---2020-04-24)
+    * [v1.0.0 - 2020-04-30](#v1.0.0---2020-04-30)
 * [Getting Started](#Getting-Started)
 * [Contribution Guidelines](#Contribution-Guidelines)
 * [Potential Features](#Potential-Features)
@@ -62,7 +62,7 @@ git clone https://github.com/kssuraaj28/OS.git
 cd OS
 ```
 
-3. If you already have a cross compiler installed, please skip this step. Run the script file for the same (only once, it takes time!): 
+3. If you already have a cross compiler installed, please skip this step. Run the script file for the same (only once, it takes time and around 2 gigs of memory!): 
  
 ```bash
 bash script.sh
@@ -114,7 +114,7 @@ A detailed explanation of each of the above-mentioned instructions are given bel
 
 #### Removed
 
-### v1.0.0 - 2020-04-29
+### v1.0.0 - 2020-04-30
 
 #### Added
 
@@ -130,15 +130,15 @@ A detailed explanation of each of the above-mentioned instructions are given bel
 ## Getting Started
 Getting started with operating systems development is a bit tricky. [Dr. Nick Blundell's book](https://www.cs.bham.ac.uk/~exr/lectures/opsys/10_11/lectures/os-dev.pdf) is a great resource to begin with, especially for bare-metal and bootloader programming. 
 
-[BrokenThorn's series](http://www.brokenthorn.com/Resources/OSDevIndex.html), although old, is really helpful. Most of the overall structure of the project was built from this resource.
+[BrokenThorn's OS Development series](http://www.brokenthorn.com/Resources/OSDevIndex.html), although old, is really helpful. Most of the overall structure of the project was built from this resource.
 
-Feel free to have discussions with the people at #osdev on [Freenode IRC](https://webchat.freenode.net/), as well as the [OsDev forums](https://webchat.freenode.net/), if you have any issue.
+Feel free to have discussions with the people at #osdev on [freenode IRC](https://webchat.freenode.net/), as well as the [OsDev forums](https://forum.osdev.org/), if you have any issue.
 
-To get started with simple baremetal programming, you can read [Suraaj's blog](https://kssuraaj28.github.io/2020-01-09-Introduction/). 
+To get started with simple bare-metal programming, you can read [Suraaj's blog](https://kssuraaj28.github.io/2020-01-09-Introduction/). 
 
 ## Contribution Guidelines
 
-Operating system development is debatably the most onerous task in programming, notably because of the complete absence of any "backend" that you can work upon. You are the complete backend. However, there is no need to be discouraged. If you want to contribute, you can look at some of the more straightforward problems that we have in the [issues](https://github.com/kssuraaj28/OS/issues) section.
+Operating system development is debatably the most onerous task in programming, notably because of the complete absence of any "backend" that you can work upon. You are the complete backend. However, there is no need to be discouraged. If you want to contribute, you can look at some of the more straightforward problems that we have in the [issues](https://github.com/acmiitr/KSOS/issues) section.
 
 To get started, you NEED to know how to build the OS from source. After that, it's just up to your imagination. The thing with operating systems is, you can do whatever you want. Feel free to discuss any ideas that you may have with us by opening an issue. :smiley:
 
@@ -155,7 +155,7 @@ Once you do find an issue or feature to contribute, please:
 
 ## Potential Features
 
-A lot of the work after v.1.0.0 release can now be done mainly in C. Possible developments could include implementing: 
+A lot of the work after v.1.0.0 release can now be done in C. Possible developments could include implementing: 
 
 * more general standard input/output functions
 * file system (disk) driver
@@ -171,12 +171,12 @@ Other major work to be done:
 ## Resources
 
  * [Dr. Nick Blundell's book](https://www.cs.bham.ac.uk/~exr/lectures/opsys/10_11/lectures/os-dev.pdf)
- * [BrokenThorn](http://www.brokenthorn.com/Resources/OSDevIndex.html)
+ * [BrokenThorn's OS Development series](http://www.brokenthorn.com/Resources/OSDevIndex.html)
  * [The OSDev wiki](https://wiki.osdev.org/Main_Page)
  * [The OSDev forums](https://forum.osdev.org/)
- * Official Intel Software Developers' Manuals
- * StackOverflow (obviously :P)
- * #osdev on Freenode IRC (try it, they're the best!)
+ * [Official Intel Software Developer's Manual](https://software.intel.com/sites/default/files/managed/39/c5/325462-sdm-vol-1-2abcd-3abcd.pdf)
+ * [StackOverflow](https://stackoverflow.com/) (obviously :P)
+ * #osdev on [freenode IRC](https://webchat.freenode.net/) (try it, they're the best!)
 
 ## Licence
 This repository is licenced under `MIT Licence`, see [LICENCE.md](https://github.com/kssuraaj28/OS/blob/master/LICENSE.md).
