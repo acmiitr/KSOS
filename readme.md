@@ -3,9 +3,10 @@ of different places, just write a Unix operating system."      ~ Linus Torvalds,
 
 # KSOS
 
-This repository contains the code for the operating system, **KSOS**, developed by the members of [ IIT Roorkee ACM Student Chapter](http://iitr.acm.org). To know more about the development journey from the beginning, read our [blog](https://kssuraaj28.github.io) written by Suraaj! 
+This repository contains the code for the operating system, **KSOS**, developed by the members of [ IIT Roorkee ACM Student Chapter](http://iitr.acm.org). Get a prebuilt version of the latest release of KSOS [here](https://github.com/acmiitr/KSOS/raw/dev/disk.img)! 
 
-In the future, we will be releasing blogs highlighting the different aspects of KSOS, so the best is yet to come. Stay tuned!
+
+To know more about the development journey from the beginning, read our [blog](https://medium.com/@acmiitr/journey-to-the-core-of-the-computer-df40421acb1c) written by Suraaj. In the future, we will be releasing blogs highlighting the different core aspects of KSOS, so stay tuned!
 
 ![You asked for it!](https://i.imgur.com/K23dkge.gif)
 
@@ -18,7 +19,7 @@ In the future, we will be releasing blogs highlighting the different aspects of 
     * [Running on a Real Machine](#Running-on-a-Real-Machine)
 * [Changelog](#Changelog)
     * [Unreleased](#Unreleased)
-    * [v1.0.0 - 2020-04-30](#v1.0.0---2020-04-30)
+    * [v1.0.0 - 2020-04-30](#v100---2020-04-30)
 * [Getting Started](#Getting-Started)
 * [Contribution Guidelines](#Contribution-Guidelines)
 * [Potential Features](#Potential-Features)
@@ -37,6 +38,8 @@ We also write our very own Bootloader for Legacy BIOS. The bootloader handles th
 
 This section will mainly explain how to build KSOS on a Debian-based Linux. 
 
+**NOTE**: If you just want to run the latest release of KSOS, you can download a prebuilt version from [here](https://github.com/acmiitr/KSOS/raw/dev/disk.img). Simply run it using `qemu-system-i386 disk.img`.
+
 ### Dependencies
 
 Make sure the following are installed before proceeding further:
@@ -53,7 +56,7 @@ If you are here to just try and test the OS, carry out these commands in Bash to
 1. Clone this repository: 
 
 ```bash 
-git clone https://github.com/kssuraaj28/OS.git
+git clone https://github.com/acmiitr/KSOS.git
 ```
 
 2. Switch to the main directory of the repository: 
@@ -132,7 +135,7 @@ Getting started with operating systems development is a bit tricky. [Dr. Nick Bl
 
 [BrokenThorn's OS Development series](http://www.brokenthorn.com/Resources/OSDevIndex.html), although old, is really helpful. Most of the overall structure of the project was built from this resource.
 
-Feel free to have discussions with the people at #osdev on [freenode IRC](https://webchat.freenode.net/), as well as the [OsDev forums](https://forum.osdev.org/), if you have any issue.
+If you have any issues, feel free to have discussions with the people at #osdev on [freenode IRC](https://webchat.freenode.net/), as well as the [OSDev forums](https://forum.osdev.org/).
 
 To get started with simple bare-metal programming, you can read [Suraaj's blog](https://kssuraaj28.github.io/2020-01-09-Introduction/). 
 
@@ -179,4 +182,4 @@ Other major work to be done:
  * #osdev on [freenode IRC](https://webchat.freenode.net/) (try it, they're the best!)
 
 ## Licence
-This repository is licenced under `MIT Licence`, see [LICENCE.md](https://github.com/kssuraaj28/OS/blob/master/LICENSE.md).
+This repository is licenced under `MIT Licence`, see [LICENCE.md](https://github.com/acmiitr/KSOS/blob/master/LICENSE.md).
