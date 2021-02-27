@@ -62,7 +62,7 @@ git clone https://github.com/acmiitr/KSOS.git
 2. Switch to the main directory of the repository: 
  
 ```bash
-cd OS
+cd KSOS
 ```
 
 3. If you already have a cross compiler installed, please skip this step. Run the script file for the same (only once, it takes time and around 2 gigs of memory!): 
