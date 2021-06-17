@@ -387,10 +387,12 @@ static void command_quote()
 }
 static void string_copy(char* strd,char* strs)
 {
-	for(int i=0;strs[i];i++)
+	int i=0;
+	for(;strs[i];i++)
 	{
 		strd[i]=strs[i];
 	}
+	strd[i]='\0';
 }
 
 static bool string_compare(char* str1, char* str2)
